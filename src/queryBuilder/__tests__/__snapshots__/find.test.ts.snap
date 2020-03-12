@@ -1,0 +1,317 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FindBuilder pg basic queries no additional options 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg basic queries no additional options 2`] = `Array []`;
+
+exports[`FindBuilder pg join nested 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('films', (select coalesce(nullif(json_agg(\\"f3\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('language', (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f4\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\")) as \\"o\\" from \\"film\\" as \\"f4\\" inner join \\"film_actor\\" as \\"f5\\" on \\"f5\\".\\"film_id\\" = \\"f4\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f5\\".\\"actor_id\\" limit ?) as \\"f3\\")) as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" limit ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+
+exports[`FindBuilder pg join nested 2`] = `
+Array [
+  1,
+  4,
+  3,
+  1,
+]
+`;
+
+exports[`FindBuilder pg join with FK on builder table 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg join with FK on builder table 2`] = `
+Array [
+  1,
+]
+`;
+
+exports[`FindBuilder pg join with FK on joined table 1`] = `"select (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"film\\" as \\"f2\\" where \\"l1\\".\\"language_id\\" = \\"f2\\".\\"language_id\\") as \\"f1\\") as \\"films\\" from \\"language\\" as \\"l1\\""`;
+
+exports[`FindBuilder pg join with FK on joined table 2`] = `Array []`;
+
+exports[`FindBuilder pg join with additional options 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('firstName', \\"a2\\".\\"first_name\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" desc limit ? offset ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg join with additional options 2`] = `
+Array [
+  2,
+  1,
+]
+`;
+
+exports[`FindBuilder pg join with alias 1`] = `"select (select coalesce(nullif(json_agg(\\"p1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"p1\\") as \\"performers\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg join with alias 2`] = `Array []`;
+
+exports[`FindBuilder pg join with default builder 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg join with default builder 2`] = `Array []`;
+
+exports[`FindBuilder pg join with junction table 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg join with junction table 2`] = `Array []`;
+
+exports[`FindBuilder pg limit with number 1`] = `"select null from \\"actor\\" as \\"a1\\" limit ?"`;
+
+exports[`FindBuilder pg limit with number 2`] = `
+Array [
+  10,
+]
+`;
+
+exports[`FindBuilder pg offset with number 1`] = `"select null from \\"actor\\" as \\"a1\\" offset ?"`;
+
+exports[`FindBuilder pg offset with number 2`] = `
+Array [
+  20,
+]
+`;
+
+exports[`FindBuilder pg orderBy nested (multi with aggregate) 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by (select avg(\\"f3\\".\\"replacement_cost\\") as \\"avg\\" from \\"film_actor\\" as \\"f4\\" inner join \\"film\\" as \\"f3\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" group by \\"f4\\".\\"actor_id\\") asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+
+exports[`FindBuilder pg orderBy nested (multi with aggregate) 2`] = `
+Array [
+  1,
+]
+`;
+
+exports[`FindBuilder pg orderBy nested (multi) 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+
+exports[`FindBuilder pg orderBy nested (multi) 2`] = `
+Array [
+  1,
+]
+`;
+
+exports[`FindBuilder pg orderBy nested (single with aggregate) 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by (select avg(\\"f2\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f2\\" where \\"l2\\".\\"language_id\\" = \\"f2\\".\\"language_id\\" group by \\"f2\\".\\"language_id\\") asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
+
+exports[`FindBuilder pg orderBy nested (single with aggregate) 2`] = `
+Array [
+  1,
+  1,
+]
+`;
+
+exports[`FindBuilder pg orderBy nested (single) 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by \\"l2\\".\\"name\\" asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
+
+exports[`FindBuilder pg orderBy nested (single) 2`] = `
+Array [
+  1,
+  1,
+]
+`;
+
+exports[`FindBuilder pg orderBy with association (aggregate and through) 1`] = `"select null from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc"`;
+
+exports[`FindBuilder pg orderBy with association (aggregate and through) 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with association (aggregate) 1`] = `"select null from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc"`;
+
+exports[`FindBuilder pg orderBy with association (aggregate) 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with association (count) 1`] = `"select null from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".*) as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc"`;
+
+exports[`FindBuilder pg orderBy with association (count) 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with association (field) 1`] = `"select null from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc"`;
+
+exports[`FindBuilder pg orderBy with association (field) 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with empty object 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg orderBy with empty object 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with multiple fields 1`] = `"select null from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc"`;
+
+exports[`FindBuilder pg orderBy with multiple fields 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with no fields 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg orderBy with no fields 2`] = `Array []`;
+
+exports[`FindBuilder pg orderBy with one field 1`] = `"select null from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc"`;
+
+exports[`FindBuilder pg orderBy with one field 2`] = `Array []`;
+
+exports[`FindBuilder pg resolveInfo basic query 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\""`;
+
+exports[`FindBuilder pg resolveInfo basic query 2`] = `Array []`;
+
+exports[`FindBuilder pg resolveInfo query with alias 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", (select coalesce(nullif(json_agg(\\"m1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f1\\".\\"film_id\\", 'title', \\"f1\\".\\"title\\") as \\"o\\" from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\") as \\"m1\\") as \\"movies\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg resolveInfo query with alias 2`] = `Array []`;
+
+exports[`FindBuilder pg resolveInfo query with arguments 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\" where \\"f1\\".\\"title\\" = ? order by \\"f1\\".\\"release_year\\" desc limit ? offset ?"`;
+
+exports[`FindBuilder pg resolveInfo query with arguments 2`] = `
+Array [
+  "Title",
+  10,
+  3,
+]
+`;
+
+exports[`FindBuilder pg resolveInfo query with nested arguments 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f2\\".\\"film_id\\", 'title', \\"f2\\".\\"title\\") as \\"o\\" from \\"film\\" as \\"f2\\" inner join \\"film_actor\\" as \\"f3\\" on \\"f3\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f3\\".\\"actor_id\\" and \\"f2\\".\\"title\\" = ? order by \\"f2\\".\\"release_year\\" desc limit ? offset ?) as \\"f1\\") as \\"films\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg resolveInfo query with nested arguments 2`] = `
+Array [
+  "Title",
+  10,
+  3,
+]
+`;
+
+exports[`FindBuilder pg select add 1`] = `"select \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"actor_id\\" as \\"id\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select add 2`] = `Array []`;
+
+exports[`FindBuilder pg select add raw 1`] = `"select \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"first_name\\" as \\"first_name\\", \\"a1\\".\\"first_name\\" as \\"first_name_again\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select add raw 2`] = `Array []`;
+
+exports[`FindBuilder pg select all 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select all 2`] = `Array []`;
+
+exports[`FindBuilder pg select with missing field 1`] = `"select \\"a1\\".\\"last_name\\" as \\"lastName\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select with missing field 2`] = `Array []`;
+
+exports[`FindBuilder pg select with multiple fields 1`] = `"select \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\" from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select with multiple fields 2`] = `Array []`;
+
+exports[`FindBuilder pg select with no fields 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg select with no fields 2`] = `Array []`;
+
+exports[`FindBuilder pg where and 1`] = `"select null from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?))"`;
+
+exports[`FindBuilder pg where and 2`] = `
+Array [
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`FindBuilder pg where equals null 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null"`;
+
+exports[`FindBuilder pg where equals null 2`] = `Array []`;
+
+exports[`FindBuilder pg where merge 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
+
+exports[`FindBuilder pg where merge 2`] = `
+Array [
+  "BOB",
+  "English",
+]
+`;
+
+exports[`FindBuilder pg where not 1`] = `"select null from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?))"`;
+
+exports[`FindBuilder pg where not 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`FindBuilder pg where notEqual null 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null"`;
+
+exports[`FindBuilder pg where notEqual null 2`] = `Array []`;
+
+exports[`FindBuilder pg where or 1`] = `"select null from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?))"`;
+
+exports[`FindBuilder pg where or 2`] = `
+Array [
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`FindBuilder pg where with association (aggregate) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
+
+exports[`FindBuilder pg where with association (aggregate) 2`] = `
+Array [
+  10,
+]
+`;
+
+exports[`FindBuilder pg where with association (both field and aggregate) 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
+
+exports[`FindBuilder pg where with association (both field and aggregate) 2`] = `
+Array [
+  "BEAR GRACELAND",
+  20,
+]
+`;
+
+exports[`FindBuilder pg where with association (count) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".*) > ?))"`;
+
+exports[`FindBuilder pg where with association (count) 2`] = `
+Array [
+  1,
+]
+`;
+
+exports[`FindBuilder pg where with association (multi) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\"))"`;
+
+exports[`FindBuilder pg where with association (multi) 2`] = `
+Array [
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`FindBuilder pg where with association (single) 1`] = `"select null from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?))"`;
+
+exports[`FindBuilder pg where with association (single) 2`] = `
+Array [
+  "English",
+]
+`;
+
+exports[`FindBuilder pg where with association (through) 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\"))"`;
+
+exports[`FindBuilder pg where with association (through) 2`] = `
+Array [
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`FindBuilder pg where with empty object 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg where with empty object 2`] = `Array []`;
+
+exports[`FindBuilder pg where with extra operators 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
+
+exports[`FindBuilder pg where with extra operators 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`FindBuilder pg where with nested association 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
+
+exports[`FindBuilder pg where with nested association 2`] = `
+Array [
+  "English",
+]
+`;
+
+exports[`FindBuilder pg where with non-existent field 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+
+exports[`FindBuilder pg where with non-existent field 2`] = `Array []`;
+
+exports[`FindBuilder pg where with one field 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
+
+exports[`FindBuilder pg where with one field 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`FindBuilder pg where with two field 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ? limit ?"`;
+
+exports[`FindBuilder pg where with two field 2`] = `
+Array [
+  "BOB",
+  "GOODALL",
+  1,
+]
+`;

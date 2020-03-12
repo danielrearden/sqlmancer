@@ -1,0 +1,8 @@
+dist
+coverage
+node_modules
+.idea
+.vscode
+*.iml
+*.code-workspace
+.DS_Store

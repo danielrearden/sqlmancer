@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteBuilder pg basic queries no additional options 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`DeleteBuilder pg basic queries no additional options 2`] = `Array []`;
+
+exports[`DeleteBuilder pg limit with number 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" limit ?)"`;
+
+exports[`DeleteBuilder pg limit with number 2`] = `
+Array [
+  10,
+]
+`;
+
+exports[`DeleteBuilder pg offset with number 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" offset ?)"`;
+
+exports[`DeleteBuilder pg offset with number 2`] = `
+Array [
+  20,
+]
+`;
+
+exports[`DeleteBuilder pg orderBy with association (aggregate and through) 1`] = `"delete from \\"film\\" where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc)"`;
+
+exports[`DeleteBuilder pg orderBy with association (aggregate and through) 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with association (aggregate) 1`] = `"delete from \\"language\\" where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc)"`;
+
+exports[`DeleteBuilder pg orderBy with association (aggregate) 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with association (count) 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".*) as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc)"`;
+
+exports[`DeleteBuilder pg orderBy with association (count) 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with association (field) 1`] = `"delete from \\"film\\" where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc)"`;
+
+exports[`DeleteBuilder pg orderBy with association (field) 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with empty object 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`DeleteBuilder pg orderBy with empty object 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with multiple fields 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc)"`;
+
+exports[`DeleteBuilder pg orderBy with multiple fields 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with no fields 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`DeleteBuilder pg orderBy with no fields 2`] = `Array []`;
+
+exports[`DeleteBuilder pg orderBy with one field 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc)"`;
+
+exports[`DeleteBuilder pg orderBy with one field 2`] = `Array []`;
+
+exports[`DeleteBuilder pg where and 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?)))"`;
+
+exports[`DeleteBuilder pg where and 2`] = `
+Array [
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`DeleteBuilder pg where equals null 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null)"`;
+
+exports[`DeleteBuilder pg where equals null 2`] = `Array []`;
+
+exports[`DeleteBuilder pg where not 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?)))"`;
+
+exports[`DeleteBuilder pg where not 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`DeleteBuilder pg where notEqual null 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null)"`;
+
+exports[`DeleteBuilder pg where notEqual null 2`] = `Array []`;
+
+exports[`DeleteBuilder pg where or 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?)))"`;
+
+exports[`DeleteBuilder pg where or 2`] = `
+Array [
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`DeleteBuilder pg where merge 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`DeleteBuilder pg where merge 2`] = `
+Array [
+  "BOB",
+  "English",
+]
+`;
+
+exports[`DeleteBuilder pg where with association (aggregate) 1`] = `"delete from \\"language\\" where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+
+exports[`DeleteBuilder pg where with association (aggregate) 2`] = `
+Array [
+  10,
+]
+`;
+
+exports[`DeleteBuilder pg where with association (both field and aggregate) 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+
+exports[`DeleteBuilder pg where with association (both field and aggregate) 2`] = `
+Array [
+  "BEAR GRACELAND",
+  20,
+]
+`;
+
+exports[`DeleteBuilder pg where with association (count) 1`] = `"delete from \\"language\\" where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".*) > ?)))"`;
+
+exports[`DeleteBuilder pg where with association (count) 2`] = `
+Array [
+  1,
+]
+`;
+
+exports[`DeleteBuilder pg where with association (multi) 1`] = `"delete from \\"language\\" where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\")))"`;
+
+exports[`DeleteBuilder pg where with association (multi) 2`] = `
+Array [
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`DeleteBuilder pg where with association (single) 1`] = `"delete from \\"film\\" where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)))"`;
+
+exports[`DeleteBuilder pg where with association (single) 2`] = `
+Array [
+  "English",
+]
+`;
+
+exports[`DeleteBuilder pg where with association (through) 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`DeleteBuilder pg where with association (through) 2`] = `
+Array [
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`DeleteBuilder pg where with empty object 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`DeleteBuilder pg where with empty object 2`] = `Array []`;
+
+exports[`DeleteBuilder pg where with extra operators 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+
+exports[`DeleteBuilder pg where with extra operators 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`DeleteBuilder pg where with nested association 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`DeleteBuilder pg where with nested association 2`] = `
+Array [
+  "English",
+]
+`;
+
+exports[`DeleteBuilder pg where with non-existent field 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`DeleteBuilder pg where with non-existent field 2`] = `Array []`;
+
+exports[`DeleteBuilder pg where with one field 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+
+exports[`DeleteBuilder pg where with one field 2`] = `
+Array [
+  "BOB",
+]
+`;
+
+exports[`DeleteBuilder pg where with two field 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ?)"`;
+
+exports[`DeleteBuilder pg where with two field 2`] = `
+Array [
+  "BOB",
+  "GOODALL",
+]
+`;

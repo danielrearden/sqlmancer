@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteBuilder pg basic queries no additional options 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`DeleteBuilder pg basic queries no additional options 2`] = `
+Array [
+  20,
+]
+`;

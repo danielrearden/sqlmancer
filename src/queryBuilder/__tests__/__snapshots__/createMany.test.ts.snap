@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateManyBuilder pg basic queries no additional options 1`] = `"insert into \\"actor\\" (\\"first_name\\", \\"last_name\\") values (?, ?), (?, ?) returning \\"actor_id\\""`;
+
+exports[`CreateManyBuilder pg basic queries no additional options 2`] = `
+Array [
+  "SUSAN",
+  "ANTHONY",
+  "VIRGINIA",
+  "WOLF",
+]
+`;
+
+exports[`CreateManyBuilder pg basic queries non-existent field 1`] = `"insert into \\"actor\\" (\\"first_name\\", \\"last_name\\") values (?, ?), (?, ?) returning \\"actor_id\\""`;
+
+exports[`CreateManyBuilder pg basic queries non-existent field 2`] = `
+Array [
+  "SUSAN",
+  "ANTHONY",
+  "VIRGINIA",
+  "WOLF",
+]
+`;

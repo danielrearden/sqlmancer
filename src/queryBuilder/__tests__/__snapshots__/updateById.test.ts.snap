@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateManyBuilder pg basic queries no additional options 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`UpdateManyBuilder pg basic queries no additional options 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder pg basic queries non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`UpdateManyBuilder pg basic queries non-existent field 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
