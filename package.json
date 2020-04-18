@@ -14,7 +14,8 @@
   ],
   "main": "dist/index.js",
   "files": [
-    "/dist"
+    "/dist",
+    "!**/__tests__/**/*"
   ],
   "bin": {
     "sqlmancer": "./dist/cli/sqlmancer.js"
