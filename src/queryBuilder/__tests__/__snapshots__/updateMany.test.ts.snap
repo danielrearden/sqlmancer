@@ -1,141 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UpdateManyBuilder pg basic queries no additional options 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql basic queries no additional options 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg basic queries no additional options 2`] = `
+exports[`UpdateManyBuilder mysql basic queries no additional options 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg basic queries non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql basic queries non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg basic queries non-existent field 2`] = `
+exports[`UpdateManyBuilder mysql basic queries non-existent field 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg limit with number 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" limit ?)"`;
+exports[`UpdateManyBuilder mysql limit with number 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` limit ?) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg limit with number 2`] = `
+exports[`UpdateManyBuilder mysql limit with number 2`] = `
 Array [
   "YENNEFER",
   10,
 ]
 `;
 
-exports[`UpdateManyBuilder pg offset with number 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" offset ?)"`;
+exports[`UpdateManyBuilder mysql offset with number 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` limit 18446744073709551615 offset ?) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg offset with number 2`] = `
+exports[`UpdateManyBuilder mysql offset with number 2`] = `
 Array [
   "YENNEFER",
   20,
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with association (aggregate and through) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with association (aggregate and through) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (with \`conditions\` as (select \`f1\`.\`film_id\` from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc) select \`conditions\`.\`film_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with association (aggregate and through) 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with association (aggregate and through) 2`] = `
 Array [
   "Jurassic Park",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with association (aggregate) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with association (aggregate) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (with \`conditions\` as (select \`l1\`.\`language_id\` from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc) select \`conditions\`.\`language_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with association (aggregate) 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with association (aggregate) 2`] = `
 Array [
   "Polish",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with association (count) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".*) as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with association (count) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with association (count) 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with association (count) 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with association (field) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with association (field) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (with \`conditions\` as (select \`f1\`.\`film_id\` from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc) select \`conditions\`.\`film_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with association (field) 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with association (field) 2`] = `
 Array [
   "Jurassic Park",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with empty object 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql orderBy with empty object 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with empty object 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with empty object 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with multiple fields 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with multiple fields 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with multiple fields 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with multiple fields 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with no fields 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql orderBy with no fields 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with no fields 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with no fields 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg orderBy with one field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc)"`;
+exports[`UpdateManyBuilder mysql orderBy with one field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg orderBy with one field 2`] = `
+exports[`UpdateManyBuilder mysql orderBy with one field 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where and 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?)))"`;
+exports[`UpdateManyBuilder mysql where and 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where and 2`] = `
-Array [
-  "YENNEFER",
-  "BOB",
-  "FAWCETT",
-]
-`;
-
-exports[`UpdateManyBuilder pg where equals null 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null)"`;
-
-exports[`UpdateManyBuilder pg where equals null 2`] = `
-Array [
-  "YENNEFER",
-]
-`;
-
-exports[`UpdateManyBuilder pg where not 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?)))"`;
-
-exports[`UpdateManyBuilder pg where not 2`] = `
-Array [
-  "YENNEFER",
-  "BOB",
-]
-`;
-
-exports[`UpdateManyBuilder pg where notEqual null 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null)"`;
-
-exports[`UpdateManyBuilder pg where notEqual null 2`] = `
-Array [
-  "YENNEFER",
-]
-`;
-
-exports[`UpdateManyBuilder pg where or 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?)))"`;
-
-exports[`UpdateManyBuilder pg where or 2`] = `
+exports[`UpdateManyBuilder mysql where and 2`] = `
 Array [
   "YENNEFER",
   "BOB",
@@ -143,9 +108,17 @@ Array [
 ]
 `;
 
-exports[`UpdateManyBuilder pg where merge 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+exports[`UpdateManyBuilder mysql where equals null 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where merge 2`] = `
+exports[`UpdateManyBuilder mysql where equals null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder mysql where merge 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
+
+exports[`UpdateManyBuilder mysql where merge 2`] = `
 Array [
   "YENNEFER",
   "BOB",
@@ -153,18 +126,45 @@ Array [
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (aggregate) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+exports[`UpdateManyBuilder mysql where not 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (aggregate) 2`] = `
+exports[`UpdateManyBuilder mysql where not 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder mysql where notEqual null 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
+
+exports[`UpdateManyBuilder mysql where notEqual null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder mysql where or 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
+
+exports[`UpdateManyBuilder mysql where or 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`UpdateManyBuilder mysql where with association (aggregate) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (with \`conditions\` as (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))) select \`conditions\`.\`language_id\` from \`conditions\`)"`;
+
+exports[`UpdateManyBuilder mysql where with association (aggregate) 2`] = `
 Array [
   "Polish",
   10,
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (both field and aggregate) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+exports[`UpdateManyBuilder mysql where with association (both field and aggregate) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (both field and aggregate) 2`] = `
+exports[`UpdateManyBuilder mysql where with association (both field and aggregate) 2`] = `
 Array [
   "YENNEFER",
   "BEAR GRACELAND",
@@ -172,88 +172,611 @@ Array [
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (count) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".*) > ?)))"`;
+exports[`UpdateManyBuilder mysql where with association (count) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (with \`conditions\` as (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?))) select \`conditions\`.\`language_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (count) 2`] = `
+exports[`UpdateManyBuilder mysql where with association (count) 2`] = `
 Array [
   "Polish",
   1,
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (multi) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\")))"`;
+exports[`UpdateManyBuilder mysql where with association (multi) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (with \`conditions\` as (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`))) select \`conditions\`.\`language_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (multi) 2`] = `
+exports[`UpdateManyBuilder mysql where with association (multi) 2`] = `
 Array [
   "Polish",
   "BEAR GRACELAND",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (single) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)))"`;
+exports[`UpdateManyBuilder mysql where with association (single) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (with \`conditions\` as (select \`f1\`.\`film_id\` from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?))) select \`conditions\`.\`film_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (single) 2`] = `
+exports[`UpdateManyBuilder mysql where with association (single) 2`] = `
 Array [
   "Jurassic Park",
   "English",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with association (through) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\")))"`;
+exports[`UpdateManyBuilder mysql where with association (through) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with association (through) 2`] = `
+exports[`UpdateManyBuilder mysql where with association (through) 2`] = `
 Array [
   "YENNEFER",
   "BEAR GRACELAND",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with empty object 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql where with empty object 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with empty object 2`] = `
+exports[`UpdateManyBuilder mysql where with empty object 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with extra operators 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+exports[`UpdateManyBuilder mysql where with extra operators 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with extra operators 2`] = `
+exports[`UpdateManyBuilder mysql where with extra operators 2`] = `
 Array [
   "YENNEFER",
   "BOB",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with nested association 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+exports[`UpdateManyBuilder mysql where with nested association 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with nested association 2`] = `
+exports[`UpdateManyBuilder mysql where with nested association 2`] = `
 Array [
   "YENNEFER",
   "English",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+exports[`UpdateManyBuilder mysql where with non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with non-existent field 2`] = `
+exports[`UpdateManyBuilder mysql where with non-existent field 2`] = `
 Array [
   "YENNEFER",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with one field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+exports[`UpdateManyBuilder mysql where with one field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with one field 2`] = `
+exports[`UpdateManyBuilder mysql where with one field 2`] = `
 Array [
   "YENNEFER",
   "BOB",
 ]
 `;
 
-exports[`UpdateManyBuilder pg where with two field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ?)"`;
+exports[`UpdateManyBuilder mysql where with two field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (with \`conditions\` as (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ?) select \`conditions\`.\`actor_id\` from \`conditions\`)"`;
 
-exports[`UpdateManyBuilder pg where with two field 2`] = `
+exports[`UpdateManyBuilder mysql where with two field 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "GOODALL",
+]
+`;
+
+exports[`UpdateManyBuilder postgres basic queries no additional options 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres basic queries no additional options 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres basic queries non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres basic queries non-existent field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres limit with number 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" limit ?)"`;
+
+exports[`UpdateManyBuilder postgres limit with number 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder postgres offset with number 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" offset ?)"`;
+
+exports[`UpdateManyBuilder postgres offset with number 2`] = `
+Array [
+  "YENNEFER",
+  20,
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (aggregate and through) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (aggregate and through) 2`] = `
+Array [
+  "Jurassic Park",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (aggregate) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (aggregate) 2`] = `
+Array [
+  "Polish",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (count) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".\\"film_id\\") as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (count) 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (field) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with association (field) 2`] = `
+Array [
+  "Jurassic Park",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with empty object 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres orderBy with empty object 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with multiple fields 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with multiple fields 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with no fields 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres orderBy with no fields 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres orderBy with one field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc)"`;
+
+exports[`UpdateManyBuilder postgres orderBy with one field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where and 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?)))"`;
+
+exports[`UpdateManyBuilder postgres where and 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where equals null 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null)"`;
+
+exports[`UpdateManyBuilder postgres where equals null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where merge 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`UpdateManyBuilder postgres where merge 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where not 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?)))"`;
+
+exports[`UpdateManyBuilder postgres where not 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where notEqual null 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null)"`;
+
+exports[`UpdateManyBuilder postgres where notEqual null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where or 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?)))"`;
+
+exports[`UpdateManyBuilder postgres where or 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (aggregate) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+
+exports[`UpdateManyBuilder postgres where with association (aggregate) 2`] = `
+Array [
+  "Polish",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (both field and aggregate) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?)))"`;
+
+exports[`UpdateManyBuilder postgres where with association (both field and aggregate) 2`] = `
+Array [
+  "YENNEFER",
+  "BEAR GRACELAND",
+  20,
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (count) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".\\"film_id\\") > ?)))"`;
+
+exports[`UpdateManyBuilder postgres where with association (count) 2`] = `
+Array [
+  "Polish",
+  1,
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (multi) 1`] = `"update \\"language\\" set \\"name\\" = ? where \\"language\\".\\"language_id\\" in (select \\"l1\\".\\"language_id\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\")))"`;
+
+exports[`UpdateManyBuilder postgres where with association (multi) 2`] = `
+Array [
+  "Polish",
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (single) 1`] = `"update \\"film\\" set \\"title\\" = ? where \\"film\\".\\"film_id\\" in (select \\"f1\\".\\"film_id\\" from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)))"`;
+
+exports[`UpdateManyBuilder postgres where with association (single) 2`] = `
+Array [
+  "Jurassic Park",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with association (through) 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`UpdateManyBuilder postgres where with association (through) 2`] = `
+Array [
+  "YENNEFER",
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with empty object 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres where with empty object 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with extra operators 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+
+exports[`UpdateManyBuilder postgres where with extra operators 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with nested association 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\")))"`;
+
+exports[`UpdateManyBuilder postgres where with nested association 2`] = `
+Array [
+  "YENNEFER",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\")"`;
+
+exports[`UpdateManyBuilder postgres where with non-existent field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with one field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?)"`;
+
+exports[`UpdateManyBuilder postgres where with one field 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder postgres where with two field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" in (select \\"a1\\".\\"actor_id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ?)"`;
+
+exports[`UpdateManyBuilder postgres where with two field 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "GOODALL",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite basic queries no additional options 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite basic queries no additional options 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite basic queries non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite basic queries non-existent field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite limit with number 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` limit ?)"`;
+
+exports[`UpdateManyBuilder sqlite limit with number 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite offset with number 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` limit ? offset ?)"`;
+
+exports[`UpdateManyBuilder sqlite offset with number 2`] = `
+Array [
+  "YENNEFER",
+  -1,
+  20,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (aggregate and through) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (select \`f1\`.\`film_id\` from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (aggregate and through) 2`] = `
+Array [
+  "Jurassic Park",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (aggregate) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (select \`l1\`.\`language_id\` from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (aggregate) 2`] = `
+Array [
+  "Polish",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (count) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (count) 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (field) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (select \`f1\`.\`film_id\` from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with association (field) 2`] = `
+Array [
+  "Jurassic Park",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with empty object 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with empty object 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with multiple fields 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with multiple fields 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with no fields 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with no fields 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite orderBy with one field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc)"`;
+
+exports[`UpdateManyBuilder sqlite orderBy with one field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where and 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where and 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where equals null 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null)"`;
+
+exports[`UpdateManyBuilder sqlite where equals null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where merge 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`)))"`;
+
+exports[`UpdateManyBuilder sqlite where merge 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where not 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where not 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where notEqual null 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null)"`;
+
+exports[`UpdateManyBuilder sqlite where notEqual null 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where or 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where or 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+  "FAWCETT",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (aggregate) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (aggregate) 2`] = `
+Array [
+  "Polish",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (both field and aggregate) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (both field and aggregate) 2`] = `
+Array [
+  "YENNEFER",
+  "BEAR GRACELAND",
+  20,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (count) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (count) 2`] = `
+Array [
+  "Polish",
+  1,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (multi) 1`] = `"update \`language\` set \`name\` = ? where \`language\`.\`language_id\` in (select \`l1\`.\`language_id\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (multi) 2`] = `
+Array [
+  "Polish",
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (single) 1`] = `"update \`film\` set \`title\` = ? where \`film\`.\`film_id\` in (select \`f1\`.\`film_id\` from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (single) 2`] = `
+Array [
+  "Jurassic Park",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with association (through) 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`)))"`;
+
+exports[`UpdateManyBuilder sqlite where with association (through) 2`] = `
+Array [
+  "YENNEFER",
+  "BEAR GRACELAND",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with empty object 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite where with empty object 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with extra operators 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?)"`;
+
+exports[`UpdateManyBuilder sqlite where with extra operators 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with nested association 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`)))"`;
+
+exports[`UpdateManyBuilder sqlite where with nested association 2`] = `
+Array [
+  "YENNEFER",
+  "English",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\`)"`;
+
+exports[`UpdateManyBuilder sqlite where with non-existent field 2`] = `
+Array [
+  "YENNEFER",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with one field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?)"`;
+
+exports[`UpdateManyBuilder sqlite where with one field 2`] = `
+Array [
+  "YENNEFER",
+  "BOB",
+]
+`;
+
+exports[`UpdateManyBuilder sqlite where with two field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` in (select \`a1\`.\`actor_id\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ?)"`;
+
+exports[`UpdateManyBuilder sqlite where with two field 2`] = `
 Array [
   "YENNEFER",
   "BOB",

@@ -1,0 +1,395 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateClientFromSchema correct usage 1`] = `
+"
+import Knex from 'knex'
+import {
+  BuilderOptions,
+  CreateManyBuilder,
+  CreateOneBuilder,
+  DeleteByIdBuilder,
+  DeleteManyBuilder,
+  FindByIdBuilder,
+  FindManyBuilder,
+  FindOneBuilder,
+  Models,
+  UpdateByIdBuilder,
+  UpdateManyBuilder
+} from 'sqlmancer'
+
+export type JSON = boolean | number | string | null | JSONArray | JSONMap
+export interface JSONMap {
+  [key: string]: JSON
+}
+export type JSONArray = Array<JSON>
+
+export const models: Models = {
+  Actor: {
+    tableName: 'actor',
+    primaryKey: 'actor_id',
+    fields: {
+      id: {
+        column: 'actor_id',
+      },
+      firstName: {
+        column: 'first_name',
+      },
+      lastName: {
+        column: 'last_name',
+      },
+    },
+    include: [],
+    dependencies: {
+
+    },
+    associations: {
+      films: {
+        modelName: 'Film',
+        isMany: true,
+        on: [
+          {
+            from: 'actor_id',
+            to: 'actor_id',
+          },
+          {
+            from: 'film_id',
+            to: 'film_id',
+          },
+        ],
+        through: 'film_actor',
+        builder: options => new FilmFindManyBuilder(options),
+      },
+    },
+  },
+  Film: {
+    tableName: 'film',
+    primaryKey: 'film_id',
+    fields: {
+      id: {
+        column: 'film_id',
+      },
+      title: {
+        column: 'title',
+      },
+      releaseYear: {
+        column: 'release_year',
+      },
+    },
+    include: [],
+    dependencies: {
+
+    },
+    associations: {
+      actors: {
+        modelName: 'Actor',
+        isMany: true,
+        on: [
+          {
+            from: 'film_id',
+            to: 'film_id',
+          },
+          {
+            from: 'actor_id',
+            to: 'actor_id',
+          },
+        ],
+        through: 'film_actor',
+        builder: options => new ActorFindManyBuilder(options),
+      },
+    },
+  },
+}
+
+export type ActorFields = {
+  id: (number | string)
+  firstName: string
+  lastName: string
+}
+    
+export type ActorIds = 'id'
+    
+export type ActorEnums = unknown
+    
+export type ActorAssociations = {
+  films: FilmFindManyBuilder
+}
+    
+export type ActorCreateFields = {
+  id: (number | string)
+  firstName: string
+  lastName: string
+}
+    
+export type ActorUpdateFields = {
+  id?: (number | string)
+  firstName?: string
+  lastName?: string
+}
+    
+export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Actor', models)
+  }
+}
+
+export class ActorFindManyBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindManyBuilder<
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Actor', models)
+  }
+}
+
+export class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindByIdBuilder<
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions, pk: number | string) {
+    super(options, 'Actor', models, pk)
+  }
+}
+      
+export class ActorDeleteManyBuilder extends DeleteManyBuilder<ActorFields, ActorIds, ActorEnums, ActorAssociations> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Actor', models)
+  }
+}
+
+export class ActorDeleteByIdBuilder extends DeleteByIdBuilder<ActorFields, ActorIds, ActorEnums, ActorAssociations> {
+  constructor(options: BuilderOptions, pk: number | string) {
+    super(options, 'Actor', models, pk)
+  }
+}
+
+export class ActorCreateManyBuilder extends CreateManyBuilder<ActorCreateFields> {
+  constructor(options: BuilderOptions, data: ActorCreateFields[]) {
+    super(options, 'Actor', models, data)
+  }
+}
+
+export class ActorCreateOneBuilder extends CreateOneBuilder<ActorCreateFields> {
+  constructor(options: BuilderOptions, data: ActorCreateFields) {
+    super(options, 'Actor', models, data)
+  }
+}
+
+export class ActorUpdateManyBuilder extends UpdateManyBuilder<
+  ActorUpdateFields,
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations
+> {
+  constructor(options: BuilderOptions, data: ActorUpdateFields) {
+    super(options, 'Actor', models, data)
+  }
+}
+
+export class ActorUpdateByIdBuilder extends UpdateByIdBuilder<ActorUpdateFields> {
+  constructor(options: BuilderOptions, pk: number | string, data: ActorUpdateFields) {
+    super(options, 'Actor', models, pk, data)
+  }
+}
+  
+export type FilmFields = {
+  id: (number | string)
+  title: string
+  releaseYear: number
+}
+    
+export type FilmIds = 'id'
+    
+export type FilmEnums = unknown
+    
+export type FilmAssociations = {
+  actors: ActorFindManyBuilder
+}
+    
+export type FilmCreateFields = {
+  id: (number | string)
+  title: string
+  releaseYear: number
+}
+    
+export type FilmUpdateFields = {
+  id?: (number | string)
+  title?: string
+  releaseYear?: number
+}
+    
+export class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindOneBuilder<
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Film', models)
+  }
+}
+
+export class FilmFindManyBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindManyBuilder<
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Film', models)
+  }
+}
+
+export class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindByIdBuilder<
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations,
+  TSelected
+> {
+  constructor(options: BuilderOptions, pk: number | string) {
+    super(options, 'Film', models, pk)
+  }
+}
+      
+export class FilmDeleteManyBuilder extends DeleteManyBuilder<FilmFields, FilmIds, FilmEnums, FilmAssociations> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Film', models)
+  }
+}
+
+export class FilmDeleteByIdBuilder extends DeleteByIdBuilder<FilmFields, FilmIds, FilmEnums, FilmAssociations> {
+  constructor(options: BuilderOptions, pk: number | string) {
+    super(options, 'Film', models, pk)
+  }
+}
+
+export class FilmCreateManyBuilder extends CreateManyBuilder<FilmCreateFields> {
+  constructor(options: BuilderOptions, data: FilmCreateFields[]) {
+    super(options, 'Film', models, data)
+  }
+}
+
+export class FilmCreateOneBuilder extends CreateOneBuilder<FilmCreateFields> {
+  constructor(options: BuilderOptions, data: FilmCreateFields) {
+    super(options, 'Film', models, data)
+  }
+}
+
+export class FilmUpdateManyBuilder extends UpdateManyBuilder<
+  FilmUpdateFields,
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations
+> {
+  constructor(options: BuilderOptions, data: FilmUpdateFields) {
+    super(options, 'Film', models, data)
+  }
+}
+
+export class FilmUpdateByIdBuilder extends UpdateByIdBuilder<FilmUpdateFields> {
+  constructor(options: BuilderOptions, pk: number | string, data: FilmUpdateFields) {
+    super(options, 'Film', models, pk, data)
+  }
+}
+  
+type SqlmancerClient = {
+  raw: Knex.RawBuilder<any>;
+  transactionProvider(
+    config?: any
+  ): () => Promise<Knex.Transaction>;
+  transaction(
+    transactionScope?: null,
+    config?: any
+  ): Promise<Knex.Transaction>;
+  transaction<T>(
+    transactionScope: (trx: Knex.Transaction) => Promise<T> | Promise<T> | void,
+    config?: any
+  ): Promise<T>;
+  initialize(config?: Knex.Config): void;
+  destroy(callback: Function): void;
+  destroy(): Promise<void>;
+  batchInsert(
+    tableName: Knex.TableDescriptor,
+    data: readonly any[],
+    chunkSize?: number
+  ): Knex.QueryBuilder<any, {}>;
+  schema: Knex.SchemaBuilder;
+  queryBuilder<TRecord2 = any, TResult2 = any[]>(): Knex.QueryBuilder<TRecord2, TResult2>;
+  client: any;
+  migrate: Knex.Migrator;
+  seed: Knex.Seeder;
+  fn: Knex.FunctionHelper;
+  ref: Knex.RefBuilder;
+  models: {
+    Actor: {
+      findById: (id: number | string) => ActorFindByIdBuilder
+      findMany: () => ActorFindManyBuilder
+      findOne: () => ActorFindOneBuilder
+      createMany: (data: ActorCreateFields[]) => ActorCreateManyBuilder
+      createOne: (data: ActorCreateFields) => ActorCreateOneBuilder
+      deleteById: (id: number | string) => ActorDeleteByIdBuilder
+      deleteMany: () => ActorDeleteManyBuilder
+      updateById: (id: number | string, data: ActorUpdateFields) => ActorUpdateByIdBuilder
+      updateMany: (data: ActorUpdateFields) => ActorUpdateManyBuilder
+    },
+    Film: {
+      findById: (id: number | string) => FilmFindByIdBuilder
+      findMany: () => FilmFindManyBuilder
+      findOne: () => FilmFindOneBuilder
+      createMany: (data: FilmCreateFields[]) => FilmCreateManyBuilder
+      createOne: (data: FilmCreateFields) => FilmCreateOneBuilder
+      deleteById: (id: number | string) => FilmDeleteByIdBuilder
+      deleteMany: () => FilmDeleteManyBuilder
+      updateById: (id: number | string, data: FilmUpdateFields) => FilmUpdateByIdBuilder
+      updateMany: (data: FilmUpdateFields) => FilmUpdateManyBuilder
+    },
+  },
+}
+
+export function createClient (knex: Knex): SqlmancerClient {
+  return {
+    models: {
+      Actor: {
+        findById: (id: number | string) => new ActorFindByIdBuilder({ knex, dialect: 'postgres' }, id),
+        findMany: () => new ActorFindManyBuilder({ knex, dialect: 'postgres' }),
+        findOne: () => new ActorFindOneBuilder({ knex, dialect: 'postgres' }),
+        createMany: (data: ActorCreateFields[]) => new ActorCreateManyBuilder({ knex, dialect: 'postgres' }, data),
+        createOne: (data: ActorCreateFields) => new ActorCreateOneBuilder({ knex, dialect: 'postgres' }, data),
+        deleteById: (id: number | string) => new ActorDeleteByIdBuilder({ knex, dialect: 'postgres' }, id),
+        deleteMany: () => new ActorDeleteManyBuilder({ knex, dialect: 'postgres' }),
+        updateById: (id: number | string, data: ActorUpdateFields) => new ActorUpdateByIdBuilder({ knex, dialect: 'postgres' }, id, data),
+        updateMany: (data: ActorUpdateFields) => new ActorUpdateManyBuilder({ knex, dialect: 'postgres' }, data),
+      },
+      Film: {
+        findById: (id: number | string) => new FilmFindByIdBuilder({ knex, dialect: 'postgres' }, id),
+        findMany: () => new FilmFindManyBuilder({ knex, dialect: 'postgres' }),
+        findOne: () => new FilmFindOneBuilder({ knex, dialect: 'postgres' }),
+        createMany: (data: FilmCreateFields[]) => new FilmCreateManyBuilder({ knex, dialect: 'postgres' }, data),
+        createOne: (data: FilmCreateFields) => new FilmCreateOneBuilder({ knex, dialect: 'postgres' }, data),
+        deleteById: (id: number | string) => new FilmDeleteByIdBuilder({ knex, dialect: 'postgres' }, id),
+        deleteMany: () => new FilmDeleteManyBuilder({ knex, dialect: 'postgres' }),
+        updateById: (id: number | string, data: FilmUpdateFields) => new FilmUpdateByIdBuilder({ knex, dialect: 'postgres' }, id, data),
+        updateMany: (data: FilmUpdateFields) => new FilmUpdateManyBuilder({ knex, dialect: 'postgres' }, data),
+      },
+    },
+    ...knex,
+  }
+}
+  "
+`;

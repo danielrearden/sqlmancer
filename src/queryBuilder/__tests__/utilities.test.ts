@@ -8,9 +8,7 @@ describe('utilities', () => {
 
   test('getDirection', () => {
     expect(getDirection('ASC')).toStrictEqual('asc')
-    expect(getDirection('ASC_NULLS_LAST')).toStrictEqual('asc nulls last')
     expect(getDirection('DESC')).toStrictEqual('desc')
-    expect(getDirection('DESC_NULLS_LAST')).toStrictEqual('desc nulls last')
     expect(() => getDirection('FOO' as any)).toThrow('Invalid direction value')
   })
 

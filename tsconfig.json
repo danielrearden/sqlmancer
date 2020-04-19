@@ -6,6 +6,7 @@
     ],
     "module": "commonjs",
     "target": "es5",
+    "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,

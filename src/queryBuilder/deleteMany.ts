@@ -10,8 +10,8 @@ export class DeleteManyBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
-  > extends BaseBuilder {
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
+> extends BaseBuilder {
   constructor(options: BuilderOptions, modelName: string, models: Models) {
     super(options, modelName, models)
   }
@@ -74,7 +74,16 @@ export class DeleteManyBuilder<
       query.transacting(this._transaction)
     }
 
-    query.whereIn(`${this._tableName}.${this._primaryKey}`, this._getWhereInBuilder())
+    query.whereIn(
+      `${this._tableName}.${this._primaryKey}`,
+      this._dialect === 'mysql' || this._dialect === 'mariadb'
+        ? this._knex
+            .queryBuilder()
+            .with('conditions', this._getWhereInBuilder())
+            .select(`conditions.${this._primaryKey}`)
+            .from('conditions')
+        : this._getWhereInBuilder()
+    )
 
     return query
   }

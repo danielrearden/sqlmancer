@@ -5,3 +5,5 @@ export type ModelDetails = {
   joins: { fieldName: string; type: GraphQLOutputType; on: { from: string; to: string }[]; through?: string }[]
   dependencies: { fieldName: string; columns: string[] }[]
 }
+
+export type Dialect = 'postgres' | 'mysql' | 'mariadb' | 'sqlite'

@@ -198,6 +198,7 @@ export const models: Models = {
 }
 
 export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
+  'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
@@ -210,6 +211,7 @@ export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = Acto
 }
 
 export class ActorFindManyBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindManyBuilder<
+  'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
@@ -276,6 +278,7 @@ export class ActorUpdateByIdBuilder extends UpdateByIdBuilder<ActorUpdateFields>
 }
 
 export class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindOneBuilder<
+  'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
@@ -288,6 +291,7 @@ export class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFi
 }
 
 export class FilmFindManyBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindManyBuilder<
+  'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
@@ -355,7 +359,7 @@ export class FilmUpdateByIdBuilder extends UpdateByIdBuilder<FilmUpdateFields> {
 
 export class LanguageFindOneBuilder<
   TSelected extends Pick<LanguageFields, any> = LanguageFields
-> extends FindOneBuilder<LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected, {}> {
+> extends FindOneBuilder<'postgres', LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected, {}> {
   constructor(options: BuilderOptions) {
     super(options, 'Language', models)
   }
@@ -363,7 +367,7 @@ export class LanguageFindOneBuilder<
 
 export class LanguageFindManyBuilder<
   TSelected extends Pick<LanguageFields, any> = LanguageFields
-> extends FindManyBuilder<LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected, {}> {
+> extends FindManyBuilder<'postgres', LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected, {}> {
   constructor(options: BuilderOptions) {
     super(options, 'Language', models)
   }

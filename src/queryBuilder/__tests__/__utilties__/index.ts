@@ -3,9 +3,10 @@ import { execute, parse, GraphQLSchema, GraphQLResolveInfo } from 'graphql'
 import { applyMiddleware } from 'graphql-middleware'
 import { BaseBuilder } from '../../base'
 import { BuilderOptions } from '../../types'
+import { dialects } from '../../../__tests__/knex'
 
 export function getRollback(knex: Knex) {
-  return async function (builder: BaseBuilder, fn: (result: any) => void) {
+  return async function(builder: BaseBuilder, fn: (result: any) => void) {
     const error = new Error('Rolling back transaction')
     await expect(
       knex.transaction(async trx => {
@@ -20,20 +21,10 @@ export function getRollback(knex: Knex) {
 export function withDialects(
   fn: (options: BuilderOptions, rollback: (builder: BaseBuilder, fn: (result: any) => void) => Promise<void>) => void
 ) {
-  const dialects: [string, Knex][] = [
-    [
-      'pg',
-      Knex({
-        client: 'pg',
-        connection: 'postgresql://postgres@localhost:5432/sakila',
-        debug: true,
-      }),
-    ],
-  ]
-  dialects.forEach(([dialect, knex]) => {
+  dialects.forEach(({ name, knex }) => {
     // eslint-disable-next-line jest/valid-title
-    describe(dialect, () => {
-      fn({ knex }, getRollback(knex))
+    describe(name, () => {
+      fn({ knex, dialect: name as any }, getRollback(knex))
 
       afterAll(async () => {
         await knex.destroy()

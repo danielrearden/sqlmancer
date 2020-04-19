@@ -36,7 +36,9 @@ export class CreateOneBuilder<TCreateFields extends Record<string, any>> extends
       query.transacting(this._transaction)
     }
 
-    query.returning(this._primaryKey)
+    if (this._dialect === 'postgres') {
+      query.returning(this._primaryKey)
+    }
 
     return query
   }

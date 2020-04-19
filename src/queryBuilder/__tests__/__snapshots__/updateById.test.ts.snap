@@ -1,17 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UpdateManyBuilder pg basic queries no additional options 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+exports[`UpdateManyBuilder mysql basic queries no additional options 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` = ?"`;
 
-exports[`UpdateManyBuilder pg basic queries no additional options 2`] = `
+exports[`UpdateManyBuilder mysql basic queries no additional options 2`] = `
 Array [
   "YENNEFER",
   10,
 ]
 `;
 
-exports[`UpdateManyBuilder pg basic queries non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+exports[`UpdateManyBuilder mysql basic queries non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` = ?"`;
 
-exports[`UpdateManyBuilder pg basic queries non-existent field 2`] = `
+exports[`UpdateManyBuilder mysql basic queries non-existent field 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder postgres basic queries no additional options 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`UpdateManyBuilder postgres basic queries no additional options 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder postgres basic queries non-existent field 1`] = `"update \\"actor\\" set \\"first_name\\" = ? where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`UpdateManyBuilder postgres basic queries non-existent field 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite basic queries no additional options 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` = ?"`;
+
+exports[`UpdateManyBuilder sqlite basic queries no additional options 2`] = `
+Array [
+  "YENNEFER",
+  10,
+]
+`;
+
+exports[`UpdateManyBuilder sqlite basic queries non-existent field 1`] = `"update \`actor\` set \`first_name\` = ? where \`actor\`.\`actor_id\` = ?"`;
+
+exports[`UpdateManyBuilder sqlite basic queries non-existent field 2`] = `
 Array [
   "YENNEFER",
   10,

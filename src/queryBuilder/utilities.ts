@@ -1,4 +1,4 @@
-import { QueryBuilderContext } from './types'
+import { QueryBuilderContext, Dialect } from './types'
 
 export function getAlias(name: string, context: QueryBuilderContext): string {
   const index = name.substring(0, 1).toLowerCase()
@@ -13,9 +13,7 @@ export function getAlias(name: string, context: QueryBuilderContext): string {
 export function getDirection(enumValue: string): string {
   const enumValues: Record<string, string> = {
     ASC: 'asc',
-    ASC_NULLS_LAST: 'asc nulls last',
     DESC: 'desc',
-    DESC_NULLS_LAST: 'desc nulls last',
   }
 
   if (!enumValues[enumValue]) {
@@ -68,4 +66,34 @@ export function getComparisonOperator(key: string): string {
   }
 
   return operator
+}
+
+export function getJsonObjectFunctionByDialect(dialect: Dialect) {
+  switch (dialect) {
+    case 'postgres':
+      return 'json_build_object'
+    case 'mysql':
+      return 'json_object'
+    case 'mariadb':
+      return 'json_object'
+    case 'sqlite':
+      return 'json_object'
+  }
+}
+
+export function getJsonAggregateExpressionByDialect(dialect: Dialect, isArray: boolean): [string, number] {
+  switch (dialect) {
+    case 'postgres':
+      return [isArray ? `coalesce(nullif(json_agg(??)::text, '[null]'), '[]')::json` : `json_agg(??) -> 0`, 1]
+    case 'mysql':
+      return isArray
+        ? [`if(json_arrayagg(??) is null, json_array(), json_arrayagg(??))`, 2]
+        : [`json_extract(json_arrayagg(??), '$[0]')`, 1]
+    case 'mariadb':
+      return isArray
+        ? [`if(json_arrayagg(??) is null, json_array(), json_arrayagg(??))`, 2]
+        : [`json_extract(json_arrayagg(??), '$[0]')`, 1]
+    case 'sqlite':
+      return [isArray ? `json_group_array(??)` : `json_extract(json_group_array(??), '$[0]')`, 1]
+  }
 }

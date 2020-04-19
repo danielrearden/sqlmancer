@@ -60,8 +60,8 @@ export class OrderByDirective extends SchemaDirectiveVisitor {
     return aggregateFieldsOnly
       ? `${modelName}OrderByAggregateFieldsOnly`
       : includeAssociations
-        ? `${modelName}OrderBy`
-        : `${modelName}OrderByNested`
+      ? `${modelName}OrderBy`
+      : `${modelName}OrderByNested`
   }
 
   private createInputType(
@@ -132,9 +132,7 @@ export class OrderByDirective extends SchemaDirectiveVisitor {
         name: 'SortDirection',
         values: {
           ASC: {},
-          ASC_NULLS_LAST: {},
           DESC: {},
-          DESC_NULLS_LAST: {},
         },
       })
 

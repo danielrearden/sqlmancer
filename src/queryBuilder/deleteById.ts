@@ -8,7 +8,7 @@ export class DeleteByIdBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > extends BaseBuilder {
   protected _id: number | string
 

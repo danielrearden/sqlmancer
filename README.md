@@ -51,7 +51,7 @@ query FilmQuery {
 ```
 
 ## Features
-* **Multiple dialect support.** Sqlmancer supports as many different SQL dialects as possible, enabling you to incorporate it into existing projects regardless of what flavor of SQL you're using.
+* **Multiple dialect support.** Sqlmancer supports Postgres, MySQL, MariaDB and SQLite, enabling you to incorporate it into existing projects regardless of what flavor of SQL you're using.
 * **Robust filtering and sorting.** Add complex filtering and sorting to your queries, including filtering using logical operators and filtering and sorting by fields and aggregate fields of related models.
 * **Arbitrarily deep nesting.** Define one-to-one, one-to-many and many-to-many relationships between models. Related models can be filtered, sorted and paginated just like root-level fields.
 * **CRUD made easy.** Create, update and delete records, with or without transactions, using a simple, fluent API. Easily provide WHERE, ORDER BY and LIMIT clauses to your queries when updating and deleting records.

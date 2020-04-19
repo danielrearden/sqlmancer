@@ -313,15 +313,15 @@ export function createClient (knex: Knex): SqlmancerClient {
       .map(
         ({ name }) => `
       ${name}: {
-        findById: (id: number | string) => new ${name}FindByIdBuilder({ knex }, id),
-        findMany: () => new ${name}FindManyBuilder({ knex }),
-        findOne: () => new ${name}FindOneBuilder({ knex }),
-        createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex }, data),
-        createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex }, data),
-        deleteById: (id: number | string) => new ${name}DeleteByIdBuilder({ knex }, id),
-        deleteMany: () => new ${name}DeleteManyBuilder({ knex }),
-        updateById: (id: number | string, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex }, id, data),
-        updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex }, data),
+        findById: (id: number | string) => new ${name}FindByIdBuilder({ knex, dialect: '${options.dialect}' }, id),
+        findMany: () => new ${name}FindManyBuilder({ knex, dialect: '${options.dialect}' }),
+        findOne: () => new ${name}FindOneBuilder({ knex, dialect: '${options.dialect}' }),
+        createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex, dialect: '${options.dialect}' }, data),
+        createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex, dialect: '${options.dialect}' }, data),
+        deleteById: (id: number | string) => new ${name}DeleteByIdBuilder({ knex, dialect: '${options.dialect}' }, id),
+        deleteMany: () => new ${name}DeleteManyBuilder({ knex, dialect: '${options.dialect}' }),
+        updateById: (id: number | string, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${options.dialect}' }, id, data),
+        updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex, dialect: '${options.dialect}' }, data),
       },`
       )
       .join('')}

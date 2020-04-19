@@ -11,7 +11,7 @@ export abstract class FindByIdBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>,
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>,
   TSelected extends Pick<TFields, any> = TFields,
   TRawSelected extends Record<string, any> = {},
   TJoined extends Record<string, any> = {}
@@ -75,7 +75,7 @@ export abstract class FindByIdBuilder<
    */
   public join<
     TName extends Extract<keyof TAssociations, string>,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
       builder: TAssociations[TName]
     ) => TAssociations[TName]
   >(
@@ -97,7 +97,7 @@ export abstract class FindByIdBuilder<
   public join<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
       builder: TAssociations[TName]
     ) => TAssociations[TName]
   >(
@@ -119,7 +119,7 @@ export abstract class FindByIdBuilder<
   public join<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
       builder: TAssociations[TName]
     ) => TAssociations[TName]
   >(name: TName, aliasOrGetBuilder?: TAlias | TGetBuilder, getBuilder?: TGetBuilder) {

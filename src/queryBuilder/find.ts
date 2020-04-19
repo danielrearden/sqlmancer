@@ -1,17 +1,27 @@
 import _ from 'lodash'
 import Knex from 'knex'
 
-import { BuilderOptions, Expressions, OrderBy, QueryBuilderContext, Models, Where, JoinedFromBuilder } from './types'
+import {
+  BuilderOptions,
+  Dialect,
+  Expressions,
+  OrderBy,
+  QueryBuilderContext,
+  Models,
+  Where,
+  JoinedFromBuilder,
+} from './types'
 import { BaseBuilder } from './base'
-import { getAlias } from './utilities'
+import { getAlias, getJsonObjectFunctionByDialect } from './utilities'
 import { parseResolveInfo, FlattenedResolveTree } from '../graphqlUtilities'
 import { GraphQLResolveInfo } from 'graphql'
 
 export abstract class FindBuilder<
+  TDialect extends Dialect,
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>,
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>,
   TMany extends boolean = true,
   TSelected extends Pick<TFields, any> = TFields,
   TRawSelected extends Record<string, any> = {},
@@ -30,7 +40,7 @@ export abstract class FindBuilder<
    */
   public select<T extends keyof TFields>(
     ...fields: T[]
-  ): FindBuilder<TFields, TIds, TEnums, TAssociations, TMany, Pick<TFields, T>, TRawSelected, TJoined> {
+  ): FindBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TMany, Pick<TFields, T>, TRawSelected, TJoined> {
     this._select = fields
     return this
   }
@@ -38,7 +48,17 @@ export abstract class FindBuilder<
   /**
    * Sets the SELECT clause for the query to all available fields.
    */
-  public selectAll(): FindBuilder<TFields, TIds, TEnums, TAssociations, TMany, TFields, TRawSelected, TJoined> {
+  public selectAll(): FindBuilder<
+    TDialect,
+    TFields,
+    TIds,
+    TEnums,
+    TAssociations,
+    TMany,
+    TFields,
+    TRawSelected,
+    TJoined
+  > {
     this._select = Object.keys(this._model.fields)
     return this
   }
@@ -48,7 +68,17 @@ export abstract class FindBuilder<
    */
   public addSelect<T extends keyof TFields>(
     ...fields: T[]
-  ): FindBuilder<TFields, TIds, TEnums, TAssociations, TMany, TSelected & Pick<TFields, T>, TRawSelected, TJoined> {
+  ): FindBuilder<
+    TDialect,
+    TFields,
+    TIds,
+    TEnums,
+    TAssociations,
+    TMany,
+    TSelected & Pick<TFields, T>,
+    TRawSelected,
+    TJoined
+  > {
     this._select = [...this._select, ...fields]
     return this
   }
@@ -60,6 +90,7 @@ export abstract class FindBuilder<
     column: TColumn,
     as?: TAlias
   ): FindBuilder<
+    TDialect,
     TFields,
     TIds,
     TEnums,
@@ -127,6 +158,7 @@ export abstract class FindBuilder<
     name: TName,
     getBuilder?: TGetBuilder
   ): FindBuilder<
+    TDialect,
     TFields,
     TIds,
     TEnums,
@@ -151,6 +183,7 @@ export abstract class FindBuilder<
     as: TAlias,
     getBuilder?: TGetBuilder
   ): FindBuilder<
+    TDialect,
     TFields,
     TIds,
     TEnums,
@@ -166,7 +199,7 @@ export abstract class FindBuilder<
   public join<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
       builder: TAssociations[TName]
     ) => TAssociations[TName]
   >(name: TName, aliasOrGetBuilder?: TAlias | TGetBuilder, getBuilder?: TGetBuilder) {
@@ -241,6 +274,19 @@ export abstract class FindBuilder<
    */
   public async execute<TRow = TSelected & TRawSelected & TJoined>() {
     const rows = await this.toQueryBuilder()
+
+    // We use JSON aggregation for joins and SQLite returns those fields as strings
+    if (this._dialect === 'sqlite') {
+      const joinFields = Object.keys(this._joins)
+      rows.forEach((row: any) => {
+        Object.keys(row).forEach(fieldName => {
+          if (joinFields.includes(fieldName)) {
+            row[fieldName] = JSON.parse(row[fieldName])
+          }
+        })
+      })
+    }
+
     return (this._isMany ? rows : rows[0] || null) as TMany extends true ? TRow[] : TRow | null
   }
 
@@ -271,9 +317,10 @@ export abstract class FindBuilder<
 
     if (context.nested) {
       const fields = _.toPairs(expressions.select)
+      const jsonObjectFn = getJsonObjectFunctionByDialect(this._dialect)
       query.select(
         this._knex.raw(
-          `json_build_object(${fields
+          `${jsonObjectFn}(${fields
             .map(([fieldName, value]) => `'${fieldName}', ${value.constructor.name === 'Builder' ? '(??)' : '??'}`)
             .join(', ')}) as ${this._knex.ref('o')}`,
           fields.map(([, value]) => value)

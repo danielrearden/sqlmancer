@@ -15,7 +15,18 @@ export class CreateManyBuilder<TCreateFields extends Record<string, any>> extend
    */
   public async execute(): Promise<(string | number)[]> {
     const results = await this.toQueryBuilder()
-    return results
+
+    if (this._dialect === 'postgres') {
+      return results
+    }
+
+    const id = results[0]
+
+    if (this._dialect === 'sqlite') {
+      return this._data.map((_record, index) => id - (this._data.length - 1) + index).filter(x => !isNaN(x))
+    }
+
+    return this._data.map((_record, index) => id + index).filter(x => !isNaN(x))
   }
 
   /**
@@ -38,7 +49,9 @@ export class CreateManyBuilder<TCreateFields extends Record<string, any>> extend
       query.transacting(this._transaction)
     }
 
-    query.returning(this._primaryKey)
+    if (this._dialect === 'postgres') {
+      query.returning(this._primaryKey)
+    }
 
     return query
   }

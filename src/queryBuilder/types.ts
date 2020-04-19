@@ -1,8 +1,12 @@
 import Knex = require('knex')
 import { FindBuilder } from './find'
+import { Dialect } from '../types'
+
+export * from '../types'
 
 export type BuilderOptions = {
   knex: Knex
+  dialect: Dialect
 }
 
 export type Models = Record<string, Model>
@@ -26,7 +30,7 @@ export type Association = {
   isMany: boolean
   on: { from: string; to: string }[]
   through?: string
-  builder: (options: BuilderOptions) => FindBuilder<any, any, any, any, any, any, any, any>
+  builder: (options: BuilderOptions) => FindBuilder<any, any, any, any, any, any, any, any, any>
 }
 
 export type QueryBuilderContext = {
@@ -82,11 +86,11 @@ export type AggregateFields = {
   max: number | string
 }
 
-export type OrderByDirection = 'ASC' | 'DESC' | 'ASC_NULLS_LAST' | 'DESC_NULLS_LAST'
+export type OrderByDirection = 'ASC' | 'DESC'
 
 export type OrderBy<
   TFields extends Record<string, any>,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = OrderByField<TFields> & OrderByAssociation<TAssociations>
 
 export type OrderByField<TFields extends Record<string, any>> = {
@@ -94,9 +98,10 @@ export type OrderByField<TFields extends Record<string, any>> = {
 }
 
 export type OrderByAssociation<
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = {
   [Key in keyof TAssociations]?: TAssociations[Key] extends FindBuilder<
+    any,
     infer TFields,
     any,
     any,
@@ -120,7 +125,7 @@ export type Where<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = WhereFields<TFields, TIds, TEnums> &
   WhereAssociations<TAssociations> &
   WhereLogicOperators<TFields, TIds, TEnums, TAssociations>
@@ -253,9 +258,10 @@ export type JsonOperators = {
 }
 
 export type WhereAssociations<
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = {
   [Key in keyof TAssociations]?: TAssociations[Key] extends FindBuilder<
+    any,
     infer TFields,
     infer TIds,
     infer TEnums,
@@ -288,7 +294,7 @@ export type WhereLogicOperators<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = {
   or?: Where<TFields, TIds, TEnums, TAssociations>[]
   and?: Where<TFields, TIds, TEnums, TAssociations>[]
@@ -296,6 +302,7 @@ export type WhereLogicOperators<
 }
 
 export type JoinedFromBuilder<T> = T extends FindBuilder<
+  any,
   any,
   any,
   any,

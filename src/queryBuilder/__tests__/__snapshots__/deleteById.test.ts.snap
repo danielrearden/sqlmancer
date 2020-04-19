@@ -1,8 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DeleteBuilder pg basic queries no additional options 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" = ?"`;
+exports[`DeleteBuilder mysql basic queries no additional options 1`] = `"delete from \`actor\` where \`actor\`.\`actor_id\` = ?"`;
 
-exports[`DeleteBuilder pg basic queries no additional options 2`] = `
+exports[`DeleteBuilder mysql basic queries no additional options 2`] = `
+Array [
+  20,
+]
+`;
+
+exports[`DeleteBuilder postgres basic queries no additional options 1`] = `"delete from \\"actor\\" where \\"actor\\".\\"actor_id\\" = ?"`;
+
+exports[`DeleteBuilder postgres basic queries no additional options 2`] = `
+Array [
+  20,
+]
+`;
+
+exports[`DeleteBuilder sqlite basic queries no additional options 1`] = `"delete from \`actor\` where \`actor\`.\`actor_id\` = ?"`;
+
+exports[`DeleteBuilder sqlite basic queries no additional options 2`] = `
 Array [
   20,
 ]

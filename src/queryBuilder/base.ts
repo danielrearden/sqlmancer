@@ -16,7 +16,14 @@ import {
   WhereAssociations,
   WhereFields,
 } from './types'
-import { getAggregateFunction, getAlias, getComparisonOperator, getDirection } from './utilities'
+import { Dialect } from '../types'
+import {
+  getAggregateFunction,
+  getAlias,
+  getComparisonOperator,
+  getDirection,
+  getJsonAggregateExpressionByDialect,
+} from './utilities'
 
 const AGGREGATE_KEYS = ['avg', 'max', 'min', 'sum', 'count']
 
@@ -28,6 +35,7 @@ export abstract class BaseBuilder {
   protected readonly _primaryKey: string
   protected readonly _options: BuilderOptions
   protected readonly _knex: Knex
+  protected readonly _dialect: Dialect
 
   protected _select: any[] = []
   protected _rawSelect: Record<string, string> = {}
@@ -41,6 +49,7 @@ export abstract class BaseBuilder {
   constructor(options: BuilderOptions, modelName: string, models: Models) {
     this._options = options
     this._knex = options.knex
+    this._dialect = options.dialect
     this._modelName = modelName
     this._models = models
     this._model = models[modelName]
@@ -86,16 +95,13 @@ export abstract class BaseBuilder {
           association,
         },
       }
+      const [jsonAggExpression, numberPlaceholders] = getJsonAggregateExpressionByDialect(
+        this._dialect,
+        association.isMany
+      )
       expressions.select[alias] = this._knex
         .queryBuilder()
-        .select(
-          this._knex.raw(
-            `${
-              association.isMany ? `coalesce(nullif(json_agg(??)::text, '[null]'), '[]')::json` : `json_agg(??) -> 0`
-            }`,
-            [`${subqueryAlias}.o`]
-          )
-        )
+        .select(this._knex.raw(jsonAggExpression, new Array(numberPlaceholders).fill(`${subqueryAlias}.o`)))
         .from(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
     })
   }
@@ -275,7 +281,12 @@ export abstract class BaseBuilder {
         if (aggregateKey === 'count') {
           const key = Object.keys(where!)[0]
           const value = (where as any)[key]
-          query.havingRaw(`count(${this._knex.ref(`${associationAlias}.*`)}) ${getComparisonOperator(key)} ?`, [value])
+          query.havingRaw(
+            `count(${this._knex.ref(`${associationAlias}.${associationModel.primaryKey}`)}) ${getComparisonOperator(
+              key
+            )} ?`,
+            [value]
+          )
         } else {
           Object.keys(where!).forEach(key => {
             if (key in associationModel.fields) {
@@ -414,7 +425,9 @@ export abstract class BaseBuilder {
 
     if (aggregateKey === 'count') {
       selectExpression = this._knex.raw(
-        `count(${this._knex.ref(`${joinedAlias}.*`)}) as ${this._knex.ref(orderByColumnName)}`
+        `count(${this._knex.ref(`${joinedAlias}.${associationModel.primaryKey}`)}) as ${this._knex.ref(
+          orderByColumnName
+        )}`
       )
       direction = getDirection(orderBy[aggregateKey] as any)
     } else {
