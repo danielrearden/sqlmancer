@@ -49,7 +49,11 @@ describe('utilities', () => {
 
     test('mysql', () => {
       const knex = Knex({ client: 'mysql2' })
+<<<<<<< HEAD
       const exp = (op: string, value: any) => getComparisonExpression(knex, 'mysql', '`x`.`y`', op, value).toSQL().sql
+=======
+      const exp = (op: string, value: any) => getComparisonExpression(knex, 'mysql', 'x.y', op, value).toSQL().sql
+>>>>>>> Make comparison expressions dialect-specific
 
       expect(exp('equal', 10)).toStrictEqual('`x`.`y` = ?')
       expect(exp('notEqual', 10)).toStrictEqual('`x`.`y` <> ?')
