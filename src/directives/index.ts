@@ -63,11 +63,20 @@ export const typeDefs: DocumentNode = parse(`
 
   directive @private on FIELD_DEFINITION | OBJECT | UNION | INTERFACE
 
+  directive @sqlmancer(
+    config: SqlmancerConfig!
+  ) on OBJECT
+
   directive @value(string: String!) on ENUM_VALUE
 
   directive @where(
     model: String
   ) on FIELD_DEFINITION
+
+  input SqlmancerConfig {
+    dialect: SqlmancerDialect!
+    transformFieldNames: SqlmancerFieldNameTransformation
+  }
 
   input SqlmancerJoinOn {
     from: String!
@@ -75,13 +84,16 @@ export const typeDefs: DocumentNode = parse(`
   }
 
   enum SqlmancerDialect {
-    postgres
+    POSTGRES
+    MYSQL
+    MARIADB
+    SQLITE
   }
 
   enum SqlmancerFieldNameTransformation {
-    camelCase
-    PascalCase
-    snake_case
+    CAMEL_CASE
+    PASCAL_CASE
+    SNAKE_CASE
   }
 `)
 

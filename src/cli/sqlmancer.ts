@@ -7,9 +7,7 @@ import { Command } from 'commander'
 import { createWriteStream, unlinkSync } from 'fs'
 import { join } from 'path'
 
-import { getBuildClientOptions } from '../generate/getBuildClientOptions'
-import { generateClientFromSchema } from '../generate/generateClientFromSchema'
-import { getTypeDefsFromGlob } from '../generate/getTypeDefsFromGlob'
+import { generateClientFromSchema, getTypeDefsFromGlob } from '../generate'
 import { makeSqlmancerSchema } from '../directives'
 import { GraphQLSchema } from 'graphql'
 
@@ -19,34 +17,23 @@ const program = new Command()
 
 program.version(pkg.version)
 
-program.command('generate [outputPath]', { isDefault: true })
-  .description('generate database client from type definitions')
-  .option(
-    '-d, --dialect <dialect>',
-    'SQL dialect of the database you are connecting to. Possible values: postgres'
-  )
-  .option(
-    '-x, --transformFieldNames <transformation>',
-    'transformation applied to turn field names into column names. Possible values: CAMEL_CASE, PASCAL_CASE, SNAKE_CASE'
-  )
-  .option(
-    '-t, --typeDefs <glob>',
-    'glob pattern to match any files containing your type definitions -- these can be plain text files or JavaScript/TypeScript files that use the gql tag'
-  )
-  .option(
-    '-c, --config <path>',
-    'relative path to a JavaScript file that can be used instead of using CLI flags'
-  )
-  .action((output, command) => {
-    const options = getBuildClientOptions({ ...command.opts(), output })
+program
+  .command('generate <typeDefs> <outputPath>', { isDefault: true })
+  .description('generate database client from type definitions', {
+    typeDefs:
+      'Glob pattern to match any files containing your type definitions. These can be plain text files or JavaScript/TypeScript files that use the gql tag',
+    outputPath:
+      "Directory where the generated files will be created. If a directory doesn't already exist, one will be created.",
+  })
+  .action((typeDefs, output) => {
     const spinner = Ora({ color: 'magenta' })
 
-    spinner.start(`Looking for type definitions using glob pattern "${options.typeDefs}"`)
-    const documents = getTypeDefsFromGlob(options.typeDefs)
+    spinner.start(`Looking for type definitions using glob pattern "${typeDefs}"`)
+    const documents = getTypeDefsFromGlob(typeDefs)
     if (documents.length) {
-      spinner.succeed(`Found ${documents.length} document(s) with type definitions using glob pattern "${options.typeDefs}"`)
+      spinner.succeed(`Found ${documents.length} document(s) with type definitions using glob pattern "${typeDefs}"`)
     } else {
-      spinner.fail(`Found no valid type definitions using glob pattern "${options.typeDefs}"`)
+      spinner.fail(`Found no valid type definitions using glob pattern "${typeDefs}"`)
       process.exit(1)
     }
 
@@ -67,7 +54,7 @@ program.command('generate [outputPath]', { isDefault: true })
 
     spinner.succeed('Successfully built schema from type definitions')
 
-    const dirPath = join(process.cwd(), options.output)
+    const dirPath = join(process.cwd(), output)
     const filePath = join(dirPath, 'sqlmancer.ts')
     spinner.start(`Creating directory at "${dirPath}"`)
 
@@ -82,7 +69,7 @@ program.command('generate [outputPath]', { isDefault: true })
     })
 
     try {
-      generateClientFromSchema(schema, options, stream)
+      generateClientFromSchema(schema, stream)
     } catch (e) {
       spinner.fail(`An error was encountered while generating the client:\n\n${e.message}\n`)
       process.exit(1)
@@ -106,7 +93,7 @@ program.command('generate [outputPath]', { isDefault: true })
         text: `Sqlmancer client has been generated successfully and can now be imported from "${filePath.substring(
           0,
           filePath.length - 2
-        )}js"\n`
+        )}js"\n`,
       })
     })
   })

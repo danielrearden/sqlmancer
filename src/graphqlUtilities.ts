@@ -74,8 +74,8 @@ function flattenFieldsByType(fieldsByType: FieldsByTypeName) {
   }, {} as Record<string, FlattenedResolveTree>)
 }
 
-export function getModelDirective(type: GraphQLNamedType) {
-  return type.astNode && type.astNode.directives!.find(directive => directive.name.value === 'model')
+export function getDirectiveByName(type: GraphQLNamedType | null | undefined, name: string) {
+  return type && type.astNode && type.astNode.directives!.find(directive => directive.name.value === name)
 }
 
 export function getModelDetails(type: GraphQLCompositeType, schema: GraphQLSchema) {

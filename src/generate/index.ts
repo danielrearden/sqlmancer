@@ -1,2 +1,2 @@
 export * from './generateClientFromSchema'
-export * from './getBuildClientOptions'
+export * from './getTypeDefsFromGlob'

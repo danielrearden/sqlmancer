@@ -19,12 +19,31 @@ import { getArgumentValues } from 'graphql/execution/values'
 import { GraphQLJSON, GraphQLJSONObject } from '../scalars'
 import { Writable } from 'stream'
 
-import { BuildClientOptions } from './types'
-import { getModelDetails, getModelDirective, isCustomScalar, makeNullable, unwrap } from '../graphqlUtilities'
+import {
+  getModelDetails,
+  getDirectiveArguments,
+  getDirectiveByName,
+  isCustomScalar,
+  makeNullable,
+  unwrap,
+} from '../graphqlUtilities'
+import { Dialect, FieldNameTransformation } from '../types'
 
 const libraryPath = process.env.SQLMANCER_PATH || 'sqlmancer'
 
-export function generateClientFromSchema(schema: GraphQLSchema, options: BuildClientOptions, stream: Writable): void {
+export function generateClientFromSchema(schema: GraphQLSchema, stream: Writable): void {
+  const sqlmancerDirective = getDirectiveByName(schema.getQueryType(), 'sqlmancer')
+
+  if (!sqlmancerDirective) {
+    throw new Error(
+      'Unable to parse Sqlmancer configuration from type definitions. Did you include the @sqlmancer directive on your Query type?'
+    )
+  }
+
+  const options = getDirectiveArguments(sqlmancerDirective, schema)!
+  const dialect = _.lowerCase(options.dialect) as Dialect
+  const transformFieldNames = options.transformFieldNames as FieldNameTransformation
+
   stream.write(`
 import Knex from 'knex'
 import {
@@ -50,7 +69,7 @@ export type JSONArray = Array<JSON>
 export const models: Models = {`)
 
   const models = getModels(schema).map(model => {
-    const modelDirective = getModelDirective(model)!
+    const modelDirective = getDirectiveByName(model, 'model')!
     const { table, pk, include } = getArgumentValues(schema.getDirective('model')!, modelDirective)
     const details = getModelDetails(model, schema)
     return {
@@ -71,7 +90,7 @@ export const models: Models = {`)
     fields: {\n${fields
       .map(
         ({ fieldName, columnName, hasDefault }) => `      ${fieldName}: {
-        column: '${columnName || transformFieldName(fieldName, options.transformFieldNames)}',${
+        column: '${columnName || transformFieldName(fieldName, transformFieldNames)}',${
           hasDefault ? '\n        hasDefault: true,\n' : ''
         }
       },`
@@ -177,7 +196,7 @@ enum ${enumName} {\n${enumType
     stream.write(
       `
 export class ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindOneBuilder<
-  '${options.dialect}',
+  '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
@@ -190,7 +209,7 @@ export class ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = 
 }
 
 export class ${name}FindManyBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindManyBuilder<
-  '${options.dialect}',
+  '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
@@ -218,7 +237,7 @@ export class ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> =
 
     stream.write(`
 export class ${name}DeleteManyBuilder extends DeleteManyBuilder<
-  '${options.dialect}',
+  '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
@@ -248,7 +267,7 @@ export class ${name}CreateOneBuilder extends CreateOneBuilder<${name}CreateField
 }
 
 export class ${name}UpdateManyBuilder extends UpdateManyBuilder<
-  '${options.dialect}',
+  '${dialect}',
   ${name}UpdateFields,
   ${name}Fields,
   ${name}Ids,
@@ -322,15 +341,15 @@ export function createClient (knex: Knex): SqlmancerClient {
       .map(
         ({ name }) => `
       ${name}: {
-        findById: (id: number | string) => new ${name}FindByIdBuilder({ knex, dialect: '${options.dialect}' }, id),
-        findMany: () => new ${name}FindManyBuilder({ knex, dialect: '${options.dialect}' }),
-        findOne: () => new ${name}FindOneBuilder({ knex, dialect: '${options.dialect}' }),
-        createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex, dialect: '${options.dialect}' }, data),
-        createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex, dialect: '${options.dialect}' }, data),
-        deleteById: (id: number | string) => new ${name}DeleteByIdBuilder({ knex, dialect: '${options.dialect}' }, id),
-        deleteMany: () => new ${name}DeleteManyBuilder({ knex, dialect: '${options.dialect}' }),
-        updateById: (id: number | string, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${options.dialect}' }, id, data),
-        updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex, dialect: '${options.dialect}' }, data),
+        findById: (id: number | string) => new ${name}FindByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        findMany: () => new ${name}FindManyBuilder({ knex, dialect: '${dialect}' }),
+        findOne: () => new ${name}FindOneBuilder({ knex, dialect: '${dialect}' }),
+        createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex, dialect: '${dialect}' }, data),
+        createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex, dialect: '${dialect}' }, data),
+        deleteById: (id: number | string) => new ${name}DeleteByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        deleteMany: () => new ${name}DeleteManyBuilder({ knex, dialect: '${dialect}' }),
+        updateById: (id: number | string, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${dialect}' }, id, data),
+        updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex, dialect: '${dialect}' }, data),
       },`
       )
       .join('')}
@@ -341,7 +360,7 @@ export function createClient (knex: Knex): SqlmancerClient {
   `)
 }
 
-function transformFieldName(fieldName: string, transformation?: BuildClientOptions['transformFieldNames']) {
+function transformFieldName(fieldName: string, transformation?: FieldNameTransformation) {
   switch (transformation) {
     case 'CAMEL_CASE':
       return _.camelCase(fieldName)
@@ -391,7 +410,7 @@ function getAssociationProperty(associationName: string, type: GraphQLOutputType
 function getModels(schema: GraphQLSchema) {
   return Object.keys(schema.getTypeMap()).reduce((acc, typeName) => {
     const type = schema.getType(typeName)!
-    const modelDirective = getModelDirective(type)
+    const modelDirective = getDirectiveByName(type, 'model')
     if (modelDirective) {
       acc.push(type as GraphQLCompositeType)
     }

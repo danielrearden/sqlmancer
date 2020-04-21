@@ -7,7 +7,10 @@ const typeDefs = `
   scalar JSON
   scalar JSONObject
 
-  type Query {
+  type Query @sqlmancer(config: {
+    dialect: POSTGRES
+    transformFieldNames: SNAKE_CASE
+  }) {
     widgets: [Widget!]! @limit @offset @orderBy(model: "Widget") @where(model: "Widget")
     alsoWidgets: [Widget!]! @orderBy(model: "Widget") @where(model: "Widget")
     someMoreWidgets: [Widget!]! @orderBy(model: "Widget") @where(model: "Widget")

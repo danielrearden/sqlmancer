@@ -5,11 +5,7 @@ import { schema } from './__fixtures__/schema'
 describe('generateClientFromSchema', () => {
   test('correct usage', async () => {
     const stream = new WritableMock()
-    generateClientFromSchema(
-      schema,
-      { dialect: 'postgres', transformFieldNames: 'SNAKE_CASE', typeDefs: '', output: '' },
-      stream
-    )
+    generateClientFromSchema(schema, stream)
     stream.end()
     await new Promise((resolve, reject) => {
       stream.on('finish', () => {
