@@ -40,7 +40,7 @@ export abstract class BaseBuilder {
   protected _select: any[] = []
   protected _rawSelect: Record<string, string> = {}
   protected _joins: Record<string, [any, any]> = {}
-  protected _where: Where<any, any, any, any> = {}
+  protected _where: Where<any, any, any, any, any> = {}
   protected _orderBy: OrderBy<any, any>[] = []
   protected _limit = 0
   protected _offset = 0
@@ -142,7 +142,7 @@ export abstract class BaseBuilder {
   }
 
   protected _getWhereExpressions(
-    where: Where<any, any, any, any>,
+    where: Where<any, any, any, any, any>,
     modelName: string,
     tableAlias: string,
     context: QueryBuilderContext
@@ -165,7 +165,7 @@ export abstract class BaseBuilder {
       } else if (key === 'and') {
         acc.push([
           qb => {
-            const wheres = where[key] as NonNullable<Where<any, any, any, any>['and']>
+            const wheres = where[key] as NonNullable<Where<any, any, any, any, any>['and']>
             wheres.forEach(where => {
               qb.andWhere(qb => {
                 this._getWhereExpressions(where, modelName, tableAlias, context).forEach(where =>
@@ -178,7 +178,7 @@ export abstract class BaseBuilder {
       } else if (key === 'or') {
         acc.push([
           qb => {
-            const wheres = where[key] as NonNullable<Where<any, any, any, any>['and']>
+            const wheres = where[key] as NonNullable<Where<any, any, any, any, any>['and']>
             wheres.forEach(where => {
               qb.orWhere(qb => {
                 this._getWhereExpressions(where, modelName, tableAlias, context).forEach(where =>
@@ -192,7 +192,7 @@ export abstract class BaseBuilder {
         acc.push([
           qb =>
             qb.whereNot(qb => {
-              const whereNot = where[key] as NonNullable<Where<any, any, any, any>['not']>
+              const whereNot = where[key] as NonNullable<Where<any, any, any, any, any>['not']>
               this._getWhereExpressions(whereNot, modelName, tableAlias, context).forEach(whereArgs =>
                 (qb.where as any)(...whereArgs)
               )
@@ -206,7 +206,7 @@ export abstract class BaseBuilder {
 
   protected _getFieldWhereExpression(
     field: string,
-    operatorAndValue: WhereFields<any, any, any>[string],
+    operatorAndValue: WhereFields<any, any, any, any>[string],
     modelName: string,
     tableAlias: string,
     aggregateKey?: keyof AggregateFields
@@ -277,7 +277,7 @@ export abstract class BaseBuilder {
 
     if (association.isMany) {
       Object.keys(_.pick(operatorAndValue, AGGREGATE_KEYS)).forEach((aggregateKey: keyof AggregateFields | 'count') => {
-        const where = (operatorAndValue as WhereAggregate<any, any, any, true>)[aggregateKey]
+        const where = (operatorAndValue as WhereAggregate<any, any, any, any, true>)[aggregateKey]
         if (aggregateKey === 'count') {
           const key = Object.keys(where!)[0]
           const value = (where as any)[key]

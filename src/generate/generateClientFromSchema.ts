@@ -177,6 +177,7 @@ enum ${enumName} {\n${enumType
     stream.write(
       `
 export class ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindOneBuilder<
+  '${options.dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
@@ -189,6 +190,7 @@ export class ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = 
 }
 
 export class ${name}FindManyBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindManyBuilder<
+  '${options.dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
@@ -215,7 +217,13 @@ export class ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> =
     )
 
     stream.write(`
-export class ${name}DeleteManyBuilder extends DeleteManyBuilder<${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations> {
+export class ${name}DeleteManyBuilder extends DeleteManyBuilder<
+  '${options.dialect}',
+  ${name}Fields,
+  ${name}Ids,
+  ${name}Enums,
+  ${name}Associations
+> {
   constructor(options: BuilderOptions) {
     super(options, '${name}', models)
   }
@@ -240,6 +248,7 @@ export class ${name}CreateOneBuilder extends CreateOneBuilder<${name}CreateField
 }
 
 export class ${name}UpdateManyBuilder extends UpdateManyBuilder<
+  '${options.dialect}',
   ${name}UpdateFields,
   ${name}Fields,
   ${name}Ids,

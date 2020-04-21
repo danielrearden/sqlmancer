@@ -127,6 +127,7 @@ export type ActorUpdateFields = {
 }
     
 export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
+  'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
@@ -139,6 +140,7 @@ export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = Acto
 }
 
 export class ActorFindManyBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindManyBuilder<
+  'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
@@ -162,7 +164,13 @@ export class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Act
   }
 }
       
-export class ActorDeleteManyBuilder extends DeleteManyBuilder<ActorFields, ActorIds, ActorEnums, ActorAssociations> {
+export class ActorDeleteManyBuilder extends DeleteManyBuilder<
+  'postgres',
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations
+> {
   constructor(options: BuilderOptions) {
     super(options, 'Actor', models)
   }
@@ -187,6 +195,7 @@ export class ActorCreateOneBuilder extends CreateOneBuilder<ActorCreateFields> {
 }
 
 export class ActorUpdateManyBuilder extends UpdateManyBuilder<
+  'postgres',
   ActorUpdateFields,
   ActorFields,
   ActorIds,
@@ -231,6 +240,7 @@ export type FilmUpdateFields = {
 }
     
 export class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindOneBuilder<
+  'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
@@ -243,6 +253,7 @@ export class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFi
 }
 
 export class FilmFindManyBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindManyBuilder<
+  'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
@@ -266,7 +277,13 @@ export class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmF
   }
 }
       
-export class FilmDeleteManyBuilder extends DeleteManyBuilder<FilmFields, FilmIds, FilmEnums, FilmAssociations> {
+export class FilmDeleteManyBuilder extends DeleteManyBuilder<
+  'postgres',
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations
+> {
   constructor(options: BuilderOptions) {
     super(options, 'Film', models)
   }
@@ -291,6 +308,7 @@ export class FilmCreateOneBuilder extends CreateOneBuilder<FilmCreateFields> {
 }
 
 export class FilmUpdateManyBuilder extends UpdateManyBuilder<
+  'postgres',
   FilmUpdateFields,
   FilmFields,
   FilmIds,

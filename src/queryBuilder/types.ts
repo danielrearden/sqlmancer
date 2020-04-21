@@ -122,29 +122,60 @@ export type OrderByAssociation<
 }
 
 export type Where<
+  TDialect extends Dialect,
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
   TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
-> = WhereFields<TFields, TIds, TEnums> &
+> = WhereFields<TDialect, TFields, TIds, TEnums> &
   WhereAssociations<TAssociations> &
-  WhereLogicOperators<TFields, TIds, TEnums, TAssociations>
+  WhereLogicOperators<TDialect, TFields, TIds, TEnums, TAssociations>
 
-export type WhereFields<TFields extends Record<string, any>, TIds extends string, TEnums> = {
-  [Key in keyof TFields]?: Key extends TIds
-    ? TFields[Key] extends Array<any>
-      ? IdArrayOperators
-      : IdOperators
-    : TFields[Key] extends Array<infer TElement>
-    ? TElement extends TEnums
-      ? EnumArrayOperators<TFields[Key]>
-      : TElement extends boolean
-      ? BooleanArrayOperators
-      : TElement extends number
-      ? NumberArrayOperators
-      : TElement extends string
-      ? StringArrayOperators
+export type WhereFields<TDialect extends Dialect, TFields extends Record<string, any>, TIds extends string, TEnums> = {
+  [Key in keyof TFields]?: TDialect extends 'postgres'
+    ? Key extends TIds
+      ? TFields[Key] extends Array<any>
+        ? IdArrayOperators
+        : IdOperators
+      : TFields[Key] extends Array<infer TElement>
+      ? TElement extends TEnums
+        ? EnumArrayOperators<TFields[Key]>
+        : TElement extends boolean
+        ? BooleanArrayOperators
+        : TElement extends number
+        ? NumberArrayOperators
+        : TElement extends string
+        ? StringArrayOperators
+        : never
+      : TFields[Key] extends TEnums
+      ? EnumOperators<TFields[Key]>
+      : TFields[Key] extends boolean
+      ? BooleanOperators
+      : TFields[Key] extends number
+      ? NumberOperators
+      : TFields[Key] extends string
+      ? StringOperators
+      : TFields[Key] extends JSON
+      ? JsonOperators
       : never
+    : TDialect extends 'sqlite'
+    ? Key extends TIds
+      ? TFields[Key] extends Array<any>
+        ? never
+        : IdOperators
+      : TFields[Key] extends TEnums
+      ? EnumOperators<TFields[Key]>
+      : TFields[Key] extends boolean
+      ? BooleanOperators
+      : TFields[Key] extends number
+      ? NumberOperators
+      : TFields[Key] extends string
+      ? StringOperators
+      : never
+    : Key extends TIds
+    ? TFields[Key] extends Array<any>
+      ? never
+      : IdOperators
     : TFields[Key] extends TEnums
     ? EnumOperators<TFields[Key]>
     : TFields[Key] extends boolean
@@ -261,7 +292,7 @@ export type WhereAssociations<
   TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = {
   [Key in keyof TAssociations]?: TAssociations[Key] extends FindBuilder<
-    any,
+    infer TDialect,
     infer TFields,
     infer TIds,
     infer TEnums,
@@ -271,11 +302,12 @@ export type WhereAssociations<
     any,
     any
   >
-    ? Where<TFields, TIds, TEnums, TAssociations> & WhereAggregate<TFields, TIds, TEnums, TMany>
+    ? Where<TDialect, TFields, TIds, TEnums, TAssociations> & WhereAggregate<TDialect, TFields, TIds, TEnums, TMany>
     : {}
 }
 
 export type WhereAggregate<
+  TDialect extends Dialect,
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
@@ -285,20 +317,21 @@ export type WhereAggregate<
   : {
       [AggKey in keyof AggregateFields]?: {
         [Key in keyof TFields]?: TFields[Key] extends AggregateFields[AggKey]
-          ? WhereFields<TFields, TIds, TEnums>[Key]
+          ? WhereFields<TDialect, TFields, TIds, TEnums>[Key]
           : never
       }
     } & { count?: NumberOperators }
 
 export type WhereLogicOperators<
+  TDialect extends Dialect,
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
   TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > = {
-  or?: Where<TFields, TIds, TEnums, TAssociations>[]
-  and?: Where<TFields, TIds, TEnums, TAssociations>[]
-  not?: Where<TFields, TIds, TEnums, TAssociations>
+  or?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
+  and?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
+  not?: Where<TDialect, TFields, TIds, TEnums, TAssociations>
 }
 
 export type JoinedFromBuilder<T> = T extends FindBuilder<

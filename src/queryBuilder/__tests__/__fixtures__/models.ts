@@ -235,7 +235,13 @@ export class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Act
   }
 }
 
-export class ActorDeleteManyBuilder extends DeleteManyBuilder<ActorFields, ActorIds, ActorEnums, ActorAssociations> {
+export class ActorDeleteManyBuilder extends DeleteManyBuilder<
+  'postgres',
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations
+> {
   constructor(options: BuilderOptions) {
     super(options, 'Actor', models)
   }
@@ -260,6 +266,7 @@ export class ActorCreateOneBuilder extends CreateOneBuilder<ActorCreateFields> {
 }
 
 export class ActorUpdateManyBuilder extends UpdateManyBuilder<
+  'postgres',
   ActorUpdateFields,
   ActorFields,
   ActorIds,
@@ -315,7 +322,13 @@ export class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmF
   }
 }
 
-export class FilmDeleteManyBuilder extends DeleteManyBuilder<FilmFields, FilmIds, FilmEnums, FilmAssociations> {
+export class FilmDeleteManyBuilder extends DeleteManyBuilder<
+  'postgres',
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations
+> {
   constructor(options: BuilderOptions) {
     super(options, 'Film', models)
   }
@@ -340,6 +353,7 @@ export class FilmCreateOneBuilder extends CreateOneBuilder<FilmCreateFields> {
 }
 
 export class FilmUpdateManyBuilder extends UpdateManyBuilder<
+  'postgres',
   FilmUpdateFields,
   FilmFields,
   FilmIds,
@@ -382,6 +396,7 @@ export class LanguageFindByIdBuilder<
 }
 
 export class LanguageDeleteManyBuilder extends DeleteManyBuilder<
+  'postgres',
   LanguageFields,
   LanguageIds,
   LanguageEnums,
@@ -416,6 +431,7 @@ export class LanguageCreateOneBuilder extends CreateOneBuilder<LanguageCreateFie
 }
 
 export class LanguageUpdateManyBuilder extends UpdateManyBuilder<
+  'postgres',
   LanguageUpdateFields,
   LanguageFields,
   LanguageIds,

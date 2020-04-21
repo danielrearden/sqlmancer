@@ -3,10 +3,11 @@ import Knex from 'knex'
 
 import { BaseBuilder } from './base'
 import { FindBuilder } from './find'
-import { BuilderOptions, Expressions, OrderBy, Models, Where } from './types'
+import { BuilderOptions, Dialect, Expressions, OrderBy, Models, Where } from './types'
 import { getAlias } from './utilities'
 
 export class UpdateManyBuilder<
+  TDialect extends Dialect,
   TUpdateFields extends Record<string, any>,
   TFields extends Record<string, any>,
   TIds extends string,
@@ -23,7 +24,7 @@ export class UpdateManyBuilder<
   /**
    * Sets the WHERE clause for the query.
    */
-  public where(where: Where<TFields, TIds, TEnums, TAssociations>) {
+  public where(where: Where<TDialect, TFields, TIds, TEnums, TAssociations>) {
     this._where = where
     return this
   }
@@ -31,7 +32,7 @@ export class UpdateManyBuilder<
   /**
    * Deep merges the provided object with the existing WHERE options for the query.
    */
-  public mergeWhere(where: Where<TFields, TIds, TEnums, TAssociations>) {
+  public mergeWhere(where: Where<TDialect, TFields, TIds, TEnums, TAssociations>) {
     this._where = _.merge({}, this._where, where)
     return this
   }

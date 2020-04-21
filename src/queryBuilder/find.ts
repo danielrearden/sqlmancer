@@ -107,7 +107,7 @@ export abstract class FindBuilder<
   /**
    * Sets the WHERE clause for the query.
    */
-  public where(where: Where<TFields, TIds, TEnums, TAssociations>) {
+  public where(where: Where<TDialect, TFields, TIds, TEnums, TAssociations>) {
     this._where = where
     return this
   }
@@ -115,7 +115,7 @@ export abstract class FindBuilder<
   /**
    * Deep merges the provided object with the existing WHERE options for the query.
    */
-  public mergeWhere(where: Where<TFields, TIds, TEnums, TAssociations>) {
+  public mergeWhere(where: Where<TDialect, TFields, TIds, TEnums, TAssociations>) {
     this._where = _.merge({}, this._where, where)
     return this
   }
