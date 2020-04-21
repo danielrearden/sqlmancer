@@ -154,7 +154,7 @@ export type WhereFields<TDialect extends Dialect, TFields extends Record<string,
       : TFields[Key] extends number
       ? NumberOperators
       : TFields[Key] extends string
-      ? StringOperators
+      ? PgStringOperators
       : TFields[Key] extends JSON
       ? JsonOperators
       : never
@@ -251,10 +251,13 @@ export type StringOperators = {
   lessThanOrEqual?: string
   like?: string
   notLike?: string
-  iLike?: string
-  notILike?: string
   in?: string[]
   notIn?: string[]
+}
+
+export type PgStringOperators = StringOperators & {
+  iLike?: string
+  notILike?: string
 }
 
 export type StringArrayOperators = {

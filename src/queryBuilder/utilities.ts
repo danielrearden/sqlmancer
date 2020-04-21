@@ -1,3 +1,4 @@
+import Knex from 'knex'
 import { QueryBuilderContext, Dialect } from './types'
 
 export function getAlias(name: string, context: QueryBuilderContext): string {
@@ -38,34 +39,77 @@ export function getAggregateFunction(key: string): string {
   return aggregates[key]
 }
 
-export function getComparisonOperator(key: string): string {
-  const operatorMap: Record<string, string> = {
-    equal: '=',
-    notEqual: '<>',
-    in: 'IN',
-    notIn: 'NOT IN',
-    contains: '@>',
-    containedBy: '<@',
-    overlaps: '&&',
-    greaterThan: '>',
-    greaterThanOrEqual: '>=',
-    lessThan: '<',
-    lessThanOrEqual: '<=',
-    like: 'LIKE',
-    notLike: 'NOT LIKE',
-    iLike: 'ILIKE',
-    notILike: 'NOT ILIKE',
-    hasKey: '?',
-    hasAnyKeys: '?|',
-    hasAllKeys: '?&',
-  }
-  const operator = operatorMap[key]
-
-  if (!operator) {
-    throw new Error(`Invalid operator "${key}"`)
+export function getComparisonExpression(
+  knex: Knex,
+  dialect: Dialect,
+  column: string | Knex.Ref<any, any>,
+  operator: string,
+  value: any
+): Knex.Raw {
+  if (value === null && (operator === 'equal' || operator === 'notEqual')) {
+    return knex.raw(`${column} is ${operator === 'notEqual' ? 'not ' : ''}null`)
   }
 
-  return operator
+  switch (operator) {
+    case 'equal':
+      return knex.raw(`${column} = ?`, [value])
+    case 'notEqual':
+      return knex.raw(`${column} <> ?`, [value])
+    case 'in':
+      return knex.raw(`${column} in ?`, [value])
+    case 'notIn':
+      return knex.raw(`${column} not in ?`, [value])
+    case 'greaterThan':
+      return knex.raw(`${column} > ?`, [value])
+    case 'greaterThanOrEqual':
+      return knex.raw(`${column} >= ?`, [value])
+    case 'lessThan':
+      return knex.raw(`${column} < ?`, [value])
+    case 'lessThanOrEqual':
+      return knex.raw(`${column} <= ?`, [value])
+    case 'like':
+      return knex.raw(`${column} like ?`, [value])
+    case 'notLike':
+      return knex.raw(`${column} not like ?`, [value])
+  }
+
+  if (dialect === 'postgres') {
+    switch (operator) {
+      case 'contains':
+        return knex.raw(`${column} @> ?`, [value])
+      case 'containedBy':
+        return knex.raw(`${column} <@ ?`, [value])
+      case 'overlaps':
+        return knex.raw(`${column} && ?`, [value])
+      case 'iLike':
+        return knex.raw(`${column} ilike ?`, [value])
+      case 'notILike':
+        return knex.raw(`${column} not ilike ?`, [value])
+      case 'hasKey':
+        return knex.raw(`${column} \\? ?`, [value])
+      case 'hasAnyKeys':
+        return knex.raw(`${column} \\?| ?::text[]`, [value])
+      case 'hasAllKeys':
+        return knex.raw(`${column} \\?& ?::text[]`, [value])
+    }
+  }
+
+  if (dialect === 'mysql' || dialect === 'mariadb') {
+    switch (operator) {
+      case 'contains':
+        return knex.raw(`json_contains(${column}, ?)`, [value])
+      case 'containedBy':
+        return knex.raw(`json_contains(?, ${column})`, [value])
+      case 'hasKey':
+        return knex.raw(`json_contains_path(${column}, 'all', concat('$.', ?))`, [value])
+      case 'hasAnyKeys':
+        return knex.raw(`json_contains_path(${column}, 'one', ${value.map(() => `concat('$.', ?)`).join(', ')})`, value)
+      case 'hasAllKeys':
+        return knex.raw(`json_contains_path(${column}, 'all', ${value.map(() => `concat('$.', ?)`).join(', ')})`, value)
+    }
+  }
+
+  throw new Error(`Unsupported operator "${operator}" for dialect ${dialect}`)
 }
 
 export function getJsonObjectFunctionByDialect(dialect: Dialect) {

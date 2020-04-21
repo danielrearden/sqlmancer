@@ -20,7 +20,7 @@ import { Dialect } from '../types'
 import {
   getAggregateFunction,
   getAlias,
-  getComparisonOperator,
+  getComparisonExpression,
   getDirection,
   getJsonAggregateExpressionByDialect,
 } from './utilities'
@@ -151,7 +151,7 @@ export abstract class BaseBuilder {
     const keys = Object.keys(where)
     return keys.reduce((acc, key) => {
       if (key in fields) {
-        acc.push(this._getFieldWhereExpression(key, where[key], modelName, tableAlias))
+        acc.push([this._getFieldWhereExpression(key, where[key], modelName, tableAlias)])
       } else if (key in associations) {
         acc.push(
           this._getAssociationWhereExpression(
@@ -210,26 +210,25 @@ export abstract class BaseBuilder {
     modelName: string,
     tableAlias: string,
     aggregateKey?: keyof AggregateFields
-  ): [Knex.Raw, string, Knex.Value] | [string, string, Knex.Value] {
+  ): Knex.Raw {
     const { fields } = this._models[modelName]
     const key = Object.keys(operatorAndValue!)[0]
     const value = (operatorAndValue as any)[key]
-    const operator =
-      value !== null || (key !== 'equal' && key !== 'notEqual')
-        ? getComparisonOperator(key)
-        : key === 'equal'
-        ? 'is'
-        : 'is not'
-
     return aggregateKey
-      ? [
-          this._knex.raw(
-            `${getAggregateFunction(aggregateKey)}(${this._knex.ref(`${tableAlias}.${fields[field].column}`)})`
-          ),
-          operator,
-          value,
-        ]
-      : [`${tableAlias}.${fields[field].column}`, operator, value]
+      ? getComparisonExpression(
+          this._knex,
+          this._dialect,
+          `${getAggregateFunction(aggregateKey)}(${this._knex.ref(`${tableAlias}.${fields[field].column}`)})`,
+          key,
+          value
+        )
+      : getComparisonExpression(
+          this._knex,
+          this._dialect,
+          this._knex.ref(`${tableAlias}.${fields[field].column}`),
+          key,
+          value
+        )
   }
 
   protected _getAssociationWhereExpression(
@@ -282,22 +281,25 @@ export abstract class BaseBuilder {
           const key = Object.keys(where!)[0]
           const value = (where as any)[key]
           query.havingRaw(
-            `count(${this._knex.ref(`${associationAlias}.${associationModel.primaryKey}`)}) ${getComparisonOperator(
-              key
-            )} ?`,
-            [value]
+            getComparisonExpression(
+              this._knex,
+              this._dialect,
+              `count(${this._knex.ref(`${associationAlias}.${associationModel.primaryKey}`)})`,
+              key,
+              value
+            )
           )
         } else {
           Object.keys(where!).forEach(key => {
             if (key in associationModel.fields) {
               query.having(
-                ...(this._getFieldWhereExpression(
+                this._getFieldWhereExpression(
                   key,
                   (where as any)[key],
                   association.modelName,
                   associationAlias,
                   aggregateKey
-                ) as [Knex.Raw, string, Knex.Value])
+                )
               )
             }
           })
