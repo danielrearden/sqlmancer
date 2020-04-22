@@ -121,4 +121,14 @@ describe('directives', () => {
       expect(fields.enumList).toBeUndefined()
     })
   })
+
+  describe('@many', () => {
+    test('correct usage', () => {
+      const field = schema.getQueryType()!.getFields().someMoreWidgets!
+      expect(field.args.find(arg => arg.name === 'where')).toBeDefined()
+      expect(field.args.find(arg => arg.name === 'orderBy')).toBeDefined()
+      expect(field.args.find(arg => arg.name === 'limit')).toBeDefined()
+      expect(field.args.find(arg => arg.name === 'offset')).toBeDefined()
+    })
+  })
 })

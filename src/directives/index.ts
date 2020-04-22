@@ -7,6 +7,7 @@ import { DependDirective } from './depend'
 import { IgnoreDirective } from './ignore'
 import { JoinDirective } from './join'
 import { LimitDirective } from './limit'
+import { ManyDirective } from './many'
 import { ModelDirective } from './model'
 import { OffsetDirective } from './offset'
 import { OrderByDirective } from './orderBy'
@@ -24,6 +25,7 @@ export const schemaDirectives: Record<string, typeof SchemaDirectiveVisitor> = {
   offset: OffsetDirective,
   orderBy: OrderByDirective,
   private: PrivateDirective,
+  many: ManyDirective,
   model: ModelDirective,
   value: ValueDirective,
   where: WhereDirective,
@@ -48,6 +50,10 @@ export const typeDefs: DocumentNode = parse(`
   ) on FIELD_DEFINITION
 
   directive @limit on FIELD_DEFINITION
+
+  directive @many(
+    model: String
+  ) on FIELD_DEFINITION
 
   directive @model(
     table: String!
@@ -110,6 +116,7 @@ export { DependDirective } from './depend'
 export { IgnoreDirective } from './ignore'
 export { JoinDirective } from './join'
 export { LimitDirective } from './limit'
+export { ManyDirective } from './many'
 export { ModelDirective } from './model'
 export { OffsetDirective } from './offset'
 export { OrderByDirective } from './orderBy'

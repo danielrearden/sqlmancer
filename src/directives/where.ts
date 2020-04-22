@@ -37,25 +37,23 @@ export class WhereDirective extends SchemaDirectiveVisitor {
     this.config = getSqlmancerConfig(this.schema)
   }
 
-  visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> | undefined {
+  visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     const modelName = this.args.model || unwrap(field.type).name
-    const type = this.getInputType(modelName, false)
+    const type = this.getInputType(modelName, false)!
 
-    if (type) {
-      return {
-        ...field,
-        args: [
-          ...field.args,
-          {
-            name: 'where',
-            type,
-            description: '',
-            defaultValue: undefined,
-            extensions: undefined,
-            astNode: undefined,
-          },
-        ],
-      }
+    return {
+      ...field,
+      args: [
+        ...field.args,
+        {
+          name: 'where',
+          type,
+          description: '',
+          defaultValue: undefined,
+          extensions: undefined,
+          astNode: undefined,
+        },
+      ],
     }
   }
 

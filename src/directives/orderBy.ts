@@ -19,25 +19,23 @@ import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
 import { makeNullable, unwrap, isNumberType, getModelDetails } from '../graphqlUtilities'
 
 export class OrderByDirective extends SchemaDirectiveVisitor {
-  visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> | void {
+  visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     const modelName = this.args.model || unwrap(field.type).name
-    const type = this.getInputType(modelName, true, false)
+    const type = this.getInputType(modelName, true, false)!
 
-    if (type) {
-      return {
-        ...field,
-        args: [
-          ...field.args,
-          {
-            name: 'orderBy',
-            type: new GraphQLList(new GraphQLNonNull(type)),
-            description: '',
-            defaultValue: undefined,
-            extensions: undefined,
-            astNode: undefined,
-          },
-        ],
-      }
+    return {
+      ...field,
+      args: [
+        ...field.args,
+        {
+          name: 'orderBy',
+          type: new GraphQLList(new GraphQLNonNull(type)),
+          description: '',
+          defaultValue: undefined,
+          extensions: undefined,
+          astNode: undefined,
+        },
+      ],
     }
   }
 

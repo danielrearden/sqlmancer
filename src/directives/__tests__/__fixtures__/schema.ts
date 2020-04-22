@@ -12,8 +12,8 @@ const typeDefs = `
     transformFieldNames: SNAKE_CASE
   }) {
     widgets: [Widget!]! @limit @offset @orderBy(model: "Widget") @where(model: "Widget")
-    alsoWidgets: [Widget!]! @orderBy(model: "Widget") @where(model: "Widget")
-    someMoreWidgets: [Widget!]! @orderBy(model: "Widget") @where(model: "Widget")
+    alsoWidgets: [Widget!]! @orderBy @where
+    someMoreWidgets: [Widget!]! @many
   }
 
   type Widget @model(table: "widgets", pk: "id") {
