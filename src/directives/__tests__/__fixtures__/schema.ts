@@ -1,4 +1,4 @@
-import { makeExecutableSchema } from 'graphql-tools-fork'
+import { makeExecutableSchema } from 'graphql-tools'
 import { GraphQLJSON, GraphQLJSONObject } from '../../../scalars'
 
 import { typeDefs as directiveTypeDefs, schemaDirectives } from '../../index'

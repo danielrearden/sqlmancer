@@ -1,7 +1,7 @@
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { GraphQLField, defaultFieldResolver } from 'graphql'
 
-export class JoinDirective extends SchemaDirectiveVisitor {
+export class JoinDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(field: GraphQLField<any, any>): void {
     const { resolve = defaultFieldResolver } = field
     field.resolve = (source, args, ctx, info) => {

@@ -1,4 +1,4 @@
-import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefinition } from 'graphql-tools-fork'
+import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefinition } from 'graphql-tools'
 import { parse, DocumentNode } from 'graphql'
 
 import { ColumnDirective } from './column'
@@ -15,7 +15,7 @@ import { PrivateDirective } from './private'
 import { ValueDirective } from './value'
 import { WhereDirective } from './where'
 
-export const schemaDirectives: Record<string, typeof SchemaDirectiveVisitor> = {
+export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
   col: ColumnDirective,
   depend: DependDirective,
   hasDefault: HasDefaultDirective,

@@ -1,7 +1,7 @@
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { GraphQLField, GraphQLInterfaceType, GraphQLObjectType, GraphQLUnionType } from 'graphql'
 
-export class PrivateDirective extends SchemaDirectiveVisitor {
+export class PrivateDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(
     field: GraphQLField<any, any>,
     details: {

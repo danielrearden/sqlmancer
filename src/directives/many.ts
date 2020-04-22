@@ -1,9 +1,9 @@
 import { GraphQLField, GraphQLInt } from 'graphql'
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { OrderByDirective } from './orderBy'
 import { WhereDirective } from './where'
 
-export class ManyDirective extends SchemaDirectiveVisitor {
+export class ManyDirective extends SchemaDirectiveVisitor<any, any> {
   private where: WhereDirective
   private orderBy: OrderByDirective
 

@@ -15,10 +15,10 @@ import {
   GraphQLOutputType,
   GraphQLString,
 } from 'graphql'
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 import { makeNullable, unwrap, isNumberType, getModelDetails } from '../graphqlUtilities'
 
-export class OrderByDirective extends SchemaDirectiveVisitor {
+export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     const modelName = this.args.model || unwrap(field.type).name
     const type = this.getInputType(modelName, true, false)!

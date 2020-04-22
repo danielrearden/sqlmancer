@@ -17,7 +17,7 @@ import {
   GraphQLString,
 } from 'graphql'
 import { GraphQLJSON, GraphQLJSONObject } from '../scalars'
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 import {
   makeNullable,
   unwrap,
@@ -28,7 +28,7 @@ import {
 } from '../graphqlUtilities'
 import { SqlmancerConfig } from '../types'
 
-export class WhereDirective extends SchemaDirectiveVisitor {
+export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
   private config: SqlmancerConfig
 
   constructor(config: any) {

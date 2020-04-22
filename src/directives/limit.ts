@@ -1,7 +1,7 @@
 import { GraphQLField, GraphQLInt } from 'graphql'
-import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
+import { SchemaDirectiveVisitor } from 'graphql-tools'
 
-export class LimitDirective extends SchemaDirectiveVisitor {
+export class LimitDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     return {
       ...field,
