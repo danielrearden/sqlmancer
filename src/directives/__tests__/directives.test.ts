@@ -10,7 +10,7 @@ import {
 import {
   IDOperators,
   IDListOperators,
-  StringOperators,
+  PgStringOperators,
   StringListOperators,
   IntOperators,
   IntListOperators,
@@ -64,8 +64,8 @@ describe('directives', () => {
       expect(fields.id.type).toStrictEqual(IDOperators)
       expect(fields.idNullable.type).toStrictEqual(IDOperators)
       expect(fields.idList.type).toStrictEqual(IDListOperators)
-      expect(fields.string.type).toStrictEqual(StringOperators)
-      expect(fields.stringNullable.type).toStrictEqual(StringOperators)
+      expect(fields.string.type).toStrictEqual(PgStringOperators)
+      expect(fields.stringNullable.type).toStrictEqual(PgStringOperators)
       expect(fields.stringList.type).toStrictEqual(StringListOperators)
       expect(fields.int.type).toStrictEqual(IntOperators)
       expect(fields.intNullable.type).toStrictEqual(IntOperators)

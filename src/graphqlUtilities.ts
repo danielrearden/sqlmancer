@@ -14,8 +14,9 @@ import {
   GraphQLSchema,
 } from 'graphql'
 import { parse, FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info'
-import { ModelDetails } from './types'
 import { getArgumentValues } from 'graphql/execution/values'
+
+import { Dialect, FieldNameTransformation, ModelDetails } from './types'
 
 export interface FlattenedResolveTree {
   name: string
@@ -76,6 +77,21 @@ function flattenFieldsByType(fieldsByType: FieldsByTypeName) {
 
 export function getDirectiveByName(type: GraphQLNamedType | null | undefined, name: string) {
   return type && type.astNode && type.astNode.directives!.find(directive => directive.name.value === name)
+}
+
+export function getSqlmancerConfig(schema: GraphQLSchema) {
+  const sqlmancerDirective = getDirectiveByName(schema.getQueryType(), 'sqlmancer')
+
+  if (!sqlmancerDirective) {
+    throw new Error(
+      'Unable to parse Sqlmancer configuration from type definitions. Did you include the @sqlmancer directive on your Query type?'
+    )
+  }
+
+  const { config } = getDirectiveArguments(sqlmancerDirective, schema)!
+  const dialect = _.lowerCase(config.dialect) as Dialect
+  const transformFieldNames = config.transformFieldNames as FieldNameTransformation
+  return { dialect, transformFieldNames }
 }
 
 export function getModelDetails(type: GraphQLCompositeType, schema: GraphQLSchema) {

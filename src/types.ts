@@ -2,6 +2,7 @@ import { GraphQLOutputType } from 'graphql'
 
 export type SqlmancerConfig = {
   dialect: Dialect
+  transformFieldNames: FieldNameTransformation
 }
 
 export type Dialect = 'postgres' | 'mysql' | 'mariadb' | 'sqlite'

@@ -18,9 +18,25 @@ import {
 } from 'graphql'
 import { GraphQLJSON, GraphQLJSONObject } from '../scalars'
 import { SchemaDirectiveVisitor } from 'graphql-tools-fork'
-import { makeNullable, unwrap, isCustomScalar, isNumberType, getModelDetails } from '../graphqlUtilities'
+import {
+  makeNullable,
+  unwrap,
+  isCustomScalar,
+  isNumberType,
+  getModelDetails,
+  getSqlmancerConfig,
+} from '../graphqlUtilities'
+import { SqlmancerConfig } from '../types'
 
 export class WhereDirective extends SchemaDirectiveVisitor {
+  private config: SqlmancerConfig
+
+  constructor(config: any) {
+    super(config)
+
+    this.config = getSqlmancerConfig(this.schema)
+  }
+
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> | undefined {
     const modelName = this.args.model || unwrap(field.type).name
     const type = this.getInputType(modelName, false)
@@ -106,22 +122,24 @@ export class WhereDirective extends SchemaDirectiveVisitor {
     const isList = nullableType instanceof GraphQLList
     const unwrappedType = unwrap(type)
     if (isList) {
-      if (unwrappedType instanceof GraphQLEnumType) {
-        return this.getEnumListType(unwrappedType as GraphQLEnumType)
-      } else if (unwrappedType === GraphQLID) {
-        return IDListOperators
-      } else if (unwrappedType === GraphQLString) {
-        return StringListOperators
-      } else if (unwrappedType === GraphQLInt) {
-        return IntListOperators
-      } else if (unwrappedType === GraphQLFloat) {
-        return FloatListOperators
-      } else if (unwrappedType === GraphQLBoolean) {
-        return BooleanListOperators
-      } else if (isCustomScalar(unwrappedType, GraphQLJSON)) {
-        return JSONOperators
-      } else if (isCustomScalar(unwrappedType, GraphQLJSONObject)) {
-        return JSONOperators
+      if (this.config.dialect === 'postgres') {
+        if (unwrappedType instanceof GraphQLEnumType) {
+          return this.getEnumListType(unwrappedType as GraphQLEnumType)
+        } else if (unwrappedType === GraphQLID) {
+          return IDListOperators
+        } else if (unwrappedType === GraphQLString) {
+          return StringListOperators
+        } else if (unwrappedType === GraphQLInt) {
+          return IntListOperators
+        } else if (unwrappedType === GraphQLFloat) {
+          return FloatListOperators
+        } else if (unwrappedType === GraphQLBoolean) {
+          return BooleanListOperators
+        } else if (isCustomScalar(unwrappedType, GraphQLJSON)) {
+          return JSONOperators
+        } else if (isCustomScalar(unwrappedType, GraphQLJSONObject)) {
+          return JSONOperators
+        }
       }
     } else {
       if (unwrappedType instanceof GraphQLEnumType) {
@@ -129,16 +147,16 @@ export class WhereDirective extends SchemaDirectiveVisitor {
       } else if (unwrappedType === GraphQLID) {
         return IDOperators
       } else if (unwrappedType === GraphQLString) {
-        return StringOperators
+        return this.config.dialect === 'postgres' ? PgStringOperators : StringOperators
       } else if (unwrappedType === GraphQLInt) {
         return IntOperators
       } else if (unwrappedType === GraphQLFloat) {
         return FloatOperators
       } else if (unwrappedType === GraphQLBoolean) {
         return BooleanOperators
-      } else if (isCustomScalar(unwrappedType, GraphQLJSON)) {
+      } else if (this.config.dialect !== 'sqlite' && isCustomScalar(unwrappedType, GraphQLJSON)) {
         return JSONOperators
-      } else if (isCustomScalar(unwrappedType, GraphQLJSONObject)) {
+      } else if (this.config.dialect !== 'sqlite' && isCustomScalar(unwrappedType, GraphQLJSONObject)) {
         return JSONOperators
       }
     }
@@ -254,9 +272,7 @@ export class WhereDirective extends SchemaDirectiveVisitor {
           fields: fieldsByAggregateFunction[agggregateFunctionName].reduce((acc, aggregateFieldName) => {
             const field = fields.find(field => field.fieldName === aggregateFieldName)!
             const nullableType = makeNullable(field.type)
-            const type = nullableType === GraphQLFloat
-              ? FloatOperators
-              : IntOperators
+            const type = nullableType === GraphQLFloat ? FloatOperators : IntOperators
             this.schema.getTypeMap()[type.name] = type
             return {
               [aggregateFieldName]: {
@@ -339,6 +355,11 @@ function getTextOperatorsTypeFields(type: GraphQLInputType) {
     notLike: {
       type,
     },
+  }
+}
+
+function getPgTextOperatorsTypeFields(type: GraphQLInputType) {
+  return {
     iLike: {
       type,
     },
@@ -417,6 +438,17 @@ export const StringOperators = new GraphQLInputObjectType({
     ...getNumericOperatorsTypeFields(GraphQLString),
     ...getInOperatorsTypeFields(GraphQLString),
     ...getTextOperatorsTypeFields(GraphQLString),
+  },
+})
+
+export const PgStringOperators = new GraphQLInputObjectType({
+  name: 'PgStringOperators',
+  fields: {
+    ...getEqualOperatorsTypeFields(GraphQLString),
+    ...getNumericOperatorsTypeFields(GraphQLString),
+    ...getInOperatorsTypeFields(GraphQLString),
+    ...getTextOperatorsTypeFields(GraphQLString),
+    ...getPgTextOperatorsTypeFields(GraphQLString),
   },
 })
 

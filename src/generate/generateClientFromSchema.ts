@@ -21,28 +21,18 @@ import { Writable } from 'stream'
 
 import {
   getModelDetails,
-  getDirectiveArguments,
   getDirectiveByName,
   isCustomScalar,
   makeNullable,
   unwrap,
+  getSqlmancerConfig,
 } from '../graphqlUtilities'
-import { Dialect, FieldNameTransformation } from '../types'
+import { FieldNameTransformation } from '../types'
 
 const libraryPath = process.env.SQLMANCER_PATH || 'sqlmancer'
 
 export function generateClientFromSchema(schema: GraphQLSchema, stream: Writable): void {
-  const sqlmancerDirective = getDirectiveByName(schema.getQueryType(), 'sqlmancer')
-
-  if (!sqlmancerDirective) {
-    throw new Error(
-      'Unable to parse Sqlmancer configuration from type definitions. Did you include the @sqlmancer directive on your Query type?'
-    )
-  }
-
-  const options = getDirectiveArguments(sqlmancerDirective, schema)!
-  const dialect = _.lowerCase(options.dialect) as Dialect
-  const transformFieldNames = options.transformFieldNames as FieldNameTransformation
+  const { dialect, transformFieldNames } = getSqlmancerConfig(schema)
 
   stream.write(`
 import Knex from 'knex'
