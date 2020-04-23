@@ -1,13 +1,13 @@
 import Knex from 'knex'
 
 import { BaseBuilder } from './base'
-import { BuilderOptions, Models } from './types'
+import { BuilderOptions, ID, Models } from './types'
 
 export class UpdateByIdBuilder<TUpdateFields extends Record<string, any>> extends BaseBuilder {
   protected _data: TUpdateFields
-  protected _id: number | string
+  protected _id: ID
 
-  constructor(options: BuilderOptions, modelName: string, models: Models, id: number | string, data: TUpdateFields) {
+  constructor(options: BuilderOptions, modelName: string, models: Models, id: ID, data: TUpdateFields) {
     super(options, modelName, models)
     this._id = id
     this._data = data

@@ -1,22 +1,17 @@
 import _ from 'lodash'
 import {
-  GraphQLBoolean,
   GraphQLCompositeType,
   GraphQLEnumType,
   GraphQLField,
-  GraphQLFloat,
-  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInputFieldConfigMap,
   GraphQLInputFieldMap,
-  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLOutputType,
-  GraphQLString,
 } from 'graphql'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
-import { makeNullable, unwrap, isNumberType, getModelDetails } from '../graphqlUtilities'
+import { makeNullable, unwrap, getModelDetails, getScalarTSType } from '../utilities'
 
 export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
@@ -108,13 +103,13 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
 
   private isSortableField(type: GraphQLOutputType): boolean {
     const nullableType = makeNullable(type)
+    const tsType = getScalarTSType(this.schema, nullableType.name)
 
     if (
-      nullableType === GraphQLID ||
-      nullableType === GraphQLString ||
-      nullableType === GraphQLInt ||
-      nullableType === GraphQLFloat ||
-      nullableType === GraphQLBoolean ||
+      tsType === 'number' ||
+      tsType === 'string' ||
+      tsType === 'ID' ||
+      tsType === 'boolean' ||
       nullableType instanceof GraphQLEnumType
     ) {
       return true
@@ -170,11 +165,13 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
   ): GraphQLInputFieldConfigMap {
     const fieldsByAggregateFunction = fields.reduce(
       (acc, { fieldName, type }) => {
-        if (isNumberType(type)) {
+        const nullableType = makeNullable(type)
+        const tsType = getScalarTSType(this.schema, nullableType.name)
+        if (tsType === 'number') {
           acc.avg.push(fieldName)
           acc.sum.push(fieldName)
         }
-        if (isNumberType(type) || type === GraphQLString) {
+        if (tsType === 'number' || tsType === 'string') {
           acc.min.push(fieldName)
           acc.max.push(fieldName)
         }

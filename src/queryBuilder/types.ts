@@ -73,8 +73,8 @@ export type Expressions = {
   orderBy: { column: string | Knex.QueryBuilder; order: string }[]
 }
 
-export type JSON = boolean | number | string | null | JSONArray | JSONMap
-export interface JSONMap {
+export type JSON = boolean | number | string | null | JSONArray | JSONObject
+export interface JSONObject {
   [key: string]: JSON
 }
 export type JSONArray = Array<JSON>

@@ -7,19 +7,6 @@ import {
   GraphQLList,
 } from 'graphql'
 
-import {
-  IDOperators,
-  IDListOperators,
-  PgStringOperators,
-  StringListOperators,
-  IntOperators,
-  IntListOperators,
-  FloatOperators,
-  FloatListOperators,
-  BooleanOperators,
-  BooleanListOperators,
-  JSONOperators,
-} from '../where'
 import { schema } from './__fixtures__/schema'
 
 describe('directives', () => {
@@ -61,30 +48,28 @@ describe('directives', () => {
       const argument = field.args.find(arg => arg.name === 'where')
       const type = argument!.type as GraphQLInputObjectType
       const fields = type.getFields()
-      expect(fields.id.type).toStrictEqual(IDOperators)
-      expect(fields.idNullable.type).toStrictEqual(IDOperators)
-      expect(fields.idList.type).toStrictEqual(IDListOperators)
-      expect(fields.string.type).toStrictEqual(PgStringOperators)
-      expect(fields.stringNullable.type).toStrictEqual(PgStringOperators)
-      expect(fields.stringList.type).toStrictEqual(StringListOperators)
-      expect(fields.int.type).toStrictEqual(IntOperators)
-      expect(fields.intNullable.type).toStrictEqual(IntOperators)
-      expect(fields.intList.type).toStrictEqual(IntListOperators)
-      expect(fields.float.type).toStrictEqual(FloatOperators)
-      expect(fields.floatNullable.type).toStrictEqual(FloatOperators)
-      expect(fields.floatList.type).toStrictEqual(FloatListOperators)
-      expect(fields.boolean.type).toStrictEqual(BooleanOperators)
-      expect(fields.booleanNullable.type).toStrictEqual(BooleanOperators)
-      expect(fields.booleanList.type).toStrictEqual(BooleanListOperators)
-      expect(fields.json.type).toStrictEqual(JSONOperators)
-      expect(fields.jsonNullable.type).toStrictEqual(JSONOperators)
-      expect(fields.jsonList.type).toStrictEqual(JSONOperators)
-      expect(fields.jsonObject.type).toStrictEqual(JSONOperators)
-      expect(fields.jsonObjectNullable.type).toStrictEqual(JSONOperators)
-      expect(fields.jsonObjectList.type).toStrictEqual(JSONOperators)
-      expect(fields.enum.type).toStrictEqual(schema.getType('FlavorOperators'))
-      expect(fields.enumNullable.type).toStrictEqual(schema.getType('FlavorOperators'))
-      expect(fields.enumList.type).toStrictEqual(schema.getType('FlavorListOperators'))
+      expect(fields.id.type.toString()).toStrictEqual('IDOperators')
+      expect(fields.idNullable.type.toString()).toStrictEqual('IDOperators')
+      expect(fields.idList.type.toString()).toStrictEqual('IDListOperators')
+      expect(fields.string.type.toString()).toStrictEqual('StringOperators')
+      expect(fields.stringNullable.type.toString()).toStrictEqual('StringOperators')
+      expect(fields.stringList.type.toString()).toStrictEqual('StringListOperators')
+      expect(fields.int.type.toString()).toStrictEqual('IntOperators')
+      expect(fields.intNullable.type.toString()).toStrictEqual('IntOperators')
+      expect(fields.intList.type.toString()).toStrictEqual('IntListOperators')
+      expect(fields.float.type.toString()).toStrictEqual('FloatOperators')
+      expect(fields.floatNullable.type.toString()).toStrictEqual('FloatOperators')
+      expect(fields.floatList.type.toString()).toStrictEqual('FloatListOperators')
+      expect(fields.boolean.type.toString()).toStrictEqual('BooleanOperators')
+      expect(fields.booleanNullable.type.toString()).toStrictEqual('BooleanOperators')
+      expect(fields.booleanList.type.toString()).toStrictEqual('BooleanListOperators')
+      expect(fields.json.type.toString()).toStrictEqual('JSONOperators')
+      expect(fields.jsonNullable.type.toString()).toStrictEqual('JSONOperators')
+      expect(fields.jsonObject.type.toString()).toStrictEqual('JSONObjectOperators')
+      expect(fields.jsonObjectNullable.type.toString()).toStrictEqual('JSONObjectOperators')
+      expect(fields.enum.type.toString()).toStrictEqual('FlavorOperators')
+      expect(fields.enumNullable.type.toString()).toStrictEqual('FlavorOperators')
+      expect(fields.enumList.type.toString()).toStrictEqual('FlavorListOperators')
     })
   })
 

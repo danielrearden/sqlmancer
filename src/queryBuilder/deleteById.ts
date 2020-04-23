@@ -2,7 +2,7 @@ import Knex from 'knex'
 
 import { BaseBuilder } from './base'
 import { FindBuilder } from './find'
-import { BuilderOptions, Models } from './types'
+import { BuilderOptions, ID, Models } from './types'
 
 export class DeleteByIdBuilder<
   TFields extends Record<string, any>,
@@ -10,9 +10,9 @@ export class DeleteByIdBuilder<
   TEnums,
   TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
 > extends BaseBuilder {
-  protected _id: number | string
+  protected _id: ID
 
-  constructor(options: BuilderOptions, modelName: string, models: Models, id: number | string) {
+  constructor(options: BuilderOptions, modelName: string, models: Models, id: ID) {
     super(options, modelName, models)
     this._id = id
   }

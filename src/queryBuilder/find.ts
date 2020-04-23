@@ -13,7 +13,7 @@ import {
 } from './types'
 import { BaseBuilder } from './base'
 import { getAlias, getJsonObjectFunctionByDialect } from './utilities'
-import { parseResolveInfo, FlattenedResolveTree } from '../graphqlUtilities'
+import { parseResolveInfo, FlattenedResolveTree } from '../utilities'
 import { GraphQLResolveInfo } from 'graphql'
 
 export abstract class FindBuilder<

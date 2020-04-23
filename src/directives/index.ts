@@ -82,6 +82,14 @@ export const typeDefs: DocumentNode = parse(`
   input SqlmancerConfig {
     dialect: SqlmancerDialect!
     transformFieldNames: SqlmancerFieldNameTransformation
+    customScalars: SqlmancerCustomScalars
+  }
+
+  input SqlmancerCustomScalars {
+    string: [String!]
+    number: [String!]
+    boolean: [String!]
+    JSON: [String!]
   }
 
   input SqlmancerJoinOn {

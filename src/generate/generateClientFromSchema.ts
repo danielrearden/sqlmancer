@@ -2,31 +2,26 @@ import _ from 'lodash'
 import {
   isEnumType,
   isScalarType,
-  GraphQLBoolean,
   GraphQLCompositeType,
   GraphQLEnumType,
   GraphQLID,
-  GraphQLInt,
-  GraphQLFloat,
   GraphQLList,
   GraphQLNonNull,
   GraphQLOutputType,
   GraphQLSchema,
-  GraphQLString,
   GraphQLType,
 } from 'graphql'
 import { getArgumentValues } from 'graphql/execution/values'
-import { GraphQLJSON, GraphQLJSONObject } from '../scalars'
 import { Writable } from 'stream'
 
 import {
-  getModelDetails,
   getDirectiveByName,
-  isCustomScalar,
+  getModelDetails,
+  getSqlmancerConfig,
   makeNullable,
   unwrap,
-  getSqlmancerConfig,
-} from '../graphqlUtilities'
+  getScalarTSType,
+} from '../utilities'
 import { FieldNameTransformation } from '../types'
 
 const libraryPath = process.env.SQLMANCER_PATH || 'sqlmancer'
@@ -50,8 +45,9 @@ import {
   UpdateManyBuilder
 } from '${libraryPath}'
 
-export type JSON = boolean | number | string | null | JSONArray | JSONMap
-export interface JSONMap {
+export type ID = number | string
+export type JSON = boolean | number | string | null | JSONArray | JSONObject
+export interface JSONObject {
   [key: string]: JSON
 }
 export type JSONArray = Array<JSON>
@@ -133,7 +129,7 @@ export const models: Models = {`)
 
     stream.write(`
 export type ${name}Fields = {\n${fields
-      .map(({ fieldName, type }) => `  ${getFieldProperty(fieldName, type, enums)}`)
+      .map(({ fieldName, type }) => `  ${getFieldProperty(schema, fieldName, type, enums)}`)
       .join('\n')}
 }
     `)
@@ -159,7 +155,7 @@ export type ${name}Associations = {\n${joins
 export type ${name}CreateFields = {\n${fields
       .map(
         ({ fieldName, type, hasDefault }) =>
-          `  ${getFieldProperty(fieldName, hasDefault ? makeNullable(type) : type, enums)}`
+          `  ${getFieldProperty(schema, fieldName, hasDefault ? makeNullable(type) : type, enums)}`
       )
       .join('\n')}
 }
@@ -168,7 +164,7 @@ export type ${name}CreateFields = {\n${fields
     stream.write(`
 export type ${name}UpdateFields = {\n${fields
       .filter(({ fieldName }) => fieldName !== primaryKey)
-      .map(({ fieldName, type }) => `  ${getFieldProperty(fieldName, makeNullable(type), enums)}`)
+      .map(({ fieldName, type }) => `  ${getFieldProperty(schema, fieldName, makeNullable(type), enums)}`)
       .join('\n')}
 }
     `)
@@ -218,7 +214,7 @@ export class ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> =
   ${name}Associations,
   TSelected
 > {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, '${name}', models, pk)
   }
 }
@@ -239,7 +235,7 @@ export class ${name}DeleteManyBuilder extends DeleteManyBuilder<
 }
 
 export class ${name}DeleteByIdBuilder extends DeleteByIdBuilder<${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations> {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, '${name}', models, pk)
   }
 }
@@ -270,7 +266,7 @@ export class ${name}UpdateManyBuilder extends UpdateManyBuilder<
 }
 
 export class ${name}UpdateByIdBuilder extends UpdateByIdBuilder<${name}UpdateFields> {
-  constructor(options: BuilderOptions, pk: number | string, data: ${name}UpdateFields) {
+  constructor(options: BuilderOptions, pk: ID, data: ${name}UpdateFields) {
     super(options, '${name}', models, pk, data)
   }
 }
@@ -310,14 +306,14 @@ type SqlmancerClient = {
     .map(
       ({ name }) => `
     ${name}: {
-      findById: (id: number | string) => ${name}FindByIdBuilder
+      findById: (id: ID) => ${name}FindByIdBuilder
       findMany: () => ${name}FindManyBuilder
       findOne: () => ${name}FindOneBuilder
       createMany: (data: ${name}CreateFields[]) => ${name}CreateManyBuilder
       createOne: (data: ${name}CreateFields) => ${name}CreateOneBuilder
-      deleteById: (id: number | string) => ${name}DeleteByIdBuilder
+      deleteById: (id: ID) => ${name}DeleteByIdBuilder
       deleteMany: () => ${name}DeleteManyBuilder
-      updateById: (id: number | string, data: ${name}UpdateFields) => ${name}UpdateByIdBuilder
+      updateById: (id: ID, data: ${name}UpdateFields) => ${name}UpdateByIdBuilder
       updateMany: (data: ${name}UpdateFields) => ${name}UpdateManyBuilder
     },`
     )
@@ -331,14 +327,14 @@ export function createClient (knex: Knex): SqlmancerClient {
       .map(
         ({ name }) => `
       ${name}: {
-        findById: (id: number | string) => new ${name}FindByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        findById: (id: ID) => new ${name}FindByIdBuilder({ knex, dialect: '${dialect}' }, id),
         findMany: () => new ${name}FindManyBuilder({ knex, dialect: '${dialect}' }),
         findOne: () => new ${name}FindOneBuilder({ knex, dialect: '${dialect}' }),
         createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex, dialect: '${dialect}' }, data),
         createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex, dialect: '${dialect}' }, data),
-        deleteById: (id: number | string) => new ${name}DeleteByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        deleteById: (id: ID) => new ${name}DeleteByIdBuilder({ knex, dialect: '${dialect}' }, id),
         deleteMany: () => new ${name}DeleteManyBuilder({ knex, dialect: '${dialect}' }),
-        updateById: (id: number | string, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${dialect}' }, id, data),
+        updateById: (id: ID, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${dialect}' }, id, data),
         updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex, dialect: '${dialect}' }, data),
       },`
       )
@@ -363,25 +359,19 @@ function transformFieldName(fieldName: string, transformation?: FieldNameTransfo
   }
 }
 
-function getFieldProperty(fieldName: string, type: GraphQLType, enums: Record<string, GraphQLEnumType>): string {
+function getFieldProperty(
+  schema: GraphQLSchema,
+  fieldName: string,
+  type: GraphQLType,
+  enums: Record<string, GraphQLEnumType>
+): string {
   const nullableType = makeNullable(type)
   const unwrappedType = unwrap(type)
   const colon = type instanceof GraphQLNonNull ? ': ' : '?: '
   const brackets = nullableType instanceof GraphQLList ? '[]' : ''
   if (isScalarType(unwrappedType)) {
-    let tsType
+    const tsType = getScalarTSType(schema, unwrappedType.name)
 
-    if (unwrappedType === GraphQLString) {
-      tsType = 'string'
-    } else if (unwrappedType === GraphQLInt || unwrappedType === GraphQLFloat) {
-      tsType = 'number'
-    } else if (unwrappedType === GraphQLBoolean) {
-      tsType = 'boolean'
-    } else if (unwrappedType === GraphQLID) {
-      tsType = '(number | string)'
-    } else if (isCustomScalar(unwrappedType, GraphQLJSON) || isCustomScalar(unwrappedType, GraphQLJSONObject)) {
-      tsType = 'JSON'
-    }
     return tsType ? `${fieldName}${colon}${tsType}${brackets}` : ''
   } else if (isEnumType(unwrappedType)) {
     enums[unwrappedType.name] = unwrappedType

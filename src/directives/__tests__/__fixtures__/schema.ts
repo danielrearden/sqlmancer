@@ -1,5 +1,5 @@
 import { makeExecutableSchema } from 'graphql-tools'
-import { GraphQLJSON, GraphQLJSONObject } from '../../../scalars'
+import { GraphQLJSON, GraphQLJSONObject } from 'graphql-type-json'
 
 import { typeDefs as directiveTypeDefs, schemaDirectives } from '../../index'
 
@@ -10,6 +10,9 @@ const typeDefs = `
   type Query @sqlmancer(config: {
     dialect: POSTGRES
     transformFieldNames: SNAKE_CASE
+    customScalars: {
+      JSON: ["JSON", "JSONObject"]
+    }
   }) {
     widgets: [Widget!]! @limit @offset @orderBy(model: "Widget") @where(model: "Widget")
     alsoWidgets: [Widget!]! @orderBy @where

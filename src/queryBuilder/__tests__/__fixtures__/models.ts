@@ -1,4 +1,4 @@
-import { BuilderOptions, Models } from '../../types'
+import { BuilderOptions, ID, Models } from '../../types'
 import { FindOneBuilder } from '../../findOne'
 import { FindManyBuilder } from '../../findMany'
 import { FindByIdBuilder } from '../../findById'
@@ -230,7 +230,7 @@ export class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Act
   ActorAssociations,
   TSelected
 > {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Actor', models, pk)
   }
 }
@@ -248,7 +248,7 @@ export class ActorDeleteManyBuilder extends DeleteManyBuilder<
 }
 
 export class ActorDeleteByIdBuilder extends DeleteByIdBuilder<ActorFields, ActorIds, ActorEnums, ActorAssociations> {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Actor', models, pk)
   }
 }
@@ -279,7 +279,7 @@ export class ActorUpdateManyBuilder extends UpdateManyBuilder<
 }
 
 export class ActorUpdateByIdBuilder extends UpdateByIdBuilder<ActorUpdateFields> {
-  constructor(options: BuilderOptions, pk: number | string, data: ActorUpdateFields) {
+  constructor(options: BuilderOptions, pk: ID, data: ActorUpdateFields) {
     super(options, 'Actor', models, pk, data)
   }
 }
@@ -317,7 +317,7 @@ export class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmF
   FilmAssociations,
   TSelected
 > {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Film', models, pk)
   }
 }
@@ -335,7 +335,7 @@ export class FilmDeleteManyBuilder extends DeleteManyBuilder<
 }
 
 export class FilmDeleteByIdBuilder extends DeleteByIdBuilder<FilmFields, FilmIds, FilmEnums, FilmAssociations> {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Film', models, pk)
   }
 }
@@ -366,7 +366,7 @@ export class FilmUpdateManyBuilder extends UpdateManyBuilder<
 }
 
 export class FilmUpdateByIdBuilder extends UpdateByIdBuilder<FilmUpdateFields> {
-  constructor(options: BuilderOptions, pk: number | string, data: FilmUpdateFields) {
+  constructor(options: BuilderOptions, pk: ID, data: FilmUpdateFields) {
     super(options, 'Film', models, pk, data)
   }
 }
@@ -390,7 +390,7 @@ export class LanguageFindManyBuilder<
 export class LanguageFindByIdBuilder<
   TSelected extends Pick<LanguageFields, any> = LanguageFields
 > extends FindByIdBuilder<LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected> {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Language', models, pk)
   }
 }
@@ -413,7 +413,7 @@ export class LanguageDeleteByIdBuilder extends DeleteByIdBuilder<
   LanguageEnums,
   LanguageAssociations
 > {
-  constructor(options: BuilderOptions, pk: number | string) {
+  constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Language', models, pk)
   }
 }
@@ -444,7 +444,7 @@ export class LanguageUpdateManyBuilder extends UpdateManyBuilder<
 }
 
 export class LanguageUpdateByIdBuilder extends UpdateByIdBuilder<LanguageUpdateFields> {
-  constructor(options: BuilderOptions, pk: number | string, data: LanguageUpdateFields) {
+  constructor(options: BuilderOptions, pk: ID, data: LanguageUpdateFields) {
     super(options, 'Language', models, pk, data)
   }
 }

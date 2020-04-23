@@ -1,11 +1,11 @@
 import Knex from 'knex'
 
-import { BuilderOptions, Expressions, QueryBuilderContext, Models, JoinedFromBuilder } from './types'
+import { BuilderOptions, Expressions, ID, QueryBuilderContext, Models, JoinedFromBuilder } from './types'
 import { BaseBuilder } from './base'
 import { FindBuilder } from './find'
 import { getAlias } from './utilities'
 import { GraphQLResolveInfo } from 'graphql'
-import { parseResolveInfo } from '../graphqlUtilities'
+import { parseResolveInfo } from '../utilities'
 
 export abstract class FindByIdBuilder<
   TFields extends Record<string, any>,
@@ -16,9 +16,9 @@ export abstract class FindByIdBuilder<
   TRawSelected extends Record<string, any> = {},
   TJoined extends Record<string, any> = {}
 > extends BaseBuilder {
-  protected _id: number | string
+  protected _id: ID
 
-  constructor(options: BuilderOptions, tableName: string, models: Models, id: number | string) {
+  constructor(options: BuilderOptions, tableName: string, models: Models, id: ID) {
     super(options, tableName, models)
     this._id = id
   }
