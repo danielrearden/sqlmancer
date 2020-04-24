@@ -2,10 +2,10 @@
   "compilerOptions": {
     "lib": [
       "dom",
-      "es2017"
+      "es2018"
     ],
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2018",
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

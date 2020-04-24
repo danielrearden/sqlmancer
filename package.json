@@ -4,11 +4,23 @@
   "description": "Conjure SQL from GraphQL queries",
   "author": "Daniel Rearden",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielrearden/sqlmancer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danielrearden/sqlmancer/issues"
+  },
+  "homepage": "https://sqlmancer.netlify.com",
   "keywords": [
     "graphql",
+    "sdl",
     "postgresql",
     "postgres",
     "pg",
+    "mysql",
+    "mariadb",
+    "sqlite",
     "sql",
     "sqlmancer"
   ],
@@ -17,6 +29,7 @@
     "/dist",
     "!**/__tests__/**/*"
   ],
+  "types": "dist/index.d.ts",
   "bin": {
     "sqlmancer": "./dist/cli/sqlmancer.js"
   },
@@ -26,15 +39,18 @@
     "lint": "eslint src",
     "prettify": "prettier --write \"src/**/*.ts\""
   },
+  "engines" : {
+    "node" : ">=10.0.0"
+  },
   "dependencies": {
-    "@graphql-toolkit/code-file-loader": "^0.10.3",
-    "@graphql-toolkit/core": "^0.10.3",
-    "@graphql-toolkit/graphql-file-loader": "^0.10.3",
-    "@graphql-toolkit/schema-merging": "^0.10.4",
+    "@graphql-toolkit/code-file-loader": "^0.10.5",
+    "@graphql-toolkit/core": "^0.10.5",
+    "@graphql-toolkit/graphql-file-loader": "^0.10.5",
+    "@graphql-toolkit/schema-merging": "^0.10.5",
     "chokidar": "^3.3.1",
     "commander": "^5.0.0",
     "graphql-parse-resolve-info": "^4.5.0",
-    "graphql-tools": "^5.0.0",
+    "graphql-tools": "^5.0.1-065f82a.0",
     "knex": "^0.20.13",
     "lodash": "^4.17.15",
     "mkdirp": "^1.0.4",

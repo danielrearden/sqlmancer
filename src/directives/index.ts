@@ -73,7 +73,7 @@ export const typeDefs: DocumentNode = parse(`
     config: SqlmancerConfig!
   ) on OBJECT
 
-  directive @value(string: String!) on ENUM_VALUE
+  directive @value(is: String!) on ENUM_VALUE
 
   directive @where(
     model: String

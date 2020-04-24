@@ -81,6 +81,7 @@ function generate(typeDefs: string, output: string): void {
     spinner.fail(
       `An error was encountered while building a schema from the provided type definitions:\n\n${e.message}\n`
     )
+    throw e
     process.exit(1)
   }
 
@@ -113,7 +114,7 @@ function generate(typeDefs: string, output: string): void {
     try {
       await new Promise((resolve, reject) =>
         exec(
-          `node -e "const ts = require('typescript'); ts.createProgram(['${filePath}'], { declaration: true, noImplicitAny: true }).emit();"`,
+          `node -e "const ts = require('typescript'); ts.createProgram(['${filePath}'], { declaration: true, target: 'es2018' }).emit();"`,
           error => (error ? reject(error) : resolve())
         )
       )
