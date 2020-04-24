@@ -9,7 +9,7 @@ import { join } from 'path'
 
 import { generateClientFromSchema, getTypeDefsFromGlob } from '../generate'
 import { makeSqlmancerSchema } from '../directives'
-import { GraphQLSchema } from 'graphql'
+import { DocumentNode, GraphQLSchema } from 'graphql'
 
 const pkg = require('../../package.json')
 
@@ -29,11 +29,11 @@ program
     const spinner = Ora({ color: 'magenta' })
 
     spinner.start(`Looking for type definitions using glob pattern "${typeDefs}"`)
-    const documents = getTypeDefsFromGlob(typeDefs)
-    if (documents.length) {
-      spinner.succeed(`Found ${documents.length} document(s) with type definitions using glob pattern "${typeDefs}"`)
+    const documentNode = getTypeDefsFromGlob(typeDefs) as DocumentNode
+    if (documentNode.definitions.length) {
+      spinner.succeed(`Found one or more files with valid type definitions using glob pattern "${typeDefs}"`)
     } else {
-      spinner.fail(`Found no valid type definitions using glob pattern "${typeDefs}"`)
+      spinner.fail(`Found no files with valid type definitions using glob pattern "${typeDefs}"`)
       process.exit(1)
     }
 
@@ -42,7 +42,7 @@ program
 
     try {
       schema = makeSqlmancerSchema({
-        typeDefs: documents,
+        typeDefs: documentNode,
         resolverValidationOptions: { requireResolversForResolveType: false },
       })
     } catch (e) {
