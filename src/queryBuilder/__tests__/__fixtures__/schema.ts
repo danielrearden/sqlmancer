@@ -20,6 +20,14 @@ const typeDefs = `
     film(id: ID!): Film
   }
 
+  type Mutation {
+    createFilm: CreateFilmPayload!
+  }
+
+  type CreateFilmPayload {
+    film: Film
+  }
+
   type Actor @model(table: "actor", pk: "actor_id") {
     id: ID! @col(name: "actor_id")
     firstName: String!

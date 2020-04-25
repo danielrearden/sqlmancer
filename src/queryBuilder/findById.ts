@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Knex from 'knex'
 
 import { BuilderOptions, Expressions, ID, QueryBuilderContext, Models, JoinedFromBuilder } from './types'
@@ -142,9 +143,31 @@ export abstract class FindByIdBuilder<
 
   /**
    * Modifies the query based on the passed in GraphQLResolveInfo object.
+   *
+   * An optional `path` parameter can be passed in when the model will be returned as part of a more deeply nested field.
+   * For example, the type of the field being returned might be `CreatePostPayload` with a field named `post` and it's this
+   * field we're populating using a PostFindByIdBuilder instance. In this case, we would pass in a value of "post" for the
+   * `path` to identify the correct selection set and arguments to be parsed. The path can be arbitrarily deep, with each
+   * level separated by a period, for example: "result.post".
    */
-  public resolveInfo(info: GraphQLResolveInfo) {
-    const { fields } = parseResolveInfo(info)!
+  public resolveInfo(info: GraphQLResolveInfo, path?: string) {
+    let tree = parseResolveInfo(info)!
+
+    if (path) {
+      tree = _.get(
+        tree,
+        path
+          .split('.')
+          .map(fieldName => `fields.${fieldName}`)
+          .join('.')
+      )
+
+      if (!tree) {
+        throw new Error(`Invalid path provided to resolveInfo: ${path}`)
+      }
+    }
+
+    const { fields } = tree
 
     Object.keys(fields).forEach(fieldName => {
       const field = fields[fieldName]

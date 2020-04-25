@@ -224,13 +224,33 @@ export abstract class FindBuilder<
    * Modifies the query based on the passed in GraphQLResolveInfo object. The selection set will determine what columns
    * should be selected and which related models should be joined. The `where`, `orderBy`, `limit` and `offset` arguments,
    * if they exist on the field and were provided, will be used to set the corresponding clauses in the query.
+   *
+   * An optional `path` parameter can be passed in when the model will be returned as part of a more deeply nested field.
+   * For example, the type of the field being returned might be `CreatePostPayload` with a field named `post` and it's this
+   * field we're populating using a PostFindOneBuilder instance. In this case, we would pass in a value of "post" for the
+   * `path` to identify the correct selection set and arguments to be parsed. The path can be arbitrarily deep, with each
+   * level separated by a period, for example: "result.post".
    */
-  public resolveInfo(info: GraphQLResolveInfo | FlattenedResolveTree) {
+  public resolveInfo(info: GraphQLResolveInfo | FlattenedResolveTree, path?: string) {
     let tree: FlattenedResolveTree
     if ('path' in info) {
       tree = parseResolveInfo(info)!
     } else {
       tree = info
+    }
+
+    if (path) {
+      tree = _.get(
+        tree,
+        path
+          .split('.')
+          .map(fieldName => `fields.${fieldName}`)
+          .join('.')
+      )
+
+      if (!tree) {
+        throw new Error(`Invalid path provided to resolveInfo: ${path}`)
+      }
     }
 
     const { fields, args } = tree

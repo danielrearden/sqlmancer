@@ -108,6 +108,15 @@ Array [
 ]
 `;
 
+exports[`FindByIdBuilder mysql resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` where \`f1\`.\`film_id\` = ? limit ?"`;
+
+exports[`FindByIdBuilder mysql resolveInfo valid path 2`] = `
+Array [
+  10,
+  1,
+]
+`;
+
 exports[`FindByIdBuilder mysql select add 1`] = `"select \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`actor_id\` as \`id\` from \`actor\` as \`a1\` where \`a1\`.\`actor_id\` = ? limit ?"`;
 
 exports[`FindByIdBuilder mysql select add 2`] = `
@@ -270,6 +279,15 @@ Array [
 ]
 `;
 
+exports[`FindByIdBuilder postgres resolveInfo valid path 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\" where \\"f1\\".\\"film_id\\" = ? limit ?"`;
+
+exports[`FindByIdBuilder postgres resolveInfo valid path 2`] = `
+Array [
+  10,
+  1,
+]
+`;
+
 exports[`FindByIdBuilder postgres select add 1`] = `"select \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"actor_id\\" as \\"id\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"actor_id\\" = ? limit ?"`;
 
 exports[`FindByIdBuilder postgres select add 2`] = `
@@ -427,6 +445,15 @@ Array [
   "Title",
   10,
   3,
+  10,
+  1,
+]
+`;
+
+exports[`FindByIdBuilder sqlite resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` where \`f1\`.\`film_id\` = ? limit ?"`;
+
+exports[`FindByIdBuilder sqlite resolveInfo valid path 2`] = `
+Array [
   10,
   1,
 ]

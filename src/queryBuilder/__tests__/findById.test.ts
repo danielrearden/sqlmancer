@@ -214,6 +214,37 @@ describe('FindByIdBuilder', () => {
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
+
+      test('valid path', async () => {
+        const query = `mutation {
+          createFilm {
+            film {
+              id
+              title
+            }
+          }
+        }`
+        const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
+        const builder = new FilmFindByIdBuilder(options, 10).resolveInfo(info, 'film')
+        const { sql, bindings } = builder.toQueryBuilder().toSQL()
+        const result = await builder.execute()
+        expect(result).toBeObject()
+        expect(sql).toMatchSnapshot()
+        expect(bindings).toMatchSnapshot()
+      })
+
+      test('invalid path', async () => {
+        const query = `mutation {
+          createFilm {
+            film {
+              id
+              title
+            }
+          }
+        }`
+        const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
+        expect(() => new FilmFindByIdBuilder(options, 10).resolveInfo(info, 'foo')).toThrow('Invalid path')
+      })
     })
 
     describe('transaction', () => {
