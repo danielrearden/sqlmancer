@@ -65,7 +65,7 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
   private createInputType(modelName: string, withAggregateFields: boolean): GraphQLInputObjectType | undefined {
     const modelType = this.getModelType(modelName)
     const typeName = this.getInputName(modelName, withAggregateFields)
-    const { fields, joins } = getModelDetails(modelType, this.schema)
+    const { fields, associations } = getModelDetails(modelType, this.schema)
     const inputType: GraphQLInputObjectType = new GraphQLInputObjectType({
       name: typeName,
       fields: this.getColumnFields(fields),
@@ -73,7 +73,7 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
     this.schema.getTypeMap()[typeName] = inputType
     Object.assign(inputType.getFields(), {
       ...this.getLogicalOperatorFields(withAggregateFields ? this.getInputType(modelName, false)! : inputType),
-      ...this.getAssociationFields(joins),
+      ...this.getAssociationFields(associations),
       ...(withAggregateFields ? this.getAggregateFields(modelName, fields) : {}),
     })
 

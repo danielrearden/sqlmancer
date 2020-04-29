@@ -24,14 +24,13 @@ import {
 } from '../utilities'
 import { FieldNameTransformation } from '../types'
 
-const libraryPath = process.env.SQLMANCER_PATH || 'sqlmancer'
-
 export function generateClientFromSchema(schema: GraphQLSchema, stream: Writable): void {
   const { dialect, transformFieldNames } = getSqlmancerConfig(schema)
 
   stream.write(`
 import Knex from 'knex'
 import {
+  AggregateBuilder,
   BuilderOptions,
   CreateManyBuilder,
   CreateOneBuilder,
@@ -43,7 +42,7 @@ import {
   Models,
   UpdateByIdBuilder,
   UpdateManyBuilder
-} from '${libraryPath}'
+} from 'sqlmancer'
 
 export type ID = number | string
 export type JSON = boolean | number | string | null | JSONArray | JSONObject
@@ -67,18 +66,20 @@ export const models: Models = {`)
     }
   })
 
-  models.forEach(({ name, tableName, primaryKey, include, details: { fields, joins, dependencies } }) => {
-    stream.write(
-      `
+  models.forEach(
+    ({ name, tableName, primaryKey, include, details: { fields, associations, dependencies, aggregates } }) => {
+      stream.write(
+        `
   ${name}: {
     tableName: '${tableName}',
     primaryKey: '${primaryKey}',
     fields: {\n${fields
       .map(
-        ({ fieldName, columnName, hasDefault }) => `      ${fieldName}: {
-        column: '${columnName || transformFieldName(fieldName, transformFieldNames)}',${
-          hasDefault ? '\n        hasDefault: true,\n' : ''
-        }
+        ({ fieldName, columnName, hasDefault, type }) => `      ${fieldName}: {
+        column: '${columnName || transformFieldName(fieldName, transformFieldNames)}',
+        type: '${getScalarTSType(schema, unwrap(type).name) || 'any'}${
+          makeNullable(type) instanceof GraphQLList ? '[]' : ''
+        }',${hasDefault ? '\n        hasDefault: true,\n' : ''}
       },`
       )
       .join('\n')}
@@ -88,7 +89,7 @@ export const models: Models = {`)
       .map(({ fieldName, columns }) => `      ${fieldName}: [${columns.map(col => `'${col}'`).join(', ')}],`)
       .join('\n')}
     },
-    associations: {\n${joins
+    associations: {\n${associations
       .map(({ fieldName, type, on, through }) => {
         const isList = makeNullable(type) instanceof GraphQLList
         const associationType = unwrap(type)
@@ -96,7 +97,7 @@ export const models: Models = {`)
         const isModel = !!models.find(model => model.name === associationType.name)
         if (!isModel) {
           throw new Error(
-            `The @join directive was used on ${name}.${fieldName} but the type ${associationType.name} is not a model.`
+            `The @associate directive was used on ${name}.${fieldName} but the type ${associationType.name} is not a model.`
           )
         }
 
@@ -118,13 +119,18 @@ export const models: Models = {`)
       })
       .join('\n')}
     },
+    aggregates: {\n${Object.keys(aggregates)
+      .map(fieldName => `      ${fieldName}: '${aggregates[fieldName]}',`)
+      .join('\n')}
+    },
   },`
-    )
-  })
+      )
+    }
+  )
 
   stream.write('\n}\n')
 
-  models.forEach(({ name, primaryKey, details: { fields, joins } }) => {
+  models.forEach(({ name, primaryKey, details: { fields, associations: joins } }) => {
     const enums: Record<string, GraphQLEnumType> = {}
 
     stream.write(`
@@ -218,6 +224,14 @@ export class ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> =
     super(options, '${name}', models, pk)
   }
 }
+
+export class ${name}AggregateBuilder<
+  TSelected extends Pick<${name}Fields, any> = ${name}Fields
+> extends AggregateBuilder<'postgres', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations> {
+  constructor(options: BuilderOptions) {
+    super(options, '${name}', models)
+  }
+}
       `
     )
 
@@ -306,15 +320,16 @@ type SqlmancerClient = {
     .map(
       ({ name }) => `
     ${name}: {
-      findById: (id: ID) => ${name}FindByIdBuilder
+      findById: ({ id: ID }) => ${name}FindByIdBuilder
       findMany: () => ${name}FindManyBuilder
       findOne: () => ${name}FindOneBuilder
-      createMany: (data: ${name}CreateFields[]) => ${name}CreateManyBuilder
-      createOne: (data: ${name}CreateFields) => ${name}CreateOneBuilder
-      deleteById: (id: ID) => ${name}DeleteByIdBuilder
+      aggregate: () => ${name}AggregateBuilder
+      createMany: ({ input: ${name}CreateFields[] }) => ${name}CreateManyBuilder
+      createOne: ({ input: ${name}CreateFields }) => ${name}CreateOneBuilder
+      deleteById: ({ id: ID }) => ${name}DeleteByIdBuilder
       deleteMany: () => ${name}DeleteManyBuilder
-      updateById: (id: ID, data: ${name}UpdateFields) => ${name}UpdateByIdBuilder
-      updateMany: (data: ${name}UpdateFields) => ${name}UpdateManyBuilder
+      updateById: ({ id: ID, input: ${name}UpdateFields }) => ${name}UpdateByIdBuilder
+      updateMany: ({ input: ${name}UpdateFields }) => ${name}UpdateManyBuilder
     },`
     )
     .join('')}
@@ -327,15 +342,16 @@ export function createClient (knex: Knex): SqlmancerClient {
       .map(
         ({ name }) => `
       ${name}: {
-        findById: (id: ID) => new ${name}FindByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        findById: ({ id: ID }) => new ${name}FindByIdBuilder({ knex, dialect: '${dialect}' }, id),
         findMany: () => new ${name}FindManyBuilder({ knex, dialect: '${dialect}' }),
         findOne: () => new ${name}FindOneBuilder({ knex, dialect: '${dialect}' }),
-        createMany: (data: ${name}CreateFields[]) => new ${name}CreateManyBuilder({ knex, dialect: '${dialect}' }, data),
-        createOne: (data: ${name}CreateFields) => new ${name}CreateOneBuilder({ knex, dialect: '${dialect}' }, data),
-        deleteById: (id: ID) => new ${name}DeleteByIdBuilder({ knex, dialect: '${dialect}' }, id),
+        aggregate: () => new ${name}AggregateBuilder({ knex, dialect: '${dialect}' }),
+        createMany: ({ input: ${name}CreateFields[] }) => new ${name}CreateManyBuilder({ knex, dialect: '${dialect}' }, input),
+        createOne: ({ input: ${name}CreateFields }) => new ${name}CreateOneBuilder({ knex, dialect: '${dialect}' }, input),
+        deleteById: ({ id: ID }) => new ${name}DeleteByIdBuilder({ knex, dialect: '${dialect}' }, id),
         deleteMany: () => new ${name}DeleteManyBuilder({ knex, dialect: '${dialect}' }),
-        updateById: (id: ID, data: ${name}UpdateFields) => new ${name}UpdateByIdBuilder({ knex, dialect: '${dialect}' }, id, data),
-        updateMany: (data: ${name}UpdateFields) => new ${name}UpdateManyBuilder({ knex, dialect: '${dialect}' }, data),
+        updateById: ({ id: ID, input: ${name}UpdateFields }) => new ${name}UpdateByIdBuilder({ knex, dialect: '${dialect}' }, id, input),
+        updateMany: ({ input: ${name}UpdateFields }) => new ${name}UpdateManyBuilder({ knex, dialect: '${dialect}' }, input),
       },`
       )
       .join('')}

@@ -64,7 +64,7 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
   ): GraphQLInputObjectType | undefined {
     const modelType = this.getModelType(modelName)
     const typeName = this.getInputName(modelName, includeAssociations, aggregateFieldsOnly)
-    const { fields, joins } = getModelDetails(modelType, this.schema)
+    const { fields, associations } = getModelDetails(modelType, this.schema)
 
     const inputType: GraphQLInputObjectType = new GraphQLInputObjectType({
       name: typeName,
@@ -72,7 +72,7 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
     })
     this.schema.getTypeMap()[typeName] = inputType
     Object.assign(inputType.getFields(), {
-      ...(includeAssociations ? this.getAssociationFields(joins) : {}),
+      ...(includeAssociations ? this.getAssociationFields(associations) : {}),
     })
 
     return inputType

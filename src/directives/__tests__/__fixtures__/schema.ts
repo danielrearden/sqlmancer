@@ -49,9 +49,9 @@ const typeDefs = `
     derivedField: String @depend(on: ["foo", "bar"])
     unsupportedType: Gizmo
     unsupportedListType: [Gizmo!]!
-    gizmos: [Gizmo!]! @join(on: {from: "id", to: "widget_id"})
-    jiggers: [Jigger!]! @join(through: "widget_jiggers" on:[{from: "id", to: "gizmo_id"}, {from: "jigger_id", to: "id"}])
-    bauble: Bauble @join(on: {from: "bauble_id", to: "id"})
+    gizmos: [Gizmo!]! @associate(on: {from: "id", to: "widget_id"})
+    jiggers: [Jigger!]! @associate(through: "widget_jiggers" on:[{from: "id", to: "gizmo_id"}, {from: "jigger_id", to: "id"}])
+    bauble: Bauble @associate(on: {from: "bauble_id", to: "id"})
     ignoredField: String! @ignore
   }
 

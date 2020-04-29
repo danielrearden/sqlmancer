@@ -9,9 +9,10 @@ import {
   QueryBuilderContext,
   Models,
   Where,
-  JoinedFromBuilder,
+  LoadedFromBuilder,
 } from './types'
 import { BaseBuilder } from './base'
+import { AggregateBuilder } from './aggregate'
 import { getAlias, getJsonObjectFunctionByDialect } from './utilities'
 import { parseResolveInfo, FlattenedResolveTree } from '../utilities'
 import { GraphQLResolveInfo } from 'graphql'
@@ -21,11 +22,14 @@ export abstract class FindBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>,
+  TAssociations extends Record<
+    string,
+    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+  >,
   TMany extends boolean = true,
   TSelected extends Pick<TFields, any> = TFields,
   TRawSelected extends Record<string, any> = {},
-  TJoined extends Record<string, any> = {}
+  TLoaded extends Record<string, any> = {}
 > extends BaseBuilder {
   protected readonly _isMany: boolean
 
@@ -40,7 +44,7 @@ export abstract class FindBuilder<
    */
   public select<T extends keyof TFields>(
     ...fields: T[]
-  ): FindBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TMany, Pick<TFields, T>, TRawSelected, TJoined> {
+  ): FindBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TMany, Pick<TFields, T>, TRawSelected, TLoaded> {
     this._select = fields
     return this
   }
@@ -57,7 +61,7 @@ export abstract class FindBuilder<
     TMany,
     TFields,
     TRawSelected,
-    TJoined
+    TLoaded
   > {
     this._select = Object.keys(this._model.fields)
     return this
@@ -77,7 +81,7 @@ export abstract class FindBuilder<
     TMany,
     TSelected & Pick<TFields, T>,
     TRawSelected,
-    TJoined
+    TLoaded
   > {
     this._select = [...this._select, ...fields]
     return this
@@ -98,7 +102,7 @@ export abstract class FindBuilder<
     TMany,
     TSelected,
     TRawSelected & { [key in TAlias]: any },
-    TJoined
+    TLoaded
   > {
     this._rawSelect[as || column] = column
     return this
@@ -149,13 +153,13 @@ export abstract class FindBuilder<
    * different property name. The `getBuilder` parameter is a function that's passed a fresh `FindOneBuilder` or `FindManyBuilder`
    * instance for the associated model and should return the same kind of Builder instance.
    */
-  public join<
+  public load<
     TName extends Extract<keyof TAssociations, string>,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
-      builder: TAssociations[TName]
-    ) => TAssociations[TName]
+    TGetBuilder extends (builder: TAssociations[TName][0]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+      builder: TAssociations[TName][0]
+    ) => TAssociations[TName][0]
   >(
-    name: TName,
+    associationName: TName,
     getBuilder?: TGetBuilder
   ): FindBuilder<
     TDialect,
@@ -166,20 +170,20 @@ export abstract class FindBuilder<
     TMany,
     TSelected,
     TRawSelected,
-    TJoined &
+    TLoaded &
       {
-        [key in TName]: JoinedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TName]: LoadedFromBuilder<ReturnType<TGetBuilder>>
       }
   >
 
-  public join<
+  public load<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any> = (
-      builder: TAssociations[TName]
-    ) => TAssociations[TName]
+    TGetBuilder extends (builder: TAssociations[TName][0]) => FindBuilder<any, any, any, any, any, any, any, any> = (
+      builder: TAssociations[TName][0]
+    ) => TAssociations[TName][0]
   >(
-    name: TName,
+    associationName: TName,
     as: TAlias,
     getBuilder?: TGetBuilder
   ): FindBuilder<
@@ -191,30 +195,71 @@ export abstract class FindBuilder<
     TMany,
     TSelected,
     TRawSelected,
-    TJoined &
+    TLoaded &
       {
-        [key in TAlias]: JoinedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TAlias]: LoadedFromBuilder<ReturnType<TGetBuilder>>
       }
   >
-  public join<
+  public load<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName]) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
-      builder: TAssociations[TName]
-    ) => TAssociations[TName]
-  >(name: TName, aliasOrGetBuilder?: TAlias | TGetBuilder, getBuilder?: TGetBuilder) {
-    const association = this._model.associations[name]
+    TGetBuilder extends (
+      builder: TAssociations[TName][0]
+    ) => FindBuilder<any, any, any, any, any, any, any, any, any> = (
+      builder: TAssociations[TName][0]
+    ) => TAssociations[TName][0]
+  >(associationName: TName, aliasOrGetBuilder?: TAlias | TGetBuilder, getBuilder?: TGetBuilder) {
+    const association = this._model.associations[associationName]
 
     if (!association) {
-      throw new Error(`Invalid association name: ${name}`)
+      throw new Error(`Invalid association name: ${associationName}`)
     }
 
-    const fieldName = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : name
+    const fieldName = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : associationName
     const getBuilderFn = typeof aliasOrGetBuilder === 'string' ? getBuilder : aliasOrGetBuilder
     const initialBuilder = association.builder(this._options)
-    this._joins[fieldName] = [
-      name,
-      getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName]) : initialBuilder,
+    this._loadedAssociations[fieldName] = [
+      associationName,
+      getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName][0]) : initialBuilder,
+    ]
+
+    return this
+  }
+
+  public loadAggregate<
+    TName extends Extract<keyof TAssociations, string>,
+    TAlias extends string,
+    TGetBuilder extends (builder: TAssociations[TName][1]) => AggregateBuilder<any, any, any, any, any, any> = (
+      builder: TAssociations[TName][1]
+    ) => TAssociations[TName][1]
+  >(
+    associationName: TName,
+    alias: TAlias,
+    getBuilder?: TGetBuilder
+  ): FindBuilder<
+    TDialect,
+    TFields,
+    TIds,
+    TEnums,
+    TAssociations,
+    TMany,
+    TSelected,
+    TRawSelected,
+    TLoaded &
+      {
+        [key in TAlias]: string | number
+      }
+  > {
+    const association = this._model.associations[associationName]
+
+    if (!association) {
+      throw new Error(`Invalid association name: ${associationName}`)
+    }
+
+    const initialBuilder = association.aggregateBuilder(this._options)
+    this._loadedAggregates[alias] = [
+      associationName,
+      getBuilder ? getBuilder(initialBuilder as TAssociations[TName][1]) : initialBuilder,
     ]
 
     return this
@@ -222,7 +267,7 @@ export abstract class FindBuilder<
 
   /**
    * Modifies the query based on the passed in GraphQLResolveInfo object. The selection set will determine what columns
-   * should be selected and which related models should be joined. The `where`, `orderBy`, `limit` and `offset` arguments,
+   * should be selected and which related models should be loaded. The `where`, `orderBy`, `limit` and `offset` arguments,
    * if they exist on the field and were provided, will be used to set the corresponding clauses in the query.
    *
    * An optional `path` parameter can be passed in when the model will be returned as part of a more deeply nested field.
@@ -262,7 +307,11 @@ export abstract class FindBuilder<
       } else if (field.name in this._model.dependencies) {
         this._model.dependencies[field.name].forEach(columnName => this.addSelectRaw(columnName))
       } else if (field.name in this._model.associations) {
-        this.join(field.name as Extract<keyof TAssociations, string>, field.alias, builder =>
+        this.load(field.name as Extract<keyof TAssociations, string>, field.alias, builder =>
+          builder.resolveInfo(field)
+        )
+      } else if (field.name in this._model.aggregates) {
+        this.loadAggregate(this._model.aggregates[field.name] as any, field.alias, builder =>
           builder.resolveInfo(field)
         )
       }
@@ -292,15 +341,15 @@ export abstract class FindBuilder<
   /**
    * Executes the query and returns a Promise that will resolve to the found row or rows.
    */
-  public async execute<TRow = TSelected & TRawSelected & TJoined>() {
+  public async execute<TRow = TSelected & TRawSelected & TLoaded>() {
     const rows = await this.toQueryBuilder()
 
-    // We use JSON aggregation for joins and SQLite returns those fields as strings
+    // We use JSON aggregation for loading related models and SQLite returns those fields as strings
     if (this._dialect === 'sqlite') {
-      const joinFields = Object.keys(this._joins)
+      const jsonFields = [...Object.keys(this._loadedAssociations), ...Object.keys(this._loadedAggregates)]
       rows.forEach((row: any) => {
         Object.keys(row).forEach(fieldName => {
-          if (joinFields.includes(fieldName)) {
+          if (jsonFields.includes(fieldName)) {
             row[fieldName] = JSON.parse(row[fieldName])
           }
         })
@@ -354,25 +403,7 @@ export abstract class FindBuilder<
 
     query.from({ [tableAlias]: this._tableName })
 
-    expressions.join.forEach(join => (query as any)[join.type](join.table, join.on))
-
-    expressions.where.forEach(whereArgs => (query.where as any)(...whereArgs))
-
-    if (expressions.groupBy.length) {
-      query.groupBy(expressions.groupBy)
-    }
-
-    if (expressions.orderBy.length) {
-      query.orderBy(expressions.orderBy as any)
-    }
-
-    if (this._limit) {
-      query.limit(this._limit)
-    }
-
-    if (this._offset) {
-      query.offset(this._offset)
-    }
+    this._applyExpressions(query, expressions)
 
     if (this._transaction) {
       query.transacting(this._transaction)

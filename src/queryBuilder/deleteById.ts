@@ -1,6 +1,7 @@
 import Knex from 'knex'
 
 import { BaseBuilder } from './base'
+import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
 import { BuilderOptions, ID, Models } from './types'
 
@@ -8,7 +9,10 @@ export class DeleteByIdBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<
+    string,
+    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+  >
 > extends BaseBuilder {
   protected _id: ID
 

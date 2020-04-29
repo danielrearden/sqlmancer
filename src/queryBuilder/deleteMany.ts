@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Knex from 'knex'
 
 import { BaseBuilder } from './base'
+import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
 import { BuilderOptions, Dialect, Expressions, OrderBy, Models, Where } from './types'
 import { getAlias } from './utilities'
@@ -11,7 +12,10 @@ export class DeleteManyBuilder<
   TFields extends Record<string, any>,
   TIds extends string,
   TEnums,
-  TAssociations extends Record<string, FindBuilder<any, any, any, any, any, any, any, any, any>>
+  TAssociations extends Record<
+    string,
+    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+  >
 > extends BaseBuilder {
   constructor(options: BuilderOptions, modelName: string, models: Models) {
     super(options, modelName, models)
@@ -109,19 +113,7 @@ export class DeleteManyBuilder<
 
     query.from({ [tableAlias]: this._tableName })
 
-    expressions.where.forEach(whereArgs => (query.where as any)(...whereArgs))
-
-    if (expressions.orderBy.length) {
-      query.orderBy(expressions.orderBy as any)
-    }
-
-    if (this._limit) {
-      query.limit(this._limit)
-    }
-
-    if (this._offset) {
-      query.offset(this._offset)
-    }
+    this._applyExpressions(query, expressions)
 
     if (this._transaction) {
       query.transacting(this._transaction)

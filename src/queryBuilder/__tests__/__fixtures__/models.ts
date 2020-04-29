@@ -1,4 +1,5 @@
 import { BuilderOptions, ID, Models } from '../../types'
+import { AggregateBuilder } from '../../aggregate'
 import { FindOneBuilder } from '../../findOne'
 import { FindManyBuilder } from '../../findMany'
 import { FindByIdBuilder } from '../../findById'
@@ -17,7 +18,7 @@ export type ActorFields = {
 }
 
 export type ActorAssociations = {
-  films: FilmFindManyBuilder
+  films: [FilmFindManyBuilder, FilmAggregateBuilder]
 }
 
 export type ActorIds = 'id'
@@ -60,9 +61,9 @@ export type FilmIds = 'id'
 export type FilmEnums = FilmRating
 
 export type FilmAssociations = {
-  actors: ActorFindManyBuilder
-  language: LanguageFindOneBuilder
-  originalLanguage: LanguageFindOneBuilder
+  actors: [ActorFindManyBuilder, ActorAggregateBuilder]
+  language: [LanguageFindOneBuilder, LanguageAggregateBuilder]
+  originalLanguage: [LanguageFindOneBuilder, LanguageAggregateBuilder]
 }
 
 export type FilmCreateFields = {
@@ -98,7 +99,7 @@ export type LanguageIds = 'id'
 export type LanguageEnums = unknown
 
 export type LanguageAssociations = {
-  films: FilmFindManyBuilder
+  films: [FilmFindManyBuilder, FilmAggregateBuilder]
 }
 
 export type LanguageCreateFields = {
@@ -114,10 +115,10 @@ export const models: Models = {
     tableName: 'actor',
     primaryKey: 'actor_id',
     fields: {
-      id: { column: 'actor_id' },
-      firstName: { column: 'first_name' },
-      lastName: { column: 'last_name' },
-      lastUpdate: { column: 'last_update' },
+      id: { column: 'actor_id', type: 'ID' },
+      firstName: { column: 'first_name', type: 'string' },
+      lastName: { column: 'last_name', type: 'string' },
+      lastUpdate: { column: 'last_update', type: 'string' },
     },
     include: [],
     dependencies: {},
@@ -131,23 +132,27 @@ export const models: Models = {
         ],
         through: 'film_actor',
         builder: options => new FilmFindManyBuilder(options),
+        aggregateBuilder: options => new FilmAggregateBuilder(options),
       },
+    },
+    aggregates: {
+      filmsAggregate: 'films',
     },
   },
   Film: {
     tableName: 'film',
     primaryKey: 'film_id',
     fields: {
-      id: { column: 'film_id' },
-      title: { column: 'title' },
-      description: { column: 'description' },
-      releaseYear: { column: 'release_year' },
-      rentalDuration: { column: 'rental_duration' },
-      rentalRate: { column: 'rental_rate' },
-      replacementCost: { column: 'replacement_cost' },
-      rating: { column: 'rating' },
-      specialFeatures: { column: 'special_features' },
-      lastUpdate: { column: 'last_update' },
+      id: { column: 'film_id', type: 'ID' },
+      title: { column: 'title', type: 'string' },
+      description: { column: 'description', type: 'string' },
+      releaseYear: { column: 'release_year', type: 'number' },
+      rentalDuration: { column: 'rental_duration', type: 'number' },
+      rentalRate: { column: 'rental_rate', type: 'number' },
+      replacementCost: { column: 'replacement_cost', type: 'number' },
+      rating: { column: 'rating', type: 'string' },
+      specialFeatures: { column: 'special_features', type: 'string[]' },
+      lastUpdate: { column: 'last_update', type: 'string' },
     },
     include: [],
     dependencies: {},
@@ -161,28 +166,32 @@ export const models: Models = {
         ],
         through: 'film_actor',
         builder: options => new ActorFindManyBuilder(options),
+        aggregateBuilder: options => new ActorAggregateBuilder(options),
       },
       language: {
         modelName: 'Language',
         isMany: false,
         on: [{ from: 'language_id', to: 'language_id' }],
         builder: options => new LanguageFindOneBuilder(options),
+        aggregateBuilder: options => new LanguageAggregateBuilder(options),
       },
       originalLanguage: {
         modelName: 'Language',
         isMany: false,
         on: [{ from: 'original_language_id', to: 'language_id' }],
         builder: options => new LanguageFindOneBuilder(options),
+        aggregateBuilder: options => new LanguageAggregateBuilder(options),
       },
     },
+    aggregates: {},
   },
   Language: {
     tableName: 'language',
     primaryKey: 'language_id',
     fields: {
-      id: { column: 'language_id' },
-      name: { column: 'name' },
-      lastUpdate: { column: 'last_update' },
+      id: { column: 'language_id', type: 'ID' },
+      name: { column: 'name', type: 'string' },
+      lastUpdate: { column: 'last_update', type: 'string' },
     },
     include: [],
     dependencies: {},
@@ -192,8 +201,10 @@ export const models: Models = {
         isMany: true,
         on: [{ from: 'language_id', to: 'language_id' }],
         builder: options => new FilmFindManyBuilder(options),
+        aggregateBuilder: options => new FilmAggregateBuilder(options),
       },
     },
+    aggregates: {},
   },
 }
 
@@ -232,6 +243,19 @@ export class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Act
 > {
   constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Actor', models, pk)
+  }
+}
+
+export class ActorAggregateBuilder extends AggregateBuilder<
+  'postgres',
+  ActorFields,
+  ActorIds,
+  ActorEnums,
+  ActorAssociations,
+  {}
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Actor', models)
   }
 }
 
@@ -322,6 +346,19 @@ export class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmF
   }
 }
 
+export class FilmAggregateBuilder extends AggregateBuilder<
+  'postgres',
+  FilmFields,
+  FilmIds,
+  FilmEnums,
+  FilmAssociations,
+  {}
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Film', models)
+  }
+}
+
 export class FilmDeleteManyBuilder extends DeleteManyBuilder<
   'postgres',
   FilmFields,
@@ -392,6 +429,19 @@ export class LanguageFindByIdBuilder<
 > extends FindByIdBuilder<LanguageFields, LanguageIds, LanguageEnums, LanguageAssociations, TSelected> {
   constructor(options: BuilderOptions, pk: ID) {
     super(options, 'Language', models, pk)
+  }
+}
+
+export class LanguageAggregateBuilder extends AggregateBuilder<
+  'postgres',
+  LanguageFields,
+  LanguageIds,
+  LanguageEnums,
+  LanguageAssociations,
+  {}
+> {
+  constructor(options: BuilderOptions) {
+    super(options, 'Language', models)
   }
 }
 

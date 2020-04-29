@@ -1,11 +1,12 @@
 import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefinition } from 'graphql-tools'
 import { parse, DocumentNode } from 'graphql'
 
+import { AggregateDirective } from './aggregate'
+import { AssociateDirective } from './associate'
 import { ColumnDirective } from './column'
 import { HasDefaultDirective } from './has-default'
 import { DependDirective } from './depend'
 import { IgnoreDirective } from './ignore'
-import { JoinDirective } from './join'
 import { LimitDirective } from './limit'
 import { ManyDirective } from './many'
 import { ModelDirective } from './model'
@@ -16,11 +17,12 @@ import { ValueDirective } from './value'
 import { WhereDirective } from './where'
 
 export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
+  aggregate: AggregateDirective,
+  associate: AssociateDirective,
   col: ColumnDirective,
   depend: DependDirective,
   hasDefault: HasDefaultDirective,
   ignore: IgnoreDirective,
-  join: JoinDirective,
   limit: LimitDirective,
   offset: OffsetDirective,
   orderBy: OrderByDirective,
@@ -32,6 +34,15 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
 }
 
 export const typeDefs: DocumentNode = parse(`
+  directive @aggregate(
+    generateType: Boolean = true
+  ) on FIELD_DEFINITION
+
+  directive @associate(
+    on: [SqlmancerJoinOn!]!
+    through: String
+  ) on FIELD_DEFINITION
+
   directive @col(
     name: String!
   ) on FIELD_DEFINITION
@@ -43,11 +54,6 @@ export const typeDefs: DocumentNode = parse(`
   directive @hasDefault on FIELD_DEFINITION
 
   directive @ignore on FIELD_DEFINITION
-
-  directive @join(
-    on: [SqlmancerJoinOn!]!
-    through: String
-  ) on FIELD_DEFINITION
 
   directive @limit on FIELD_DEFINITION
 
@@ -109,6 +115,14 @@ export const typeDefs: DocumentNode = parse(`
     PASCAL_CASE
     SNAKE_CASE
   }
+
+  enum SqlmancerAggregateFunction {
+    avg
+    count
+    max
+    min
+    sum
+  }
 `)
 
 export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
@@ -118,11 +132,12 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
     schemaDirectives: config.schemaDirectives ? { ...config.schemaDirectives, ...schemaDirectives } : schemaDirectives,
   })
 
+export { AggregateDirective } from './aggregate'
+export { AssociateDirective } from './associate'
 export { ColumnDirective } from './column'
 export { HasDefaultDirective } from './has-default'
 export { DependDirective } from './depend'
 export { IgnoreDirective } from './ignore'
-export { JoinDirective } from './join'
 export { LimitDirective } from './limit'
 export { ManyDirective } from './many'
 export { ModelDirective } from './model'

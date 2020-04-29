@@ -39,7 +39,8 @@ export abstract class BaseBuilder {
 
   protected _select: any[] = []
   protected _rawSelect: Record<string, string> = {}
-  protected _joins: Record<string, [any, any]> = {}
+  protected _loadedAssociations: Record<string, [any, any]> = {}
+  protected _loadedAggregates: Record<string, [any, any]> = {}
   protected _where: Where<any, any, any, any, any> = {}
   protected _orderBy: OrderBy<any, any>[] = []
   protected _limit = 0
@@ -85,7 +86,7 @@ export abstract class BaseBuilder {
       expressions.select[alias] = `${tableAlias}.${this._rawSelect[alias]}`
     })
 
-    _.forIn(this._joins, ([associationName, builder], alias) => {
+    _.forIn(this._loadedAssociations, ([associationName, builder], alias) => {
       const subqueryAlias = getAlias(alias, context)
       const association = this._model.associations[associationName]
       const nestedContext: QueryBuilderContext = {
@@ -103,6 +104,24 @@ export abstract class BaseBuilder {
         .queryBuilder()
         .select(this._knex.raw(jsonAggExpression, new Array(numberPlaceholders).fill(`${subqueryAlias}.o`)))
         .from(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
+    })
+
+    _.forIn(this._loadedAggregates, ([associationName, builder], alias) => {
+      const subqueryAlias = getAlias(alias, context)
+      const association = this._model.associations[associationName]
+      const nestedContext: QueryBuilderContext = {
+        ...context,
+        nested: {
+          outerAlias: tableAlias,
+          association,
+        },
+      }
+
+      expressions.select[alias] = this._knex
+        .queryBuilder()
+        .select(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
+      // .select({ [alias]: `${subqueryAlias}.agg` })
+      // .from(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
     })
   }
 
@@ -453,5 +472,27 @@ export abstract class BaseBuilder {
     }
 
     return { orderByColumnName, direction, selectExpression }
+  }
+
+  protected _applyExpressions(query: Knex.QueryBuilder, expressions: Expressions) {
+    expressions.join.forEach(join => (query as any)[join.type](join.table, join.on))
+
+    expressions.where.forEach(whereArgs => (query.where as any)(...whereArgs))
+
+    if (expressions.groupBy.length) {
+      query.groupBy(expressions.groupBy)
+    }
+
+    if (expressions.orderBy.length) {
+      query.orderBy(expressions.orderBy as any)
+    }
+
+    if (this._limit) {
+      query.limit(this._limit)
+    }
+
+    if (this._offset) {
+      query.offset(this._offset)
+    }
   }
 }

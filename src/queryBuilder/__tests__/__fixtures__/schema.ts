@@ -32,14 +32,17 @@ const typeDefs = `
     id: ID! @col(name: "actor_id")
     firstName: String!
     lastName: String!
-    films: [Film!]! @join(on: [{from: "actor_id", to: "actor_id"}, {from: "film_id", to: "film_id"}], through: "film_actor") @where(model: "Film") @orderBy(model: "Film") @limit @offset
+    films: [Film!]! @associate(on: [{from: "actor_id", to: "actor_id"}, {from: "film_id", to: "film_id"}], through: "film_actor") @where(model: "Film") @orderBy(model: "Film") @limit @offset
+    filmsAggregate: Film @aggregate @many(model: "Film")
   }
 
   type Film @model(table: "film", pk: "film_id") {
     id: ID! @col(name: "film_id")
     title: String!
     releaseYear: Int!
-    actors: [Actor!]! @join(on: [{from: "film_id", to: "film_id"}, {from: "actor_id", to: "actor_id"}], through: "film_actor") @where(model: "Actor") @orderBy(model: "Actor") @limit @offset
+    rentalRate: Float!
+    replacementCost: Float!
+    actors: [Actor!]! @associate(on: [{from: "film_id", to: "film_id"}, {from: "actor_id", to: "actor_id"}], through: "film_actor") @where(model: "Actor") @orderBy(model: "Actor") @limit @offset
   }
 `
 export const schema = makeExecutableSchema({

@@ -3,8 +3,9 @@ import { parseDirectiveArguments } from './parseDirectiveArguments'
 
 export type ModelDetails = {
   fields: { fieldName: string; columnName?: string; type: GraphQLOutputType; hasDefault: boolean }[]
-  joins: { fieldName: string; type: GraphQLOutputType; on: { from: string; to: string }[]; through?: string }[]
+  associations: { fieldName: string; type: GraphQLOutputType; on: { from: string; to: string }[]; through?: string }[]
   dependencies: { fieldName: string; columns: string[] }[]
+  aggregates: Record<string, string>
 }
 
 export function getModelDetails(type: GraphQLCompositeType, schema: GraphQLSchema) {
@@ -17,26 +18,29 @@ export function getModelDetails(type: GraphQLCompositeType, schema: GraphQLSchem
         const field = fieldMap[fieldName]
         const directives = field.astNode!.directives!
         const columnArgs = parseDirectiveArguments(getDirectiveNode('col', directives), schema)
-        const joinArgs = parseDirectiveArguments(getDirectiveNode('join', directives), schema)
+        const associateArgs = parseDirectiveArguments(getDirectiveNode('associate', directives), schema)
         const dependArgs = parseDirectiveArguments(getDirectiveNode('depend', directives), schema)
+        const aggArgs = parseDirectiveArguments(getDirectiveNode('agg', directives), schema)
         const ignoreDirective = getDirectiveNode('ignore', directives)
         const hasDefaultDirective = getDirectiveNode('hasDefault', directives)
-        if (!ignoreDirective && !joinArgs && !dependArgs) {
+        if (!ignoreDirective && !associateArgs && !dependArgs) {
           acc.fields.push({
             fieldName,
             type: field.type,
             columnName: columnArgs ? columnArgs.name : undefined,
             hasDefault: !!hasDefaultDirective,
           })
-        } else if (joinArgs) {
-          acc.joins.push({ fieldName, type: field.type, on: joinArgs.on, through: joinArgs.through })
+        } else if (associateArgs) {
+          acc.associations.push({ fieldName, type: field.type, on: associateArgs.on, through: associateArgs.through })
         } else if (dependArgs) {
           acc.dependencies.push({ fieldName, columns: dependArgs.on })
+        } else if (aggArgs) {
+          acc.aggregates[fieldName] = aggArgs.association
         }
       })
       return acc
     },
-    { fields: [], joins: [], dependencies: [] } as ModelDetails
+    { fields: [], associations: [], dependencies: [], aggregates: {} } as ModelDetails
   )
 }
 
