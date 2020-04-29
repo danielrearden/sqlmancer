@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FindBuilder mysql basic queries no additional options 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql basic queries no additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql basic queries no additional options 2`] = `Array []`;
 
-exports[`FindBuilder mysql limit with number 1`] = `"select null from \`actor\` as \`a1\` limit ?"`;
+exports[`FindBuilder mysql limit with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit ?"`;
 
 exports[`FindBuilder mysql limit with number 2`] = `
 Array [
@@ -12,7 +12,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql load nested 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('films', (select if(json_arrayagg(\`f3\`.\`o\`) is null, json_array(), json_arrayagg(\`f3\`.\`o\`)) from (select json_object('language', (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f4\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`)) as \`o\` from \`film\` as \`f4\` inner join \`film_actor\` as \`f5\` on \`f5\`.\`film_id\` = \`f4\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f5\`.\`actor_id\` limit ?) as \`f3\`)) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` limit ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql load nested 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`, 'films', (select if(json_arrayagg(\`f3\`.\`o\`) is null, json_array(), json_arrayagg(\`f3\`.\`o\`)) from (select json_object('id', \`f4\`.\`film_id\`, 'title', \`f4\`.\`title\`, 'description', \`f4\`.\`description\`, 'releaseYear', \`f4\`.\`release_year\`, 'rentalDuration', \`f4\`.\`rental_duration\`, 'rentalRate', \`f4\`.\`rental_rate\`, 'replacementCost', \`f4\`.\`replacement_cost\`, 'rating', \`f4\`.\`rating\`, 'specialFeatures', \`f4\`.\`special_features\`, 'lastUpdate', \`f4\`.\`last_update\`, 'language', (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f4\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`)) as \`o\` from \`film\` as \`f4\` inner join \`film_actor\` as \`f5\` on \`f5\`.\`film_id\` = \`f4\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f5\`.\`actor_id\` limit ?) as \`f3\`)) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` limit ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql load nested 2`] = `
 Array [
@@ -23,7 +23,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql load with FK on builder table 1`] = `"select (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql load with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql load with FK on builder table 2`] = `
 Array [
@@ -31,11 +31,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql load with FK on joined table 1`] = `"select (select if(json_arrayagg(\`f1\`.\`o\`) is null, json_array(), json_arrayagg(\`f1\`.\`o\`)) from (select json_object() as \`o\` from \`film\` as \`f2\` where \`l1\`.\`language_id\` = \`f2\`.\`language_id\`) as \`f1\`) as \`films\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder mysql load with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`f1\`.\`o\`) is null, json_array(), json_arrayagg(\`f1\`.\`o\`)) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'rating', \`f2\`.\`rating\`, 'specialFeatures', \`f2\`.\`special_features\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` where \`l1\`.\`language_id\` = \`f2\`.\`language_id\`) as \`f1\`) as \`films\` from \`language\` as \`l1\`"`;
 
 exports[`FindBuilder mysql load with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder mysql load with additional options 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('firstName', \`a2\`.\`first_name\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` desc limit ? offset ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql load with additional options 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('firstName', \`a2\`.\`first_name\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` desc limit ? offset ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql load with additional options 2`] = `
 Array [
@@ -44,27 +44,27 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql load with alias 1`] = `"select (select if(json_arrayagg(\`p1\`.\`o\`) is null, json_array(), json_arrayagg(\`p1\`.\`o\`)) from (select json_object() as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`p1\`) as \`performers\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql load with alias 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`p1\`.\`o\`) is null, json_array(), json_arrayagg(\`p1\`.\`o\`)) from (select json_object('id', \`a1\`.\`actor_id\`, 'firstName', \`a1\`.\`first_name\`, 'lastName', \`a1\`.\`last_name\`, 'lastUpdate', \`a1\`.\`last_update\`) as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`p1\`) as \`performers\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql load with alias 2`] = `Array []`;
 
-exports[`FindBuilder mysql load with default builder 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql load with default builder 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql load with default builder 2`] = `Array []`;
 
-exports[`FindBuilder mysql load with junction table 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql load with junction table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with FK on builder table 1`] = `"select (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql loadAggregate with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql loadAggregate with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with FK on joined table 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder mysql loadAggregate with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
 
 exports[`FindBuilder mysql loadAggregate with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with additional options 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql loadAggregate with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql loadAggregate with additional options 2`] = `
 Array [
@@ -73,11 +73,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql loadAggregate with junction table 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql loadAggregate with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql loadAggregate with junction table 2`] = `Array []`;
 
-exports[`FindBuilder mysql offset with number 1`] = `"select null from \`actor\` as \`a1\` limit 18446744073709551615 offset ?"`;
+exports[`FindBuilder mysql offset with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit 18446744073709551615 offset ?"`;
 
 exports[`FindBuilder mysql offset with number 2`] = `
 Array [
@@ -85,7 +85,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql orderBy nested (multi with aggregate) 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by (select avg(\`f3\`.\`replacement_cost\`) as \`avg\` from \`film_actor\` as \`f4\` inner join \`film\` as \`f3\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f4\`.\`actor_id\` group by \`f4\`.\`actor_id\`) asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql orderBy nested (multi with aggregate) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by (select avg(\`f3\`.\`replacement_cost\`) as \`avg\` from \`film_actor\` as \`f4\` inner join \`film\` as \`f3\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f4\`.\`actor_id\` group by \`f4\`.\`actor_id\`) asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql orderBy nested (multi with aggregate) 2`] = `
 Array [
@@ -93,7 +93,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql orderBy nested (multi) 1`] = `"select (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql orderBy nested (multi) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`a1\`.\`o\`) is null, json_array(), json_arrayagg(\`a1\`.\`o\`)) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql orderBy nested (multi) 2`] = `
 Array [
@@ -101,7 +101,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql orderBy nested (single with aggregate) 1`] = `"select (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by (select avg(\`f2\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f2\` where \`l2\`.\`language_id\` = \`f2\`.\`language_id\` group by \`f2\`.\`language_id\`) asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql orderBy nested (single with aggregate) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by (select avg(\`f2\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f2\` where \`l2\`.\`language_id\` = \`f2\`.\`language_id\` group by \`f2\`.\`language_id\`) asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql orderBy nested (single with aggregate) 2`] = `
 Array [
@@ -110,7 +110,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql orderBy nested (single) 1`] = `"select (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by \`l2\`.\`name\` asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql orderBy nested (single) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_arrayagg(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by \`l2\`.\`name\` asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql orderBy nested (single) 2`] = `
 Array [
@@ -119,47 +119,47 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql orderBy with association (aggregate and through) 1`] = `"select null from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc"`;
+exports[`FindBuilder mysql orderBy with association (aggregate and through) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc"`;
 
 exports[`FindBuilder mysql orderBy with association (aggregate and through) 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with association (aggregate) 1`] = `"select null from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc"`;
+exports[`FindBuilder mysql orderBy with association (aggregate) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc"`;
 
 exports[`FindBuilder mysql orderBy with association (aggregate) 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with association (count) 1`] = `"select null from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc"`;
+exports[`FindBuilder mysql orderBy with association (count) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc"`;
 
 exports[`FindBuilder mysql orderBy with association (count) 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with association (field) 1`] = `"select null from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc"`;
+exports[`FindBuilder mysql orderBy with association (field) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc"`;
 
 exports[`FindBuilder mysql orderBy with association (field) 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with empty object 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql orderBy with empty object 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql orderBy with empty object 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with multiple fields 1`] = `"select null from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc"`;
+exports[`FindBuilder mysql orderBy with multiple fields 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc"`;
 
 exports[`FindBuilder mysql orderBy with multiple fields 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with no fields 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql orderBy with no fields 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql orderBy with no fields 2`] = `Array []`;
 
-exports[`FindBuilder mysql orderBy with one field 1`] = `"select null from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc"`;
+exports[`FindBuilder mysql orderBy with one field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc"`;
 
 exports[`FindBuilder mysql orderBy with one field 2`] = `Array []`;
 
-exports[`FindBuilder mysql resolveInfo basic query 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql resolveInfo basic query 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder mysql resolveInfo basic query 2`] = `Array []`;
 
-exports[`FindBuilder mysql resolveInfo query with alias 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select if(json_arrayagg(\`m1\`.\`o\`) is null, json_array(), json_arrayagg(\`m1\`.\`o\`)) from (select json_object('id', \`f1\`.\`film_id\`, 'title', \`f1\`.\`title\`) as \`o\` from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\`) as \`m1\`) as \`movies\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql resolveInfo query with alias 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`m1\`.\`o\`) is null, json_array(), json_arrayagg(\`m1\`.\`o\`)) from (select json_object('id', \`f1\`.\`film_id\`, 'title', \`f1\`.\`title\`, 'description', \`f1\`.\`description\`, 'releaseYear', \`f1\`.\`release_year\`, 'rentalDuration', \`f1\`.\`rental_duration\`, 'rentalRate', \`f1\`.\`rental_rate\`, 'replacementCost', \`f1\`.\`replacement_cost\`, 'rating', \`f1\`.\`rating\`, 'specialFeatures', \`f1\`.\`special_features\`, 'lastUpdate', \`f1\`.\`last_update\`) as \`o\` from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\`) as \`m1\`) as \`movies\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql resolveInfo query with alias 2`] = `Array []`;
 
-exports[`FindBuilder mysql resolveInfo query with arguments 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` where \`f1\`.\`title\` = ? order by \`f1\`.\`release_year\` desc limit ? offset ?"`;
+exports[`FindBuilder mysql resolveInfo query with arguments 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` where \`f1\`.\`title\` = ? order by \`f1\`.\`release_year\` desc limit ? offset ?"`;
 
 exports[`FindBuilder mysql resolveInfo query with arguments 2`] = `
 Array [
@@ -169,7 +169,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql resolveInfo query with nested aggregate 2`] = `
 Array [
@@ -179,7 +179,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select if(json_arrayagg(\`f1\`.\`o\`) is null, json_array(), json_arrayagg(\`f1\`.\`o\`)) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`f1\`.\`o\`) is null, json_array(), json_arrayagg(\`f1\`.\`o\`)) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'rating', \`f2\`.\`rating\`, 'specialFeatures', \`f2\`.\`special_features\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql resolveInfo query with nested arguments 2`] = `
 Array [
@@ -189,7 +189,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder mysql resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder mysql resolveInfo valid path 2`] = `
 Array [
@@ -221,7 +221,7 @@ exports[`FindBuilder mysql select with no fields 1`] = `"select null from \`acto
 
 exports[`FindBuilder mysql select with no fields 2`] = `Array []`;
 
-exports[`FindBuilder mysql where and 1`] = `"select null from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?))"`;
+exports[`FindBuilder mysql where and 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?))"`;
 
 exports[`FindBuilder mysql where and 2`] = `
 Array [
@@ -230,11 +230,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where equals null 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null"`;
+exports[`FindBuilder mysql where equals null 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null"`;
 
 exports[`FindBuilder mysql where equals null 2`] = `Array []`;
 
-exports[`FindBuilder mysql where merge 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder mysql where merge 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder mysql where merge 2`] = `
 Array [
@@ -243,7 +243,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where not 1`] = `"select null from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?))"`;
+exports[`FindBuilder mysql where not 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?))"`;
 
 exports[`FindBuilder mysql where not 2`] = `
 Array [
@@ -251,11 +251,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where notEqual null 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null"`;
+exports[`FindBuilder mysql where notEqual null 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null"`;
 
 exports[`FindBuilder mysql where notEqual null 2`] = `Array []`;
 
-exports[`FindBuilder mysql where or 1`] = `"select null from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?))"`;
+exports[`FindBuilder mysql where or 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?))"`;
 
 exports[`FindBuilder mysql where or 2`] = `
 Array [
@@ -264,7 +264,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (aggregate) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
+exports[`FindBuilder mysql where with association (aggregate) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
 
 exports[`FindBuilder mysql where with association (aggregate) 2`] = `
 Array [
@@ -272,7 +272,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (both field and aggregate) 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
+exports[`FindBuilder mysql where with association (both field and aggregate) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
 
 exports[`FindBuilder mysql where with association (both field and aggregate) 2`] = `
 Array [
@@ -281,7 +281,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (count) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?))"`;
+exports[`FindBuilder mysql where with association (count) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?))"`;
 
 exports[`FindBuilder mysql where with association (count) 2`] = `
 Array [
@@ -289,7 +289,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (multi) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`))"`;
+exports[`FindBuilder mysql where with association (multi) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`))"`;
 
 exports[`FindBuilder mysql where with association (multi) 2`] = `
 Array [
@@ -297,7 +297,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (single) 1`] = `"select null from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?))"`;
+exports[`FindBuilder mysql where with association (single) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?))"`;
 
 exports[`FindBuilder mysql where with association (single) 2`] = `
 Array [
@@ -305,7 +305,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with association (through) 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder mysql where with association (through) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder mysql where with association (through) 2`] = `
 Array [
@@ -313,11 +313,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with empty object 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql where with empty object 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql where with empty object 2`] = `Array []`;
 
-exports[`FindBuilder mysql where with extra operators 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
+exports[`FindBuilder mysql where with extra operators 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
 
 exports[`FindBuilder mysql where with extra operators 2`] = `
 Array [
@@ -325,7 +325,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with nested association 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder mysql where with nested association 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder mysql where with nested association 2`] = `
 Array [
@@ -333,11 +333,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with non-existent field 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql where with non-existent field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder mysql where with non-existent field 2`] = `Array []`;
 
-exports[`FindBuilder mysql where with one field 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
+exports[`FindBuilder mysql where with one field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
 
 exports[`FindBuilder mysql where with one field 2`] = `
 Array [
@@ -345,7 +345,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql where with two field 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ? limit ?"`;
+exports[`FindBuilder mysql where with two field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ? limit ?"`;
 
 exports[`FindBuilder mysql where with two field 2`] = `
 Array [
@@ -355,11 +355,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres basic queries no additional options 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres basic queries no additional options 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres basic queries no additional options 2`] = `Array []`;
 
-exports[`FindBuilder postgres limit with number 1`] = `"select null from \\"actor\\" as \\"a1\\" limit ?"`;
+exports[`FindBuilder postgres limit with number 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" limit ?"`;
 
 exports[`FindBuilder postgres limit with number 2`] = `
 Array [
@@ -367,7 +367,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres load nested 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('films', (select coalesce(nullif(json_agg(\\"f3\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('language', (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f4\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\")) as \\"o\\" from \\"film\\" as \\"f4\\" inner join \\"film_actor\\" as \\"f5\\" on \\"f5\\".\\"film_id\\" = \\"f4\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f5\\".\\"actor_id\\" limit ?) as \\"f3\\")) as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" limit ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres load nested 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a2\\".\\"actor_id\\", 'firstName', \\"a2\\".\\"first_name\\", 'lastName', \\"a2\\".\\"last_name\\", 'lastUpdate', \\"a2\\".\\"last_update\\", 'films', (select coalesce(nullif(json_agg(\\"f3\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f4\\".\\"film_id\\", 'title', \\"f4\\".\\"title\\", 'description', \\"f4\\".\\"description\\", 'releaseYear', \\"f4\\".\\"release_year\\", 'rentalDuration', \\"f4\\".\\"rental_duration\\", 'rentalRate', \\"f4\\".\\"rental_rate\\", 'replacementCost', \\"f4\\".\\"replacement_cost\\", 'rating', \\"f4\\".\\"rating\\", 'specialFeatures', \\"f4\\".\\"special_features\\", 'lastUpdate', \\"f4\\".\\"last_update\\", 'language', (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object('id', \\"l2\\".\\"language_id\\", 'name', \\"l2\\".\\"name\\", 'lastUpdate', \\"l2\\".\\"last_update\\") as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f4\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\")) as \\"o\\" from \\"film\\" as \\"f4\\" inner join \\"film_actor\\" as \\"f5\\" on \\"f5\\".\\"film_id\\" = \\"f4\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f5\\".\\"actor_id\\" limit ?) as \\"f3\\")) as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" limit ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres load nested 2`] = `
 Array [
@@ -378,7 +378,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres load with FK on builder table 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres load with FK on builder table 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object('id', \\"l2\\".\\"language_id\\", 'name', \\"l2\\".\\"name\\", 'lastUpdate', \\"l2\\".\\"last_update\\") as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres load with FK on builder table 2`] = `
 Array [
@@ -386,11 +386,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres load with FK on joined table 1`] = `"select (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"film\\" as \\"f2\\" where \\"l1\\".\\"language_id\\" = \\"f2\\".\\"language_id\\") as \\"f1\\") as \\"films\\" from \\"language\\" as \\"l1\\""`;
+exports[`FindBuilder postgres load with FK on joined table 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f2\\".\\"film_id\\", 'title', \\"f2\\".\\"title\\", 'description', \\"f2\\".\\"description\\", 'releaseYear', \\"f2\\".\\"release_year\\", 'rentalDuration', \\"f2\\".\\"rental_duration\\", 'rentalRate', \\"f2\\".\\"rental_rate\\", 'replacementCost', \\"f2\\".\\"replacement_cost\\", 'rating', \\"f2\\".\\"rating\\", 'specialFeatures', \\"f2\\".\\"special_features\\", 'lastUpdate', \\"f2\\".\\"last_update\\") as \\"o\\" from \\"film\\" as \\"f2\\" where \\"l1\\".\\"language_id\\" = \\"f2\\".\\"language_id\\") as \\"f1\\") as \\"films\\" from \\"language\\" as \\"l1\\""`;
 
 exports[`FindBuilder postgres load with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder postgres load with additional options 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('firstName', \\"a2\\".\\"first_name\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" desc limit ? offset ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres load with additional options 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('firstName', \\"a2\\".\\"first_name\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" desc limit ? offset ?) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres load with additional options 2`] = `
 Array [
@@ -399,27 +399,27 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres load with alias 1`] = `"select (select coalesce(nullif(json_agg(\\"p1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"p1\\") as \\"performers\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres load with alias 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"p1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a1\\".\\"actor_id\\", 'firstName', \\"a1\\".\\"first_name\\", 'lastName', \\"a1\\".\\"last_name\\", 'lastUpdate', \\"a1\\".\\"last_update\\") as \\"o\\" from \\"actor\\" as \\"a1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"p1\\") as \\"performers\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres load with alias 2`] = `Array []`;
 
-exports[`FindBuilder postgres load with default builder 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres load with default builder 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a2\\".\\"actor_id\\", 'firstName', \\"a2\\".\\"first_name\\", 'lastName', \\"a2\\".\\"last_name\\", 'lastUpdate', \\"a2\\".\\"last_update\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres load with default builder 2`] = `Array []`;
 
-exports[`FindBuilder postgres load with junction table 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres load with junction table 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a2\\".\\"actor_id\\", 'firstName', \\"a2\\".\\"first_name\\", 'lastName', \\"a2\\".\\"last_name\\", 'lastUpdate', \\"a2\\".\\"last_update\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\") as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with FK on builder table 1`] = `"select (select (select json_build_object('max', json_build_object('name', max(\\"l2\\".\\"name\\"))) as \\"agg\\" from (select \\"l3\\".\\"name\\" from \\"language\\" as \\"l3\\" where \\"f1\\".\\"language_id\\" = \\"l3\\".\\"language_id\\") as \\"l2\\") as \\"l1\\") as \\"languageAggregate\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres loadAggregate with FK on builder table 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('name', max(\\"l2\\".\\"name\\"))) as \\"agg\\" from (select \\"l3\\".\\"name\\" from \\"language\\" as \\"l3\\" where \\"f1\\".\\"language_id\\" = \\"l3\\".\\"language_id\\") as \\"l2\\") as \\"l1\\") as \\"languageAggregate\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres loadAggregate with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with FK on joined table 1`] = `"select (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" where \\"l1\\".\\"language_id\\" = \\"f3\\".\\"language_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"language\\" as \\"l1\\""`;
+exports[`FindBuilder postgres loadAggregate with FK on joined table 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" where \\"l1\\".\\"language_id\\" = \\"f3\\".\\"language_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"language\\" as \\"l1\\""`;
 
 exports[`FindBuilder postgres loadAggregate with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with additional options 1`] = `"select (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" order by \\"f3\\".\\"title\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres loadAggregate with additional options 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" order by \\"f3\\".\\"title\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres loadAggregate with additional options 2`] = `
 Array [
@@ -428,11 +428,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres loadAggregate with junction table 1`] = `"select (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres loadAggregate with junction table 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres loadAggregate with junction table 2`] = `Array []`;
 
-exports[`FindBuilder postgres offset with number 1`] = `"select null from \\"actor\\" as \\"a1\\" offset ?"`;
+exports[`FindBuilder postgres offset with number 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" offset ?"`;
 
 exports[`FindBuilder postgres offset with number 2`] = `
 Array [
@@ -440,7 +440,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres orderBy nested (multi with aggregate) 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by (select avg(\\"f3\\".\\"replacement_cost\\") as \\"avg\\" from \\"film_actor\\" as \\"f4\\" inner join \\"film\\" as \\"f3\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" group by \\"f4\\".\\"actor_id\\") asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres orderBy nested (multi with aggregate) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a2\\".\\"actor_id\\", 'firstName', \\"a2\\".\\"first_name\\", 'lastName', \\"a2\\".\\"last_name\\", 'lastUpdate', \\"a2\\".\\"last_update\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by (select avg(\\"f3\\".\\"replacement_cost\\") as \\"avg\\" from \\"film_actor\\" as \\"f4\\" inner join \\"film\\" as \\"f3\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a2\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" group by \\"f4\\".\\"actor_id\\") asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres orderBy nested (multi with aggregate) 2`] = `
 Array [
@@ -448,7 +448,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres orderBy nested (multi) 1`] = `"select (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object() as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres orderBy nested (multi) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"a1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"a2\\".\\"actor_id\\", 'firstName', \\"a2\\".\\"first_name\\", 'lastName', \\"a2\\".\\"last_name\\", 'lastUpdate', \\"a2\\".\\"last_update\\") as \\"o\\" from \\"actor\\" as \\"a2\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"actor_id\\" = \\"a2\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" order by \\"a2\\".\\"first_name\\" asc) as \\"a1\\") as \\"actors\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres orderBy nested (multi) 2`] = `
 Array [
@@ -456,7 +456,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres orderBy nested (single with aggregate) 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by (select avg(\\"f2\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f2\\" where \\"l2\\".\\"language_id\\" = \\"f2\\".\\"language_id\\" group by \\"f2\\".\\"language_id\\") asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres orderBy nested (single with aggregate) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object('id', \\"l2\\".\\"language_id\\", 'name', \\"l2\\".\\"name\\", 'lastUpdate', \\"l2\\".\\"last_update\\") as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by (select avg(\\"f2\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f2\\" where \\"l2\\".\\"language_id\\" = \\"f2\\".\\"language_id\\" group by \\"f2\\".\\"language_id\\") asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres orderBy nested (single with aggregate) 2`] = `
 Array [
@@ -465,7 +465,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres orderBy nested (single) 1`] = `"select (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object() as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by \\"l2\\".\\"name\\" asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres orderBy nested (single) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select json_agg(\\"l1\\".\\"o\\") -> 0 from (select json_build_object('id', \\"l2\\".\\"language_id\\", 'name', \\"l2\\".\\"name\\", 'lastUpdate', \\"l2\\".\\"last_update\\") as \\"o\\" from \\"language\\" as \\"l2\\" where \\"f1\\".\\"language_id\\" = \\"l2\\".\\"language_id\\" order by \\"l2\\".\\"name\\" asc limit ?) as \\"l1\\") as \\"language\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres orderBy nested (single) 2`] = `
 Array [
@@ -474,47 +474,47 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres orderBy with association (aggregate and through) 1`] = `"select null from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc"`;
+exports[`FindBuilder postgres orderBy with association (aggregate and through) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\" order by (select min(\\"a1\\".\\"last_update\\") as \\"min\\" from \\"film_actor\\" as \\"f2\\" inner join \\"actor\\" as \\"a1\\" on \\"f2\\".\\"actor_id\\" = \\"a1\\".\\"actor_id\\" where \\"f1\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" group by \\"f2\\".\\"film_id\\") asc"`;
 
 exports[`FindBuilder postgres orderBy with association (aggregate and through) 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with association (aggregate) 1`] = `"select null from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc"`;
+exports[`FindBuilder postgres orderBy with association (aggregate) 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"language\\" as \\"l1\\" order by (select avg(\\"f1\\".\\"replacement_cost\\") as \\"avg\\" from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\") asc"`;
 
 exports[`FindBuilder postgres orderBy with association (aggregate) 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with association (count) 1`] = `"select null from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".\\"film_id\\") as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc"`;
+exports[`FindBuilder postgres orderBy with association (count) 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" order by (select count(\\"f1\\".\\"film_id\\") as \\"count\\" from \\"film_actor\\" as \\"f2\\" inner join \\"film\\" as \\"f1\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" group by \\"f2\\".\\"actor_id\\") asc"`;
 
 exports[`FindBuilder postgres orderBy with association (count) 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with association (field) 1`] = `"select null from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc"`;
+exports[`FindBuilder postgres orderBy with association (field) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\" order by (select \\"l1\\".\\"name\\" from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\") asc"`;
 
 exports[`FindBuilder postgres orderBy with association (field) 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with empty object 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres orderBy with empty object 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres orderBy with empty object 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with multiple fields 1`] = `"select null from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc"`;
+exports[`FindBuilder postgres orderBy with multiple fields 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"actor_id\\" asc, \\"a1\\".\\"last_update\\" asc"`;
 
 exports[`FindBuilder postgres orderBy with multiple fields 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with no fields 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres orderBy with no fields 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres orderBy with no fields 2`] = `Array []`;
 
-exports[`FindBuilder postgres orderBy with one field 1`] = `"select null from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc"`;
+exports[`FindBuilder postgres orderBy with one field 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" order by \\"a1\\".\\"first_name\\" asc"`;
 
 exports[`FindBuilder postgres orderBy with one field 2`] = `Array []`;
 
-exports[`FindBuilder postgres resolveInfo basic query 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres resolveInfo basic query 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\""`;
 
 exports[`FindBuilder postgres resolveInfo basic query 2`] = `Array []`;
 
-exports[`FindBuilder postgres resolveInfo query with alias 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", (select coalesce(nullif(json_agg(\\"m1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f1\\".\\"film_id\\", 'title', \\"f1\\".\\"title\\") as \\"o\\" from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\") as \\"m1\\") as \\"movies\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres resolveInfo query with alias 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"m1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f1\\".\\"film_id\\", 'title', \\"f1\\".\\"title\\", 'description', \\"f1\\".\\"description\\", 'releaseYear', \\"f1\\".\\"release_year\\", 'rentalDuration', \\"f1\\".\\"rental_duration\\", 'rentalRate', \\"f1\\".\\"rental_rate\\", 'replacementCost', \\"f1\\".\\"replacement_cost\\", 'rating', \\"f1\\".\\"rating\\", 'specialFeatures', \\"f1\\".\\"special_features\\", 'lastUpdate', \\"f1\\".\\"last_update\\") as \\"o\\" from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\") as \\"m1\\") as \\"movies\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres resolveInfo query with alias 2`] = `Array []`;
 
-exports[`FindBuilder postgres resolveInfo query with arguments 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\" where \\"f1\\".\\"title\\" = ? order by \\"f1\\".\\"release_year\\" desc limit ? offset ?"`;
+exports[`FindBuilder postgres resolveInfo query with arguments 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\" where \\"f1\\".\\"title\\" = ? order by \\"f1\\".\\"release_year\\" desc limit ? offset ?"`;
 
 exports[`FindBuilder postgres resolveInfo query with arguments 2`] = `
 Array [
@@ -524,7 +524,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres resolveInfo query with nested aggregate 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", (select (select json_build_object('count', coalesce(count(\\"f2\\".\\"film_id\\"), 0), 'avg', json_build_object('rentalRate', coalesce(avg(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(avg(\\"f2\\".\\"replacement_cost\\"), 0)), 'sum', json_build_object('rentalRate', coalesce(sum(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(sum(\\"f2\\".\\"replacement_cost\\"), 0)), 'min', json_build_object('title', min(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(min(\\"f2\\".\\"release_year\\"), 0)), 'max', json_build_object('title', max(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(max(\\"f2\\".\\"release_year\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"film_id\\", \\"f3\\".\\"rental_rate\\", \\"f3\\".\\"replacement_cost\\", \\"f3\\".\\"title\\", \\"f3\\".\\"release_year\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" and \\"f3\\".\\"title\\" = ? order by \\"f3\\".\\"release_year\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres resolveInfo query with nested aggregate 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('count', coalesce(count(\\"f2\\".\\"film_id\\"), 0), 'avg', json_build_object('rentalRate', coalesce(avg(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(avg(\\"f2\\".\\"replacement_cost\\"), 0)), 'sum', json_build_object('rentalRate', coalesce(sum(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(sum(\\"f2\\".\\"replacement_cost\\"), 0)), 'min', json_build_object('title', min(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(min(\\"f2\\".\\"release_year\\"), 0)), 'max', json_build_object('title', max(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(max(\\"f2\\".\\"release_year\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"film_id\\", \\"f3\\".\\"rental_rate\\", \\"f3\\".\\"replacement_cost\\", \\"f3\\".\\"title\\", \\"f3\\".\\"release_year\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" and \\"f3\\".\\"title\\" = ? order by \\"f3\\".\\"release_year\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres resolveInfo query with nested aggregate 2`] = `
 Array [
@@ -534,7 +534,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres resolveInfo query with nested arguments 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f2\\".\\"film_id\\", 'title', \\"f2\\".\\"title\\") as \\"o\\" from \\"film\\" as \\"f2\\" inner join \\"film_actor\\" as \\"f3\\" on \\"f3\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f3\\".\\"actor_id\\" and \\"f2\\".\\"title\\" = ? order by \\"f2\\".\\"release_year\\" desc limit ? offset ?) as \\"f1\\") as \\"films\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres resolveInfo query with nested arguments 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f2\\".\\"film_id\\", 'title', \\"f2\\".\\"title\\", 'description', \\"f2\\".\\"description\\", 'releaseYear', \\"f2\\".\\"release_year\\", 'rentalDuration', \\"f2\\".\\"rental_duration\\", 'rentalRate', \\"f2\\".\\"rental_rate\\", 'replacementCost', \\"f2\\".\\"replacement_cost\\", 'rating', \\"f2\\".\\"rating\\", 'specialFeatures', \\"f2\\".\\"special_features\\", 'lastUpdate', \\"f2\\".\\"last_update\\") as \\"o\\" from \\"film\\" as \\"f2\\" inner join \\"film_actor\\" as \\"f3\\" on \\"f3\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f3\\".\\"actor_id\\" and \\"f2\\".\\"title\\" = ? order by \\"f2\\".\\"release_year\\" desc limit ? offset ?) as \\"f1\\") as \\"films\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres resolveInfo query with nested arguments 2`] = `
 Array [
@@ -544,7 +544,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres resolveInfo valid path 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\" from \\"film\\" as \\"f1\\" limit ?"`;
+exports[`FindBuilder postgres resolveInfo valid path 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\" limit ?"`;
 
 exports[`FindBuilder postgres resolveInfo valid path 2`] = `
 Array [
@@ -576,7 +576,7 @@ exports[`FindBuilder postgres select with no fields 1`] = `"select null from \\"
 
 exports[`FindBuilder postgres select with no fields 2`] = `Array []`;
 
-exports[`FindBuilder postgres where and 1`] = `"select null from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?))"`;
+exports[`FindBuilder postgres where and 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) and (\\"a1\\".\\"last_name\\" = ?))"`;
 
 exports[`FindBuilder postgres where and 2`] = `
 Array [
@@ -585,11 +585,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where equals null 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null"`;
+exports[`FindBuilder postgres where equals null 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is null"`;
 
 exports[`FindBuilder postgres where equals null 2`] = `Array []`;
 
-exports[`FindBuilder postgres where merge 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
+exports[`FindBuilder postgres where merge 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
 
 exports[`FindBuilder postgres where merge 2`] = `
 Array [
@@ -598,7 +598,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where not 1`] = `"select null from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?))"`;
+exports[`FindBuilder postgres where not 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where (not (\\"a1\\".\\"first_name\\" = ?))"`;
 
 exports[`FindBuilder postgres where not 2`] = `
 Array [
@@ -606,11 +606,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where notEqual null 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null"`;
+exports[`FindBuilder postgres where notEqual null 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" is not null"`;
 
 exports[`FindBuilder postgres where notEqual null 2`] = `Array []`;
 
-exports[`FindBuilder postgres where or 1`] = `"select null from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?))"`;
+exports[`FindBuilder postgres where or 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where ((\\"a1\\".\\"first_name\\" = ?) or (\\"a1\\".\\"last_name\\" = ?))"`;
 
 exports[`FindBuilder postgres where or 2`] = `
 Array [
@@ -619,7 +619,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (aggregate) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
+exports[`FindBuilder postgres where with association (aggregate) 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
 
 exports[`FindBuilder postgres where with association (aggregate) 2`] = `
 Array [
@@ -627,7 +627,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (both field and aggregate) 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
+exports[`FindBuilder postgres where with association (both field and aggregate) 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\" having avg(\\"f1\\".\\"replacement_cost\\") > ?))"`;
 
 exports[`FindBuilder postgres where with association (both field and aggregate) 2`] = `
 Array [
@@ -636,7 +636,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (count) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".\\"film_id\\") > ?))"`;
+exports[`FindBuilder postgres where with association (count) 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" group by \\"f1\\".\\"language_id\\" having count(\\"f1\\".\\"film_id\\") > ?))"`;
 
 exports[`FindBuilder postgres where with association (count) 2`] = `
 Array [
@@ -644,7 +644,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (multi) 1`] = `"select null from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\"))"`;
+exports[`FindBuilder postgres where with association (multi) 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"language\\" as \\"l1\\" where (exists (select null from \\"film\\" as \\"f1\\" where \\"l1\\".\\"language_id\\" = \\"f1\\".\\"language_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f1\\".\\"language_id\\"))"`;
 
 exports[`FindBuilder postgres where with association (multi) 2`] = `
 Array [
@@ -652,7 +652,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (single) 1`] = `"select null from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?))"`;
+exports[`FindBuilder postgres where with association (single) 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"film\\" as \\"f1\\" where (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?))"`;
 
 exports[`FindBuilder postgres where with association (single) 2`] = `
 Array [
@@ -660,7 +660,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with association (through) 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\"))"`;
+exports[`FindBuilder postgres where with association (through) 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and \\"f1\\".\\"title\\" = ? group by \\"f2\\".\\"film_id\\"))"`;
 
 exports[`FindBuilder postgres where with association (through) 2`] = `
 Array [
@@ -668,11 +668,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with empty object 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres where with empty object 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres where with empty object 2`] = `Array []`;
 
-exports[`FindBuilder postgres where with extra operators 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
+exports[`FindBuilder postgres where with extra operators 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
 
 exports[`FindBuilder postgres where with extra operators 2`] = `
 Array [
@@ -680,7 +680,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with nested association 1`] = `"select null from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
+exports[`FindBuilder postgres where with nested association 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where (exists (select null from \\"film\\" as \\"f1\\" inner join \\"film_actor\\" as \\"f2\\" on \\"f2\\".\\"film_id\\" = \\"f1\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f2\\".\\"actor_id\\" and (exists (select null from \\"language\\" as \\"l1\\" where \\"f1\\".\\"language_id\\" = \\"l1\\".\\"language_id\\" and \\"l1\\".\\"name\\" = ?)) group by \\"f2\\".\\"film_id\\"))"`;
 
 exports[`FindBuilder postgres where with nested association 2`] = `
 Array [
@@ -688,11 +688,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with non-existent field 1`] = `"select null from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres where with non-existent field 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
 exports[`FindBuilder postgres where with non-existent field 2`] = `Array []`;
 
-exports[`FindBuilder postgres where with one field 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
+exports[`FindBuilder postgres where with one field 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ?"`;
 
 exports[`FindBuilder postgres where with one field 2`] = `
 Array [
@@ -700,7 +700,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres where with two field 1`] = `"select null from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ? limit ?"`;
+exports[`FindBuilder postgres where with two field 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" where \\"a1\\".\\"first_name\\" = ? and \\"a1\\".\\"last_name\\" = ? limit ?"`;
 
 exports[`FindBuilder postgres where with two field 2`] = `
 Array [
@@ -710,11 +710,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite basic queries no additional options 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite basic queries no additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite basic queries no additional options 2`] = `Array []`;
 
-exports[`FindBuilder sqlite limit with number 1`] = `"select null from \`actor\` as \`a1\` limit ?"`;
+exports[`FindBuilder sqlite limit with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit ?"`;
 
 exports[`FindBuilder sqlite limit with number 2`] = `
 Array [
@@ -722,7 +722,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite load nested 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object('films', (select json_group_array(\`f3\`.\`o\`) from (select json_object('language', (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f4\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`)) as \`o\` from \`film\` as \`f4\` inner join \`film_actor\` as \`f5\` on \`f5\`.\`film_id\` = \`f4\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f5\`.\`actor_id\` limit ?) as \`f3\`)) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` limit ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite load nested 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`, 'films', (select json_group_array(\`f3\`.\`o\`) from (select json_object('id', \`f4\`.\`film_id\`, 'title', \`f4\`.\`title\`, 'description', \`f4\`.\`description\`, 'releaseYear', \`f4\`.\`release_year\`, 'rentalDuration', \`f4\`.\`rental_duration\`, 'rentalRate', \`f4\`.\`rental_rate\`, 'replacementCost', \`f4\`.\`replacement_cost\`, 'rating', \`f4\`.\`rating\`, 'specialFeatures', \`f4\`.\`special_features\`, 'lastUpdate', \`f4\`.\`last_update\`, 'language', (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f4\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`)) as \`o\` from \`film\` as \`f4\` inner join \`film_actor\` as \`f5\` on \`f5\`.\`film_id\` = \`f4\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f5\`.\`actor_id\` limit ?) as \`f3\`)) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` limit ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite load nested 2`] = `
 Array [
@@ -733,7 +733,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite load with FK on builder table 1`] = `"select (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite load with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite load with FK on builder table 2`] = `
 Array [
@@ -741,11 +741,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite load with FK on joined table 1`] = `"select (select json_group_array(\`f1\`.\`o\`) from (select json_object() as \`o\` from \`film\` as \`f2\` where \`l1\`.\`language_id\` = \`f2\`.\`language_id\`) as \`f1\`) as \`films\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder sqlite load with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`f1\`.\`o\`) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'rating', \`f2\`.\`rating\`, 'specialFeatures', \`f2\`.\`special_features\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` where \`l1\`.\`language_id\` = \`f2\`.\`language_id\`) as \`f1\`) as \`films\` from \`language\` as \`l1\`"`;
 
 exports[`FindBuilder sqlite load with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite load with additional options 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object('firstName', \`a2\`.\`first_name\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` desc limit ? offset ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite load with additional options 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('firstName', \`a2\`.\`first_name\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` desc limit ? offset ?) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite load with additional options 2`] = `
 Array [
@@ -754,27 +754,27 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite load with alias 1`] = `"select (select json_group_array(\`p1\`.\`o\`) from (select json_object() as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`p1\`) as \`performers\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite load with alias 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`p1\`.\`o\`) from (select json_object('id', \`a1\`.\`actor_id\`, 'firstName', \`a1\`.\`first_name\`, 'lastName', \`a1\`.\`last_name\`, 'lastUpdate', \`a1\`.\`last_update\`) as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`p1\`) as \`performers\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite load with alias 2`] = `Array []`;
 
-exports[`FindBuilder sqlite load with default builder 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite load with default builder 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite load with default builder 2`] = `Array []`;
 
-exports[`FindBuilder sqlite load with junction table 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite load with junction table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\`) as \`a1\`) as \`actors\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on builder table 1`] = `"select (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite loadAggregate with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite loadAggregate with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on joined table 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder sqlite loadAggregate with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
 
 exports[`FindBuilder sqlite loadAggregate with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with additional options 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite loadAggregate with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite loadAggregate with additional options 2`] = `
 Array [
@@ -783,11 +783,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite loadAggregate with junction table 1`] = `"select (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite loadAggregate with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite loadAggregate with junction table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite offset with number 1`] = `"select null from \`actor\` as \`a1\` limit ? offset ?"`;
+exports[`FindBuilder sqlite offset with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit ? offset ?"`;
 
 exports[`FindBuilder sqlite offset with number 2`] = `
 Array [
@@ -796,7 +796,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite orderBy nested (multi with aggregate) 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by (select avg(\`f3\`.\`replacement_cost\`) as \`avg\` from \`film_actor\` as \`f4\` inner join \`film\` as \`f3\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f4\`.\`actor_id\` group by \`f4\`.\`actor_id\`) asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite orderBy nested (multi with aggregate) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by (select avg(\`f3\`.\`replacement_cost\`) as \`avg\` from \`film_actor\` as \`f4\` inner join \`film\` as \`f3\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a2\`.\`actor_id\` = \`f4\`.\`actor_id\` group by \`f4\`.\`actor_id\`) asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite orderBy nested (multi with aggregate) 2`] = `
 Array [
@@ -804,7 +804,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite orderBy nested (multi) 1`] = `"select (select json_group_array(\`a1\`.\`o\`) from (select json_object() as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite orderBy nested (multi) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`a1\`.\`o\`) from (select json_object('id', \`a2\`.\`actor_id\`, 'firstName', \`a2\`.\`first_name\`, 'lastName', \`a2\`.\`last_name\`, 'lastUpdate', \`a2\`.\`last_update\`) as \`o\` from \`actor\` as \`a2\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`actor_id\` = \`a2\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` order by \`a2\`.\`first_name\` asc) as \`a1\`) as \`actors\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite orderBy nested (multi) 2`] = `
 Array [
@@ -812,7 +812,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite orderBy nested (single with aggregate) 1`] = `"select (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by (select avg(\`f2\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f2\` where \`l2\`.\`language_id\` = \`f2\`.\`language_id\` group by \`f2\`.\`language_id\`) asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite orderBy nested (single with aggregate) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by (select avg(\`f2\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f2\` where \`l2\`.\`language_id\` = \`f2\`.\`language_id\` group by \`f2\`.\`language_id\`) asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite orderBy nested (single with aggregate) 2`] = `
 Array [
@@ -821,7 +821,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite orderBy nested (single) 1`] = `"select (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object() as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by \`l2\`.\`name\` asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite orderBy nested (single) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select json_extract(json_group_array(\`l1\`.\`o\`), '$[0]') from (select json_object('id', \`l2\`.\`language_id\`, 'name', \`l2\`.\`name\`, 'lastUpdate', \`l2\`.\`last_update\`) as \`o\` from \`language\` as \`l2\` where \`f1\`.\`language_id\` = \`l2\`.\`language_id\` order by \`l2\`.\`name\` asc limit ?) as \`l1\`) as \`language\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite orderBy nested (single) 2`] = `
 Array [
@@ -830,47 +830,47 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite orderBy with association (aggregate and through) 1`] = `"select null from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc"`;
+exports[`FindBuilder sqlite orderBy with association (aggregate and through) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` order by (select min(\`a1\`.\`last_update\`) as \`min\` from \`film_actor\` as \`f2\` inner join \`actor\` as \`a1\` on \`f2\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f1\`.\`film_id\` = \`f2\`.\`film_id\` group by \`f2\`.\`film_id\`) asc"`;
 
 exports[`FindBuilder sqlite orderBy with association (aggregate and through) 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with association (aggregate) 1`] = `"select null from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc"`;
+exports[`FindBuilder sqlite orderBy with association (aggregate) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` order by (select avg(\`f1\`.\`replacement_cost\`) as \`avg\` from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\`) asc"`;
 
 exports[`FindBuilder sqlite orderBy with association (aggregate) 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with association (count) 1`] = `"select null from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc"`;
+exports[`FindBuilder sqlite orderBy with association (count) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by (select count(\`f1\`.\`film_id\`) as \`count\` from \`film_actor\` as \`f2\` inner join \`film\` as \`f1\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` group by \`f2\`.\`actor_id\`) asc"`;
 
 exports[`FindBuilder sqlite orderBy with association (count) 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with association (field) 1`] = `"select null from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc"`;
+exports[`FindBuilder sqlite orderBy with association (field) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` order by (select \`l1\`.\`name\` from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\`) asc"`;
 
 exports[`FindBuilder sqlite orderBy with association (field) 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with empty object 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite orderBy with empty object 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite orderBy with empty object 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with multiple fields 1`] = `"select null from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc"`;
+exports[`FindBuilder sqlite orderBy with multiple fields 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by \`a1\`.\`actor_id\` asc, \`a1\`.\`last_update\` asc"`;
 
 exports[`FindBuilder sqlite orderBy with multiple fields 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with no fields 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite orderBy with no fields 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite orderBy with no fields 2`] = `Array []`;
 
-exports[`FindBuilder sqlite orderBy with one field 1`] = `"select null from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc"`;
+exports[`FindBuilder sqlite orderBy with one field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` order by \`a1\`.\`first_name\` asc"`;
 
 exports[`FindBuilder sqlite orderBy with one field 2`] = `Array []`;
 
-exports[`FindBuilder sqlite resolveInfo basic query 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite resolveInfo basic query 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\`"`;
 
 exports[`FindBuilder sqlite resolveInfo basic query 2`] = `Array []`;
 
-exports[`FindBuilder sqlite resolveInfo query with alias 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select json_group_array(\`m1\`.\`o\`) from (select json_object('id', \`f1\`.\`film_id\`, 'title', \`f1\`.\`title\`) as \`o\` from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\`) as \`m1\`) as \`movies\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite resolveInfo query with alias 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`m1\`.\`o\`) from (select json_object('id', \`f1\`.\`film_id\`, 'title', \`f1\`.\`title\`, 'description', \`f1\`.\`description\`, 'releaseYear', \`f1\`.\`release_year\`, 'rentalDuration', \`f1\`.\`rental_duration\`, 'rentalRate', \`f1\`.\`rental_rate\`, 'replacementCost', \`f1\`.\`replacement_cost\`, 'rating', \`f1\`.\`rating\`, 'specialFeatures', \`f1\`.\`special_features\`, 'lastUpdate', \`f1\`.\`last_update\`) as \`o\` from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\`) as \`m1\`) as \`movies\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite resolveInfo query with alias 2`] = `Array []`;
 
-exports[`FindBuilder sqlite resolveInfo query with arguments 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` where \`f1\`.\`title\` = ? order by \`f1\`.\`release_year\` desc limit ? offset ?"`;
+exports[`FindBuilder sqlite resolveInfo query with arguments 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` where \`f1\`.\`title\` = ? order by \`f1\`.\`release_year\` desc limit ? offset ?"`;
 
 exports[`FindBuilder sqlite resolveInfo query with arguments 2`] = `
 Array [
@@ -880,7 +880,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite resolveInfo query with nested aggregate 2`] = `
 Array [
@@ -890,7 +890,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, (select json_group_array(\`f1\`.\`o\`) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`f1\`.\`o\`) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'rating', \`f2\`.\`rating\`, 'specialFeatures', \`f2\`.\`special_features\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite resolveInfo query with nested arguments 2`] = `
 Array [
@@ -900,7 +900,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\` from \`film\` as \`f1\` limit ?"`;
+exports[`FindBuilder sqlite resolveInfo valid path 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` limit ?"`;
 
 exports[`FindBuilder sqlite resolveInfo valid path 2`] = `
 Array [
@@ -932,7 +932,7 @@ exports[`FindBuilder sqlite select with no fields 1`] = `"select null from \`act
 
 exports[`FindBuilder sqlite select with no fields 2`] = `Array []`;
 
-exports[`FindBuilder sqlite where and 1`] = `"select null from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?))"`;
+exports[`FindBuilder sqlite where and 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) and (\`a1\`.\`last_name\` = ?))"`;
 
 exports[`FindBuilder sqlite where and 2`] = `
 Array [
@@ -941,11 +941,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where equals null 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null"`;
+exports[`FindBuilder sqlite where equals null 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is null"`;
 
 exports[`FindBuilder sqlite where equals null 2`] = `Array []`;
 
-exports[`FindBuilder sqlite where merge 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder sqlite where merge 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder sqlite where merge 2`] = `
 Array [
@@ -954,7 +954,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where not 1`] = `"select null from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?))"`;
+exports[`FindBuilder sqlite where not 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (not (\`a1\`.\`first_name\` = ?))"`;
 
 exports[`FindBuilder sqlite where not 2`] = `
 Array [
@@ -962,11 +962,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where notEqual null 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null"`;
+exports[`FindBuilder sqlite where notEqual null 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` is not null"`;
 
 exports[`FindBuilder sqlite where notEqual null 2`] = `Array []`;
 
-exports[`FindBuilder sqlite where or 1`] = `"select null from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?))"`;
+exports[`FindBuilder sqlite where or 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where ((\`a1\`.\`first_name\` = ?) or (\`a1\`.\`last_name\` = ?))"`;
 
 exports[`FindBuilder sqlite where or 2`] = `
 Array [
@@ -975,7 +975,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (aggregate) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
+exports[`FindBuilder sqlite where with association (aggregate) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
 
 exports[`FindBuilder sqlite where with association (aggregate) 2`] = `
 Array [
@@ -983,7 +983,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (both field and aggregate) 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
+exports[`FindBuilder sqlite where with association (both field and aggregate) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\` having avg(\`f1\`.\`replacement_cost\`) > ?))"`;
 
 exports[`FindBuilder sqlite where with association (both field and aggregate) 2`] = `
 Array [
@@ -992,7 +992,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (count) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?))"`;
+exports[`FindBuilder sqlite where with association (count) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` group by \`f1\`.\`language_id\` having count(\`f1\`.\`film_id\`) > ?))"`;
 
 exports[`FindBuilder sqlite where with association (count) 2`] = `
 Array [
@@ -1000,7 +1000,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (multi) 1`] = `"select null from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`))"`;
+exports[`FindBuilder sqlite where with association (multi) 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\` from \`language\` as \`l1\` where (exists (select null from \`film\` as \`f1\` where \`l1\`.\`language_id\` = \`f1\`.\`language_id\` and \`f1\`.\`title\` = ? group by \`f1\`.\`language_id\`))"`;
 
 exports[`FindBuilder sqlite where with association (multi) 2`] = `
 Array [
@@ -1008,7 +1008,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (single) 1`] = `"select null from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?))"`;
+exports[`FindBuilder sqlite where with association (single) 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`special_features\` as \`specialFeatures\`, \`f1\`.\`last_update\` as \`lastUpdate\` from \`film\` as \`f1\` where (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?))"`;
 
 exports[`FindBuilder sqlite where with association (single) 2`] = `
 Array [
@@ -1016,7 +1016,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with association (through) 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder sqlite where with association (through) 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and \`f1\`.\`title\` = ? group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder sqlite where with association (through) 2`] = `
 Array [
@@ -1024,11 +1024,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with empty object 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite where with empty object 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite where with empty object 2`] = `Array []`;
 
-exports[`FindBuilder sqlite where with extra operators 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
+exports[`FindBuilder sqlite where with extra operators 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
 
 exports[`FindBuilder sqlite where with extra operators 2`] = `
 Array [
@@ -1036,7 +1036,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with nested association 1`] = `"select null from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
+exports[`FindBuilder sqlite where with nested association 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where (exists (select null from \`film\` as \`f1\` inner join \`film_actor\` as \`f2\` on \`f2\`.\`film_id\` = \`f1\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f2\`.\`actor_id\` and (exists (select null from \`language\` as \`l1\` where \`f1\`.\`language_id\` = \`l1\`.\`language_id\` and \`l1\`.\`name\` = ?)) group by \`f2\`.\`film_id\`))"`;
 
 exports[`FindBuilder sqlite where with nested association 2`] = `
 Array [
@@ -1044,11 +1044,11 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with non-existent field 1`] = `"select null from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite where with non-existent field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
 exports[`FindBuilder sqlite where with non-existent field 2`] = `Array []`;
 
-exports[`FindBuilder sqlite where with one field 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
+exports[`FindBuilder sqlite where with one field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ?"`;
 
 exports[`FindBuilder sqlite where with one field 2`] = `
 Array [
@@ -1056,7 +1056,7 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite where with two field 1`] = `"select null from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ? limit ?"`;
+exports[`FindBuilder sqlite where with two field 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` where \`a1\`.\`first_name\` = ? and \`a1\`.\`last_name\` = ? limit ?"`;
 
 exports[`FindBuilder sqlite where with two field 2`] = `
 Array [

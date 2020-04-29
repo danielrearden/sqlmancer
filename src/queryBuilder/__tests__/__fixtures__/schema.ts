@@ -33,7 +33,7 @@ const typeDefs = `
     firstName: String!
     lastName: String!
     films: [Film!]! @associate(on: [{from: "actor_id", to: "actor_id"}, {from: "film_id", to: "film_id"}], through: "film_actor") @where(model: "Film") @orderBy(model: "Film") @limit @offset
-    filmsAggregate: Film @aggregate @many(model: "Film")
+    filmsAggregate: Film @associate(aggregate: "films") @aggregate @many(model: "Film")
   }
 
   type Film @model(table: "film", pk: "film_id") {

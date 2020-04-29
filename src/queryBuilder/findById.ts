@@ -26,6 +26,7 @@ export abstract class FindByIdBuilder<
   constructor(options: BuilderOptions, tableName: string, models: Models, id: ID) {
     super(options, tableName, models)
     this._id = id
+    this._select = Object.keys(this._model.fields)
   }
 
   /**

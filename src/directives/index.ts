@@ -34,13 +34,12 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
 }
 
 export const typeDefs: DocumentNode = parse(`
-  directive @aggregate(
-    generateType: Boolean = true
-  ) on FIELD_DEFINITION
+  directive @aggregate on FIELD_DEFINITION
 
   directive @associate(
-    on: [SqlmancerJoinOn!]!
+    on: [SqlmancerJoinOn!]
     through: String
+    aggregate: String
   ) on FIELD_DEFINITION
 
   directive @col(

@@ -37,6 +37,7 @@ export abstract class FindBuilder<
     super(options, modelName, models)
     this._isMany = isMany
     this._limit = isMany ? 0 : 1
+    this._select = Object.keys(this._model.fields)
   }
 
   /**

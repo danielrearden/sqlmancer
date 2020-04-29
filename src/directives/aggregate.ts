@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
 import {
-  defaultFieldResolver,
   GraphQLCompositeType,
   GraphQLField,
-  GraphQLInterfaceType,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLOutputType,
@@ -16,34 +14,12 @@ import {
 import { unwrap, getModelDetails, getDirectiveByName, getScalarTSType, makeNullable } from '../utilities'
 
 export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
-  visitFieldDefinition(
-    field: GraphQLField<any, any>,
-    details: {
-      objectType: GraphQLObjectType | GraphQLInterfaceType
-    }
-  ): GraphQLField<any, any> {
-    const newField = { ...field }
-    const { resolve = defaultFieldResolver, type } = field
-    const isModelField = !!getDirectiveByName(details.objectType, 'model')
-
-    if (isModelField) {
-      newField.resolve = (source, args, ctx, info) => {
-        const alias = info.path.key
-        const fieldName = info.fieldName
-        const modifiedSource = { ...source, [fieldName]: source[alias] }
-        return resolve(modifiedSource, args, ctx, info)
-      }
-    }
-
-    if (this.args.generateType) {
-      newField.type = this.getAggregateType(field, type)
-    }
-
-    return newField
+  visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
+    return { ...field, type: this.getAggregateType(field) }
   }
 
-  private getAggregateType(field: GraphQLField<any, any>, type: GraphQLOutputType): GraphQLOutputType {
-    const unwrappedType = unwrap(type)
+  private getAggregateType(field: GraphQLField<any, any>): GraphQLOutputType {
+    const unwrappedType = unwrap(field.type)
     const name = `${unwrappedType.name}Aggregate`
     const existingType = this.schema.getType(name)
 
