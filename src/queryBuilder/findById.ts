@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Knex from 'knex'
 
-import { BuilderOptions, Expressions, ID, QueryBuilderContext, Models, LoadedFromBuilder } from './types'
+import { BuilderOptions, Expressions, ID, QueryBuilderContext, Models, LoadedFromBuilder } from '../types'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'

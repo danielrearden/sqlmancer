@@ -15,7 +15,7 @@ import {
   Models,
   QueryBuilderContext,
   Where,
-} from './types'
+} from '../types'
 import { getAlias } from './utilities'
 import { parseResolveInfo, FlattenedResolveTree } from '../utilities'
 

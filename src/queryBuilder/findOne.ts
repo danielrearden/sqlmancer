@@ -1,4 +1,4 @@
-import { BuilderOptions, Dialect, Models } from './types'
+import { BuilderOptions, Dialect, Models } from '../types'
 import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
 

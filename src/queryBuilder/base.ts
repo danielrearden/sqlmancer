@@ -15,7 +15,7 @@ import {
   WhereArgs,
   WhereAssociations,
   WhereFields,
-} from './types'
+} from '../types'
 import { Dialect } from '../types'
 import {
   getAggregateFunction,

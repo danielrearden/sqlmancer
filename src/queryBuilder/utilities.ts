@@ -1,5 +1,5 @@
 import Knex from 'knex'
-import { QueryBuilderContext, Dialect } from './types'
+import { QueryBuilderContext, Dialect } from '../types'
 
 export function getAlias(name: string, context: QueryBuilderContext): string {
   const index = name.substring(0, 1).toLowerCase()

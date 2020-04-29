@@ -10,7 +10,7 @@ import {
   Models,
   Where,
   LoadedFromBuilder,
-} from './types'
+} from '../types'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
 import { getAlias, getJsonObjectFunctionByDialect } from './utilities'

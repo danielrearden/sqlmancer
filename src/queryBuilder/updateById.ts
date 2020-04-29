@@ -1,7 +1,7 @@
 import Knex from 'knex'
 
 import { BaseBuilder } from './base'
-import { BuilderOptions, ID, Models } from './types'
+import { BuilderOptions, ID, Models } from '../types'
 
 export class UpdateByIdBuilder<TUpdateFields extends Record<string, any>> extends BaseBuilder {
   protected _data: TUpdateFields

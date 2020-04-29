@@ -2,7 +2,7 @@ import Knex from 'knex'
 import { execute, parse, GraphQLSchema, GraphQLResolveInfo } from 'graphql'
 import { applyMiddleware } from 'graphql-middleware'
 import { BaseBuilder } from '../../base'
-import { BuilderOptions } from '../../types'
+import { BuilderOptions } from '../../../types'
 import { dialects } from '../../../__tests__/knex'
 
 export function getRollback(knex: Knex) {

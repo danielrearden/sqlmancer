@@ -3,7 +3,7 @@ import Knex from 'knex'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
-import { BuilderOptions, ID, Models } from './types'
+import { BuilderOptions, ID, Models } from '../types'
 
 export class DeleteByIdBuilder<
   TFields extends Record<string, any>,

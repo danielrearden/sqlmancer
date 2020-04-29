@@ -1,6 +1,6 @@
 import Knex from 'knex'
 import { BaseBuilder } from './base'
-import { BuilderOptions, Models } from './types'
+import { BuilderOptions, Models } from '../types'
 
 export class CreateOneBuilder<TCreateFields extends Record<string, any>> extends BaseBuilder {
   protected _data: TCreateFields

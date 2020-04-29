@@ -1,4 +1,4 @@
-import { BuilderOptions, ID, Models } from '../../types'
+import { BuilderOptions, ID, Models } from '../../../types'
 import { AggregateBuilder } from '../../aggregate'
 import { FindOneBuilder } from '../../findOne'
 import { FindManyBuilder } from '../../findMany'
@@ -108,104 +108,6 @@ export type LanguageCreateFields = {
 
 export type LanguageUpdateFields = {
   name?: string
-}
-
-export const models: Models = {
-  Actor: {
-    tableName: 'actor',
-    primaryKey: 'actor_id',
-    fields: {
-      id: { column: 'actor_id', type: 'ID' },
-      firstName: { column: 'first_name', type: 'string' },
-      lastName: { column: 'last_name', type: 'string' },
-      lastUpdate: { column: 'last_update', type: 'string' },
-    },
-    include: [],
-    dependencies: {},
-    associations: {
-      films: {
-        modelName: 'Film',
-        isMany: true,
-        on: [
-          { from: 'actor_id', to: 'actor_id' },
-          { from: 'film_id', to: 'film_id' },
-        ],
-        through: 'film_actor',
-        builder: options => new FilmFindManyBuilder(options),
-        aggregateBuilder: options => new FilmAggregateBuilder(options),
-      },
-    },
-    aggregates: {
-      filmsAggregate: 'films',
-    },
-  },
-  Film: {
-    tableName: 'film',
-    primaryKey: 'film_id',
-    fields: {
-      id: { column: 'film_id', type: 'ID' },
-      title: { column: 'title', type: 'string' },
-      description: { column: 'description', type: 'string' },
-      releaseYear: { column: 'release_year', type: 'number' },
-      rentalDuration: { column: 'rental_duration', type: 'number' },
-      rentalRate: { column: 'rental_rate', type: 'number' },
-      replacementCost: { column: 'replacement_cost', type: 'number' },
-      rating: { column: 'rating', type: 'string' },
-      specialFeatures: { column: 'special_features', type: 'string[]' },
-      lastUpdate: { column: 'last_update', type: 'string' },
-    },
-    include: [],
-    dependencies: {},
-    associations: {
-      actors: {
-        modelName: 'Actor',
-        isMany: true,
-        on: [
-          { from: 'film_id', to: 'film_id' },
-          { from: 'actor_id', to: 'actor_id' },
-        ],
-        through: 'film_actor',
-        builder: options => new ActorFindManyBuilder(options),
-        aggregateBuilder: options => new ActorAggregateBuilder(options),
-      },
-      language: {
-        modelName: 'Language',
-        isMany: false,
-        on: [{ from: 'language_id', to: 'language_id' }],
-        builder: options => new LanguageFindOneBuilder(options),
-        aggregateBuilder: options => new LanguageAggregateBuilder(options),
-      },
-      originalLanguage: {
-        modelName: 'Language',
-        isMany: false,
-        on: [{ from: 'original_language_id', to: 'language_id' }],
-        builder: options => new LanguageFindOneBuilder(options),
-        aggregateBuilder: options => new LanguageAggregateBuilder(options),
-      },
-    },
-    aggregates: {},
-  },
-  Language: {
-    tableName: 'language',
-    primaryKey: 'language_id',
-    fields: {
-      id: { column: 'language_id', type: 'ID' },
-      name: { column: 'name', type: 'string' },
-      lastUpdate: { column: 'last_update', type: 'string' },
-    },
-    include: [],
-    dependencies: {},
-    associations: {
-      films: {
-        modelName: 'Film',
-        isMany: true,
-        on: [{ from: 'language_id', to: 'language_id' }],
-        builder: options => new FilmFindManyBuilder(options),
-        aggregateBuilder: options => new FilmAggregateBuilder(options),
-      },
-    },
-    aggregates: {},
-  },
 }
 
 export class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
@@ -497,4 +399,138 @@ export class LanguageUpdateByIdBuilder extends UpdateByIdBuilder<LanguageUpdateF
   constructor(options: BuilderOptions, pk: ID, data: LanguageUpdateFields) {
     super(options, 'Language', models, pk, data)
   }
+}
+
+export const models: Models = {
+  Actor: {
+    tableName: 'actor',
+    primaryKey: 'actor_id',
+    fields: {
+      id: { column: 'actor_id', type: 'ID' },
+      firstName: { column: 'first_name', type: 'string' },
+      lastName: { column: 'last_name', type: 'string' },
+      lastUpdate: { column: 'last_update', type: 'string' },
+    },
+    include: [],
+    dependencies: {},
+    associations: {
+      films: {
+        modelName: 'Film',
+        isMany: true,
+        on: [
+          { from: 'actor_id', to: 'actor_id' },
+          { from: 'film_id', to: 'film_id' },
+        ],
+        through: 'film_actor',
+        builder: options => new FilmFindManyBuilder(options),
+        aggregateBuilder: options => new FilmAggregateBuilder(options),
+      },
+    },
+    aggregates: {
+      filmsAggregate: 'films',
+    },
+    builders: {
+      findById: ActorFindByIdBuilder,
+      findOne: ActorFindOneBuilder,
+      findMany: ActorFindManyBuilder,
+      aggregate: ActorAggregateBuilder,
+      createOne: ActorCreateOneBuilder,
+      createMany: ActorCreateManyBuilder,
+      deleteById: ActorDeleteByIdBuilder,
+      deleteMany: ActorDeleteManyBuilder,
+      updateById: ActorUpdateByIdBuilder,
+      updateMany: ActorUpdateManyBuilder,
+    },
+  },
+  Film: {
+    tableName: 'film',
+    primaryKey: 'film_id',
+    fields: {
+      id: { column: 'film_id', type: 'ID' },
+      title: { column: 'title', type: 'string' },
+      description: { column: 'description', type: 'string' },
+      releaseYear: { column: 'release_year', type: 'number' },
+      rentalDuration: { column: 'rental_duration', type: 'number' },
+      rentalRate: { column: 'rental_rate', type: 'number' },
+      replacementCost: { column: 'replacement_cost', type: 'number' },
+      rating: { column: 'rating', type: 'string' },
+      specialFeatures: { column: 'special_features', type: 'string[]' },
+      lastUpdate: { column: 'last_update', type: 'string' },
+    },
+    include: [],
+    dependencies: {},
+    associations: {
+      actors: {
+        modelName: 'Actor',
+        isMany: true,
+        on: [
+          { from: 'film_id', to: 'film_id' },
+          { from: 'actor_id', to: 'actor_id' },
+        ],
+        through: 'film_actor',
+        builder: options => new ActorFindManyBuilder(options),
+        aggregateBuilder: options => new ActorAggregateBuilder(options),
+      },
+      language: {
+        modelName: 'Language',
+        isMany: false,
+        on: [{ from: 'language_id', to: 'language_id' }],
+        builder: options => new LanguageFindOneBuilder(options),
+        aggregateBuilder: options => new LanguageAggregateBuilder(options),
+      },
+      originalLanguage: {
+        modelName: 'Language',
+        isMany: false,
+        on: [{ from: 'original_language_id', to: 'language_id' }],
+        builder: options => new LanguageFindOneBuilder(options),
+        aggregateBuilder: options => new LanguageAggregateBuilder(options),
+      },
+    },
+    aggregates: {},
+    builders: {
+      findById: FilmFindByIdBuilder,
+      findOne: FilmFindOneBuilder,
+      findMany: FilmFindManyBuilder,
+      aggregate: FilmAggregateBuilder,
+      createOne: FilmCreateOneBuilder,
+      createMany: FilmCreateManyBuilder,
+      deleteById: FilmDeleteByIdBuilder,
+      deleteMany: FilmDeleteManyBuilder,
+      updateById: FilmUpdateByIdBuilder,
+      updateMany: FilmUpdateManyBuilder,
+    },
+  },
+  Language: {
+    tableName: 'language',
+    primaryKey: 'language_id',
+    fields: {
+      id: { column: 'language_id', type: 'ID' },
+      name: { column: 'name', type: 'string' },
+      lastUpdate: { column: 'last_update', type: 'string' },
+    },
+    include: [],
+    dependencies: {},
+    associations: {
+      films: {
+        modelName: 'Film',
+        isMany: true,
+        on: [{ from: 'language_id', to: 'language_id' }],
+        builder: options => new FilmFindManyBuilder(options),
+        aggregateBuilder: options => new FilmAggregateBuilder(options),
+      },
+    },
+    aggregates: {},
+    builders: {
+      findById: LanguageFindByIdBuilder,
+      findOne: LanguageFindOneBuilder,
+      findMany: LanguageFindManyBuilder,
+      aggregate: LanguageAggregateBuilder,
+      createOne: LanguageCreateOneBuilder,
+      createMany: LanguageCreateManyBuilder,
+      deleteById: LanguageDeleteByIdBuilder,
+      deleteMany: LanguageDeleteManyBuilder,
+      updateById: LanguageUpdateByIdBuilder,
+      updateMany: LanguageUpdateManyBuilder,
+    },
+  },
 }

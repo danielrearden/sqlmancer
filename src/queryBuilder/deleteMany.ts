@@ -4,7 +4,7 @@ import Knex from 'knex'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
-import { BuilderOptions, Dialect, Expressions, OrderBy, Models, Where } from './types'
+import { BuilderOptions, Dialect, Expressions, OrderBy, Models, Where } from '../types'
 import { getAlias } from './utilities'
 
 export class DeleteManyBuilder<
