@@ -1,2 +1,3 @@
-export * from './generateClientFromSchema'
+export * from './createSqlmancerClient'
+export * from './generateClientTypeDeclarations'
 export * from './getTypeDefsFromGlob'

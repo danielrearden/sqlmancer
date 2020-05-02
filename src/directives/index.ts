@@ -75,7 +75,9 @@ export const typeDefs: DocumentNode = parse(`
   directive @private on FIELD_DEFINITION | OBJECT | UNION | INTERFACE
 
   directive @sqlmancer(
-    config: SqlmancerConfig!
+    dialect: SqlmancerDialect!
+    transformFieldNames: SqlmancerFieldNameTransformation
+    customScalars: SqlmancerCustomScalars
   ) on OBJECT
 
   directive @value(is: String!) on ENUM_VALUE
@@ -83,12 +85,6 @@ export const typeDefs: DocumentNode = parse(`
   directive @where(
     model: String
   ) on FIELD_DEFINITION
-
-  input SqlmancerConfig {
-    dialect: SqlmancerDialect!
-    transformFieldNames: SqlmancerFieldNameTransformation
-    customScalars: SqlmancerCustomScalars
-  }
 
   input SqlmancerCustomScalars {
     string: [String!]

@@ -1,15 +1,16 @@
-import Knex from 'knex'
 import { execute, parse, GraphQLSchema, GraphQLResolveInfo } from 'graphql'
 import { applyMiddleware } from 'graphql-middleware'
-import { BaseBuilder } from '../../base'
-import { BuilderOptions } from '../../../types'
-import { dialects } from '../../../__tests__/knex'
 
-export function getRollback(knex: Knex) {
+import { BaseBuilder } from '../../base'
+import { SqlmancerClient } from '../../../__tests__/postgres/sqlmancer'
+
+const dialectsToTest = process.env.DB ? process.env.DB.split(' ') : ['postgres', 'mysql', 'sqlite']
+
+export function getRollback(client: SqlmancerClient) {
   return async function(builder: BaseBuilder, fn: (result: any) => void) {
     const error = new Error('Rolling back transaction')
     await expect(
-      knex.transaction(async trx => {
+      client.transaction(async trx => {
         const result = await builder.transaction(trx).execute()
         fn(result)
         throw error
@@ -19,15 +20,21 @@ export function getRollback(knex: Knex) {
 }
 
 export function withDialects(
-  fn: (options: BuilderOptions, rollback: (builder: BaseBuilder, fn: (result: any) => void) => Promise<void>) => void
+  fn: (
+    client: SqlmancerClient,
+    rollback: (builder: BaseBuilder, fn: (result: any) => void) => Promise<void>,
+    schema: GraphQLSchema
+  ) => void
 ) {
-  dialects.forEach(({ name, knex }) => {
+  dialectsToTest.forEach(name => {
+    const client = require(`../../../__tests__/${name}/client`).client as SqlmancerClient
+    const schema = require(`../../../__tests__/${name}/schema`).schema as GraphQLSchema
     // eslint-disable-next-line jest/valid-title
     describe(name, () => {
-      fn({ knex, dialect: name as any }, getRollback(knex))
+      fn(client, getRollback(client), schema)
 
       afterAll(async () => {
-        await knex.destroy()
+        await client.destroy()
       })
     })
   })

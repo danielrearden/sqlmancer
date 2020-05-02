@@ -23,8 +23,8 @@ export abstract class FindByIdBuilder<
 > extends BaseBuilder {
   protected _id: ID
 
-  constructor(options: BuilderOptions, tableName: string, models: Models, id: ID) {
-    super(options, tableName, models)
+  constructor(options: BuilderOptions, modelName: string, models: Models, id: ID) {
+    super(options, modelName, models)
     this._id = id
     this._select = Object.keys(this._model.fields)
   }
@@ -143,7 +143,9 @@ export abstract class FindByIdBuilder<
 
     const fieldName = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : name
     const getBuilderFn = typeof aliasOrGetBuilder === 'string' ? getBuilder : aliasOrGetBuilder
-    const initialBuilder = association.builder(this._options)
+    const builders = this._models[association.modelName].builders
+    const Builder = association.isMany ? builders.findMany : builders.findOne
+    const initialBuilder = new Builder(this._options)
     this._loadedAssociations[fieldName] = [
       name,
       getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName][0]) : initialBuilder,
@@ -180,7 +182,8 @@ export abstract class FindByIdBuilder<
       throw new Error(`Invalid association name: ${associationName}`)
     }
 
-    const initialBuilder = association.aggregateBuilder(this._options)
+    const Builder = this._models[association.modelName].builders.aggregate
+    const initialBuilder = new Builder(this._options)
     this._loadedAggregates[alias] = [
       associationName,
       getBuilder ? getBuilder(initialBuilder as TAssociations[TName][1]) : initialBuilder,

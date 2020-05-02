@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import {
-  GraphQLCompositeType,
   GraphQLEnumType,
   GraphQLField,
   GraphQLInputObjectType,
@@ -8,12 +7,19 @@ import {
   GraphQLInputFieldMap,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLOutputType,
 } from 'graphql'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
-import { makeNullable, unwrap, getModelDetails, getScalarTSType } from '../utilities'
+import { getSqlmancerConfig, makeNullable, unwrap } from '../utilities'
+import { Association, Field, SqlmancerConfig } from '../types'
 
 export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
+  private config: SqlmancerConfig
+
+  constructor(config: any) {
+    super(config)
+    this.config = getSqlmancerConfig(this.schema)
+  }
+
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     const modelName = this.args.model || unwrap(field.type).name
     const type = this.getInputType(modelName, true, false)!
@@ -62,54 +68,46 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
     includeAssociations: boolean,
     aggregateFieldsOnly: boolean
   ): GraphQLInputObjectType | undefined {
-    const modelType = this.getModelType(modelName)
+    const { models } = this.config
+    const model = models[modelName]
+
+    if (!model) {
+      throw new Error(`"${modelName}" isn't a valid model. Did you include the @model directive?`)
+    }
+
     const typeName = this.getInputName(modelName, includeAssociations, aggregateFieldsOnly)
-    const { fields, associations } = getModelDetails(modelType, this.schema)
 
     const inputType: GraphQLInputObjectType = new GraphQLInputObjectType({
       name: typeName,
-      fields: aggregateFieldsOnly ? this.getAggregateFields(modelName, fields) : this.getColumnFields(fields),
+      fields: aggregateFieldsOnly
+        ? this.getAggregateFields(modelName, model.fields)
+        : this.getColumnFields(model.fields),
     })
     this.schema.getTypeMap()[typeName] = inputType
     Object.assign(inputType.getFields(), {
-      ...(includeAssociations ? this.getAssociationFields(associations) : {}),
+      ...(includeAssociations ? this.getAssociationFields(model.associations) : {}),
     })
 
     return inputType
   }
 
-  private getModelType(modelName: string) {
-    const modelType = this.schema.getType(modelName)
-    if (!modelType) {
-      throw new Error(`Model named "${modelName}" doesn't match any type in schema.`)
-    }
-
-    const modelDirective = modelType.astNode!.directives!.find(directive => directive.name.value === 'model')
-    if (!modelDirective) {
-      throw new Error(`Type named "${modelName}" isn't a valid model. Did you include the @model directive?`)
-    }
-
-    return modelType as GraphQLCompositeType
-  }
-
-  private getColumnFields(fields: { fieldName: string; type: GraphQLOutputType }[]): GraphQLInputFieldConfigMap {
-    return fields.reduce((acc, { fieldName, type }) => {
-      if (this.isSortableField(type)) {
+  private getColumnFields(fields: Record<string, Field>): GraphQLInputFieldConfigMap {
+    return Object.keys(fields).reduce((acc, fieldName) => {
+      const field = fields[fieldName]
+      if (this.isSortableField(field)) {
         acc[fieldName] = { type: this.getSortDirectionEnum() }
       }
       return acc
     }, {} as GraphQLInputFieldConfigMap)
   }
 
-  private isSortableField(type: GraphQLOutputType): boolean {
+  private isSortableField({ mappedType, type }: Field): boolean {
     const nullableType = makeNullable(type)
-    const tsType = getScalarTSType(this.schema, nullableType.name)
-
     if (
-      tsType === 'number' ||
-      tsType === 'string' ||
-      tsType === 'ID' ||
-      tsType === 'boolean' ||
+      mappedType === 'number' ||
+      mappedType === 'string' ||
+      mappedType === 'ID' ||
+      mappedType === 'boolean' ||
       nullableType instanceof GraphQLEnumType
     ) {
       return true
@@ -135,43 +133,29 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
     return type as GraphQLEnumType
   }
 
-  private getAssociationFields(
-    associationFields: { fieldName: string; type: GraphQLOutputType }[]
-  ): GraphQLInputFieldMap {
-    return associationFields.reduce((acc, { fieldName, type }) => {
-      const nullableType = makeNullable(type)
-      const isList = nullableType instanceof GraphQLList
-      const unwrappedType = unwrap(type)
+  private getAssociationFields(associations: Record<string, Association>): GraphQLInputFieldMap {
+    return Object.keys(associations).reduce((acc, associationName) => {
+      const { modelName, isMany } = associations[associationName]
 
-      const isModel = !!(
-        unwrappedType.astNode && unwrappedType.astNode.directives!.find(directive => directive.name.value === 'model')
-      )
-
-      if (isModel) {
-        acc[fieldName] = {
-          name: fieldName,
-          type: this.getInputType(unwrappedType.name, false, isList)!,
-          extensions: undefined,
-        }
+      acc[associationName] = {
+        name: associationName,
+        type: this.getInputType(modelName, false, isMany)!,
+        extensions: undefined,
       }
 
       return acc
     }, {} as GraphQLInputFieldMap)
   }
 
-  private getAggregateFields(
-    modelName: string,
-    fields: { fieldName: string; type: GraphQLOutputType }[]
-  ): GraphQLInputFieldConfigMap {
-    const fieldsByAggregateFunction = fields.reduce(
-      (acc, { fieldName, type }) => {
-        const nullableType = makeNullable(type)
-        const tsType = getScalarTSType(this.schema, nullableType.name)
-        if (tsType === 'number') {
+  private getAggregateFields(modelName: string, fields: Record<string, Field>): GraphQLInputFieldConfigMap {
+    const fieldsByAggregateFunction = Object.keys(fields).reduce(
+      (acc, fieldName) => {
+        const { mappedType } = fields[fieldName]
+        if (mappedType === 'number') {
           acc.avg.push(fieldName)
           acc.sum.push(fieldName)
         }
-        if (tsType === 'number' || tsType === 'string') {
+        if (mappedType === 'number' || mappedType === 'string') {
           acc.min.push(fieldName)
           acc.max.push(fieldName)
         }

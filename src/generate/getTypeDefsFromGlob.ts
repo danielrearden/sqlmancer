@@ -12,6 +12,6 @@ export function getTypeDefsFromGlob(glob: string) {
     }).map(source => source.document as DocumentNode)
     return mergeTypeDefs(documents)
   } catch (e) {
-    return []
+    return null
   }
 }

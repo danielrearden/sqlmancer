@@ -5,11 +5,10 @@ import mkdirp from 'mkdirp'
 import chokidar from 'chokidar'
 import Ora from 'ora'
 import { Command } from 'commander'
-import { createWriteStream, unlinkSync } from 'fs'
+import { createWriteStream } from 'fs'
 import { join } from 'path'
-import { exec } from 'child_process'
 
-import { generateClientFromSchema, getTypeDefsFromGlob } from '../generate'
+import { generateClientTypeDeclarations, getTypeDefsFromGlob } from '../generate'
 import { makeSqlmancerSchema } from '../directives'
 import { DocumentNode, GraphQLSchema } from 'graphql'
 
@@ -23,7 +22,7 @@ program.version(pkg.version)
 
 program
   .command('generate <typeDefs> <outputPath>')
-  .description('generate database client from type definitions', {
+  .description('generates TypeScript typings for the database client from the provided GraphQL type definitions', {
     typeDefs:
       'Glob pattern to match any files containing your type definitions. These can be plain text files or JavaScript/TypeScript files that use the gql tag',
     outputPath:
@@ -34,7 +33,7 @@ program
 program
   .command('watch <typeDefs> <outputPath>')
   .description(
-    'watches the provided type definitions and generates the database client again if any type definitions changed',
+    'watches the provided GraphQL type definitions and generates typings for the database client again if any type definitions changed',
     {
       typeDefs:
         'Glob pattern to match any files containing your type definitions. These can be plain text files or JavaScript/TypeScript files that use the gql tag',
@@ -51,6 +50,7 @@ program
 program.parse(process.argv)
 
 function generate(typeDefs: string, output: string): void {
+  const start = Date.now()
   const documentNode = getTypeDefsFromGlob(typeDefs) as DocumentNode
   if (_.isEqual(JSON.stringify(documentNode), JSON.stringify(previousDocumentNode))) {
     return
@@ -60,16 +60,13 @@ function generate(typeDefs: string, output: string): void {
 
   const spinner = Ora({ color: 'magenta' })
 
-  spinner.start(`Looking for type definitions using glob pattern "${typeDefs}"`)
+  spinner.start('Generating typings for Sqlmancer client...')
 
-  if (documentNode.definitions.length) {
-    spinner.succeed(`Found one or more files with valid type definitions using glob pattern "${typeDefs}"`)
-  } else {
+  if (!documentNode || !documentNode.definitions.length) {
     spinner.fail(`Found no files with valid type definitions using glob pattern "${typeDefs}"`)
     process.exit(1)
   }
 
-  spinner.start(`Building schema from type definitions`)
   let schema: GraphQLSchema
 
   try {
@@ -85,16 +82,11 @@ function generate(typeDefs: string, output: string): void {
     process.exit(1)
   }
 
-  spinner.succeed('Successfully built schema from type definitions')
-
   const dirPath = join(process.cwd(), output)
-  const filePath = join(dirPath, 'sqlmancer.ts')
-  spinner.start(`Creating directory at "${dirPath}"`)
+  const filePath = join(dirPath, 'sqlmancer.d.ts')
 
-  const created = mkdirp.sync(dirPath)
-  spinner.succeed(created ? `Directory created at "${dirPath}"` : `Directory already exists at "${dirPath}"`)
+  mkdirp.sync(dirPath)
 
-  spinner.start('Generating client module')
   const stream = createWriteStream(filePath)
   stream.on('error', e => {
     spinner.fail(`Failed\n\n${e.message}`)
@@ -102,36 +94,14 @@ function generate(typeDefs: string, output: string): void {
   })
 
   try {
-    generateClientFromSchema(schema, stream)
+    generateClientTypeDeclarations(schema, stream)
   } catch (e) {
     spinner.fail(`An error was encountered while generating the client:\n\n${e.message}\n`)
     process.exit(1)
   }
 
   stream.end(async () => {
-    spinner.succeed(`Successfully generated client module`)
-    spinner.start('Transpiling and generating type definitions for client module')
-    try {
-      await new Promise((resolve, reject) =>
-        exec(
-          `node -e "const ts = require('typescript'); ts.createProgram(['${filePath}'], { declaration: true, target: 'es2018' }).emit();"`,
-          error => (error ? reject(error) : resolve())
-        )
-      )
-      unlinkSync(filePath)
-    } catch (e) {
-      spinner.fail(`Error encountered while transpiling client:\n\n${e.message}`)
-      process.exit(1)
-    }
-
-    spinner.succeed('Transpiled and generated type definitions for client module')
-
-    spinner.stopAndPersist({
-      symbol: '\n🎉',
-      text: `Sqlmancer client has been generated successfully and can now be imported from "${filePath.substring(
-        0,
-        filePath.length - 2
-      )}js"\n`,
-    })
+    const stop = Date.now()
+    spinner.succeed(`Successfully generated typings for Sqlmancer client in ${stop - start} ms`)
   })
 }

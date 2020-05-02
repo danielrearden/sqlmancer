@@ -1,17 +1,15 @@
 import _ from 'lodash'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
 import {
-  GraphQLCompositeType,
   GraphQLField,
+  GraphQLFieldConfigMap,
+  GraphQLFloat,
+  GraphQLInt,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLOutputType,
-  GraphQLNamedType,
-  GraphQLInt,
-  isNamedType,
-  GraphQLFieldConfigMap,
 } from 'graphql'
-import { unwrap, getModelDetails, getDirectiveByName, getScalarTSType, makeNullable } from '../utilities'
+import { unwrap, getSqlmancerConfig, makeNullable } from '../utilities'
 
 export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
@@ -26,27 +24,29 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
     if (existingType) {
       return existingType as GraphQLOutputType
     }
+    const { models } = getSqlmancerConfig(this.schema)
+    const model = models[unwrappedType.name]
 
-    this.assertValidFieldType(field, unwrappedType)
-
-    const { fields } = getModelDetails(unwrappedType as GraphQLCompositeType, this.schema)
+    if (!model) {
+      throw new Error(
+        `Attempted to generate aggregate type for field "${field.name}" but type ${unwrappedType.name} is not a model.`
+      )
+    }
 
     return new GraphQLObjectType({
       name,
       fields: () => {
-        const fieldsByAggregateFunction = fields.reduce(
-          (acc, field) => {
-            const nullableType = makeNullable(field.type)
-            if (isNamedType(nullableType)) {
-              const tsType = getScalarTSType(this.schema, nullableType.name)
-              if (tsType === 'number') {
-                acc.avg.push(field)
-                acc.sum.push(field)
-              }
-              if (tsType === 'number' || tsType === 'string' || tsType === 'ID') {
-                acc.min.push(field)
-                acc.max.push(field)
-              }
+        const fieldsByAggregateFunction = Object.keys(model.fields).reduce(
+          (acc, fieldName) => {
+            const { mappedType, type } = model.fields[fieldName]
+            if (mappedType === 'number') {
+              acc.avg.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
+              acc.sum.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
+            }
+            if (mappedType === 'number' || mappedType === 'string' || mappedType === 'ID') {
+              const nullableType = makeNullable(type)
+              acc.min.push({ fieldName, type: nullableType })
+              acc.max.push({ fieldName, type: nullableType })
             }
 
             return acc
@@ -67,10 +67,7 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
                 name: `${name}${_.upperFirst(fn)}`,
                 fields: fieldsByAggregateFunction[fn].reduce((acc, field) => {
                   acc[field.fieldName] = {
-                    type:
-                      fn === 'avg' || fn === 'sum'
-                        ? new GraphQLNonNull(GraphQLInt)
-                        : (unwrap(field.type) as GraphQLOutputType),
+                    type: field.type,
                   }
                   return acc
                 }, {} as GraphQLFieldConfigMap<any, any>),
@@ -82,15 +79,5 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
         return aggregateFields
       },
     })
-  }
-
-  private assertValidFieldType(field: GraphQLField<any, any>, type: GraphQLNamedType) {
-    const isModelType = !!getDirectiveByName(type, 'model')
-
-    if (!isModelType) {
-      throw new Error(
-        `Attempted to generate aggregate type for field "${field.name}" but type ${type.name} is not a model.`
-      )
-    }
   }
 }

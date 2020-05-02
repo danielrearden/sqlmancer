@@ -1,11 +1,11 @@
 import { WritableMock } from 'stream-mock'
-import { generateClientFromSchema } from '../generateClientFromSchema'
+import { generateClientTypeDeclarations } from '../generateClientTypeDeclarations'
 import { schema } from './__fixtures__/schema'
 
-describe('generateClientFromSchema', () => {
+describe('generateClientTypeDeclarations', () => {
   test('correct usage', async () => {
     const stream = new WritableMock()
-    generateClientFromSchema(schema, stream)
+    generateClientTypeDeclarations(schema, stream)
     stream.end()
     await new Promise((resolve, reject) => {
       stream.on('finish', () => {

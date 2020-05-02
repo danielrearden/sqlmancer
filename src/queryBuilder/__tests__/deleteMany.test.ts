@@ -1,11 +1,10 @@
 import { withDialects } from './__utilties__'
-import { ActorDeleteManyBuilder, FilmDeleteManyBuilder, LanguageDeleteManyBuilder } from './__fixtures__/models'
 
 describe('DeleteBuilder', () => {
-  withDialects((options, rollback) => {
+  withDialects((client, rollback) => {
     describe('basic queries', () => {
       test('no additional options', async () => {
-        const builder = new ActorDeleteManyBuilder(options)
+        const builder = client.models.Actor.deleteMany()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -15,7 +14,7 @@ describe('DeleteBuilder', () => {
 
     describe('where', () => {
       test('with one field', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({ firstName: { equal: 'BOB' } })
+        const builder = client.models.Actor.deleteMany().where({ firstName: { equal: 'BOB' } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -23,7 +22,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with two field', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           firstName: { equal: 'BOB' },
           lastName: { equal: 'GOODALL' },
         })
@@ -35,7 +34,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('equals null', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           firstName: { equal: null },
         })
 
@@ -46,7 +45,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('notEqual null', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           firstName: { notEqual: null },
         })
 
@@ -57,7 +56,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with extra operators', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({ firstName: { equal: 'BOB', notEqual: 'SUSAN' } })
+        const builder = client.models.Actor.deleteMany().where({ firstName: { equal: 'BOB', notEqual: 'SUSAN' } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -65,7 +64,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with non-existent field', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           firstNam: { equal: 'BOB' },
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -75,7 +74,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with empty object', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({})
+        const builder = client.models.Actor.deleteMany().where({})
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -83,7 +82,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('and', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           and: [{ firstName: { equal: 'BOB' } }, { lastName: { equal: 'FAWCETT' } }],
         })
 
@@ -94,7 +93,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('or', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           or: [{ firstName: { equal: 'BOB' } }, { lastName: { equal: 'FAWCETT' } }],
         })
 
@@ -105,7 +104,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('not', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({ not: { firstName: { equal: 'BOB' } } })
+        const builder = client.models.Actor.deleteMany().where({ not: { firstName: { equal: 'BOB' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -113,7 +112,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (single)', async () => {
-        const builder = new FilmDeleteManyBuilder(options).where({ language: { name: { equal: 'English' } } })
+        const builder = client.models.Film.deleteMany().where({ language: { name: { equal: 'English' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -121,7 +120,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (multi)', async () => {
-        const builder = new LanguageDeleteManyBuilder(options).where({ films: { title: { equal: 'BEAR GRACELAND' } } })
+        const builder = client.models.Language.deleteMany().where({ films: { title: { equal: 'BEAR GRACELAND' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -129,7 +128,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (through)', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({ films: { title: { equal: 'BEAR GRACELAND' } } })
+        const builder = client.models.Actor.deleteMany().where({ films: { title: { equal: 'BEAR GRACELAND' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -137,7 +136,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (aggregate)', async () => {
-        const builder = new LanguageDeleteManyBuilder(options).where({
+        const builder = client.models.Language.deleteMany().where({
           films: { avg: { replacementCost: { greaterThan: 10 } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -147,7 +146,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (count)', async () => {
-        const builder = new LanguageDeleteManyBuilder(options).where({
+        const builder = client.models.Language.deleteMany().where({
           films: { count: { greaterThan: 1 } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -157,7 +156,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (both field and aggregate)', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           films: { avg: { replacementCost: { greaterThan: 20 } }, title: { equal: 'BEAR GRACELAND' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -167,7 +166,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with nested association', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({
+        const builder = client.models.Actor.deleteMany().where({
           films: { language: { name: { equal: 'English' } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -177,9 +176,11 @@ describe('DeleteBuilder', () => {
       })
 
       test('merge', async () => {
-        const builder = new ActorDeleteManyBuilder(options).where({ firstName: { equal: 'BOB' } }).mergeWhere({
-          films: { language: { name: { equal: 'English' } } },
-        })
+        const builder = client.models.Actor.deleteMany()
+          .where({ firstName: { equal: 'BOB' } })
+          .mergeWhere({
+            films: { language: { name: { equal: 'English' } } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeNumber()
@@ -190,7 +191,7 @@ describe('DeleteBuilder', () => {
 
     describe('orderBy', () => {
       test('with one field', async () => {
-        const builder = new ActorDeleteManyBuilder(options).orderBy([{ firstName: 'ASC' }])
+        const builder = client.models.Actor.deleteMany().orderBy([{ firstName: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -198,7 +199,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with no fields', async () => {
-        const builder = new ActorDeleteManyBuilder(options).orderBy([])
+        const builder = client.models.Actor.deleteMany().orderBy([])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -206,7 +207,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with multiple fields', async () => {
-        const builder = new ActorDeleteManyBuilder(options).orderBy([{ id: 'ASC' }, { lastUpdate: 'ASC' }])
+        const builder = client.models.Actor.deleteMany().orderBy([{ id: 'ASC' }, { lastUpdate: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -214,7 +215,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (field)', async () => {
-        const builder = new FilmDeleteManyBuilder(options).orderBy([{ language: { name: 'ASC' } }])
+        const builder = client.models.Film.deleteMany().orderBy([{ language: { name: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -222,7 +223,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (aggregate)', async () => {
-        const builder = new LanguageDeleteManyBuilder(options).orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
+        const builder = client.models.Language.deleteMany().orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -230,7 +231,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (aggregate and through)', async () => {
-        const builder = new FilmDeleteManyBuilder(options).orderBy([{ actors: { min: { lastUpdate: 'ASC' } } }])
+        const builder = client.models.Film.deleteMany().orderBy([{ actors: { min: { lastUpdate: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -238,7 +239,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (count)', async () => {
-        const builder = new ActorDeleteManyBuilder(options).orderBy([{ films: { count: 'ASC' } }])
+        const builder = client.models.Actor.deleteMany().orderBy([{ films: { count: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -246,7 +247,7 @@ describe('DeleteBuilder', () => {
       })
 
       test('with empty object', async () => {
-        const builder = new ActorDeleteManyBuilder(options).orderBy([{}])
+        const builder = client.models.Actor.deleteMany().orderBy([{}])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -254,12 +255,12 @@ describe('DeleteBuilder', () => {
       })
 
       test('with association (missing field)', async () => {
-        const builder = new FilmDeleteManyBuilder(options).orderBy([{ originalLanguage: { nam: 'ASC' } as any }])
+        const builder = client.models.Film.deleteMany().orderBy([{ originalLanguage: { nam: 'ASC' } as any }])
         expect(() => builder.toQueryBuilder()).toThrow('Invalid field name')
       })
 
       test('with association (missing aggregate field)', async () => {
-        const builder = new LanguageDeleteManyBuilder(options).orderBy([
+        const builder = client.models.Language.deleteMany().orderBy([
           { films: { avg: { replacementCostt: 'ASC' } as any } },
         ])
         expect(() => builder.toQueryBuilder()).toThrow('Invalid field name')
@@ -268,7 +269,7 @@ describe('DeleteBuilder', () => {
 
     describe('limit', () => {
       test('with number', async () => {
-        const builder = new ActorDeleteManyBuilder(options).limit(10)
+        const builder = client.models.Actor.deleteMany().limit(10)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
@@ -278,7 +279,7 @@ describe('DeleteBuilder', () => {
 
     describe('offset', () => {
       test('with number', async () => {
-        const builder = new ActorDeleteManyBuilder(options).offset(20)
+        const builder = client.models.Actor.deleteMany().offset(20)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()

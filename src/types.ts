@@ -12,13 +12,14 @@ import {
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from './queryBuilder'
+import { GraphQLOutputType } from 'graphql'
 
 export type ID = number | string
 
 export type SqlmancerConfig = {
   dialect: Dialect
   transformFieldNames?: FieldNameTransformation
-  customScalars?: CustomScalars
+  customScalarMap: Record<string, PossibleScalarTypes>
   models: Models
 }
 
@@ -26,12 +27,7 @@ export type Dialect = 'postgres' | 'mysql' | 'mariadb' | 'sqlite'
 
 export type FieldNameTransformation = 'CAMEL_CASE' | 'PASCAL_CASE' | 'SNAKE_CASE'
 
-export type CustomScalars = {
-  string?: string[]
-  number?: string[]
-  boolean?: string[]
-  JSON?: string[]
-}
+export type PossibleScalarTypes = 'string' | 'number' | 'boolean' | 'JSON' | 'ID'
 
 export type Models = Record<string, Model>
 
@@ -48,18 +44,19 @@ export type Model = {
     findOne: new (...args: any[]) => FindOneBuilder<any, any, any, any, any, any, any, any>
     findMany: new (...args: any[]) => FindManyBuilder<any, any, any, any, any, any, any, any>
     aggregate: new (...args: any[]) => AggregateBuilder<any, any, any, any, any, any>
-    createOne?: new (...args: any[]) => CreateOneBuilder<any>
-    createMany?: new (...args: any[]) => CreateManyBuilder<any>
-    deleteById?: new (...args: any[]) => DeleteByIdBuilder<any, any, any, any>
-    deleteMany?: new (...args: any[]) => DeleteManyBuilder<any, any, any, any, any>
-    updateById?: new (...args: any[]) => UpdateByIdBuilder<any>
-    updateMany?: new (...args: any[]) => UpdateManyBuilder<any, any, any, any, any, any>
+    createOne: new (...args: any[]) => CreateOneBuilder<any>
+    createMany: new (...args: any[]) => CreateManyBuilder<any>
+    deleteById: new (...args: any[]) => DeleteByIdBuilder
+    deleteMany: new (...args: any[]) => DeleteManyBuilder<any, any, any, any, any>
+    updateById: new (...args: any[]) => UpdateByIdBuilder<any>
+    updateMany: new (...args: any[]) => UpdateManyBuilder<any, any, any, any, any, any>
   }
 }
 
 export type Field = {
   column: string
-  type: string
+  mappedType: string
+  type: GraphQLOutputType
   hasDefault: boolean
 }
 
@@ -68,8 +65,6 @@ export type Association = {
   isMany: boolean
   on: { from: string; to: string }[]
   through?: string
-  builder: (options: BuilderOptions) => FindBuilder<any, any, any, any, any, any, any, any, any>
-  aggregateBuilder: (options: BuilderOptions) => AggregateBuilder<any, any, any, any, any, any>
 }
 
 export type BuilderOptions = {

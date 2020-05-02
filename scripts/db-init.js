@@ -1,6 +1,16 @@
+const _ = require('lodash')
 const fs = require('fs')
 const path = require('path')
-const { dialects } = require('../src/__tests__/knex')
+
+const dialectsToMigrate = process.env.DB ? process.env.DB.split(' ') : ['postgres', 'mysql', 'sqlite']
+const dialects = _.pickBy(
+  {
+    postgres: require('../src/__tests__/postgres/knex'),
+    mysql: require('../src/__tests__/mysql/knex'),
+    name: require('../src/__tests__/sqlite/knex'),
+  },
+  (_value, key) => dialectsToMigrate.includes(key)
+)
 
 dialects.reduce((previousPromise, { name, knex }) => {
   return previousPromise.then(async () => {
@@ -21,6 +31,7 @@ async function runFromFile(transaction, dialectName, action) {
     __dirname,
     '../src/__tests__/',
     dialectName,
+    'db',
     action === 'migrate' ? 'schema.sql' : 'seed.sql'
   )
   const sql = fs.readFileSync(filePath, 'utf-8')

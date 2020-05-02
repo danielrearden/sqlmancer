@@ -1,12 +1,10 @@
 import { withDialects, mockResolveInfo } from './__utilties__'
-import { schema } from './__fixtures__/schema'
-import { ActorFindByIdBuilder, FilmFindByIdBuilder, LanguageFindByIdBuilder } from './__fixtures__/models'
 
 describe('FindByIdBuilder', () => {
-  withDialects(options => {
+  withDialects((client, _rollback, schema) => {
     describe('basic queries', () => {
       test('no additional options', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10)
+        const builder = client.models.Actor.findById(10)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -17,7 +15,7 @@ describe('FindByIdBuilder', () => {
 
     describe('select', () => {
       test('with multiple fields', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).select('firstName', 'lastName')
+        const builder = client.models.Actor.findById(10).select('firstName', 'lastName')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -26,7 +24,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with no fields', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).select()
+        const builder = client.models.Actor.findById(10).select()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -35,7 +33,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with missing field', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).select('firstNam' as any, 'lastName')
+        const builder = client.models.Actor.findById(10).select('firstNam' as any, 'lastName')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -44,7 +42,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('all', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).selectAll()
+        const builder = client.models.Actor.findById(10).selectAll()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -53,7 +51,9 @@ describe('FindByIdBuilder', () => {
       })
 
       test('add', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).select('firstName', 'lastName').addSelect('id')
+        const builder = client.models.Actor.findById(10)
+          .select('firstName', 'lastName')
+          .addSelect('id')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -62,7 +62,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('add raw', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10)
+        const builder = client.models.Actor.findById(10)
           .select('firstName')
           .addSelectRaw('first_name')
           .addSelectRaw('first_name', 'first_name_again')
@@ -76,7 +76,7 @@ describe('FindByIdBuilder', () => {
 
     describe('load', () => {
       test('with FK on builder table', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('language', builder => builder)
+        const builder = client.models.Film.findById(10).load('language', builder => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -85,7 +85,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = new LanguageFindByIdBuilder(options, 5).load('films', builder => builder)
+        const builder = client.models.Language.findById(5).load('films', builder => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -94,7 +94,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('actors', builder => builder)
+        const builder = client.models.Film.findById(10).load('actors', builder => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -103,7 +103,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('actors', builder =>
+        const builder = client.models.Film.findById(10).load('actors', builder =>
           builder
             .limit(2)
             .offset(1)
@@ -118,7 +118,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with alias', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('actors', 'performers', builder => builder)
+        const builder = client.models.Film.findById(10).load('actors', 'performers', builder => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -127,7 +127,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with default builder', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('actors')
+        const builder = client.models.Film.findById(10).load('actors')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -136,7 +136,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('nested', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).load('actors', builder =>
+        const builder = client.models.Film.findById(10).load('actors', builder =>
           builder.limit(3).load('films', builder => builder.limit(4).load('language', builder => builder))
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -147,13 +147,13 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with non-existent association', async () => {
-        expect(() => new FilmFindByIdBuilder(options, 10).load('actor' as any)).toThrow('Invalid association name')
+        expect(() => client.models.Film.findById(10).load('actor' as any)).toThrow('Invalid association name')
       })
     })
 
     describe('loadAggregate', () => {
       test('with FK on builder table', async () => {
-        const builder = new FilmFindByIdBuilder(options, 10).loadAggregate('language', 'languageAggregate', builder =>
+        const builder = client.models.Film.findById(10).loadAggregate('language', 'languageAggregate', builder =>
           builder.max('name')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -164,7 +164,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = new LanguageFindByIdBuilder(options, 1).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Language.findById(1).loadAggregate('films', 'filmsAggregate', builder =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -175,7 +175,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', builder =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -186,7 +186,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = new ActorFindByIdBuilder(options, 10).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', builder =>
           builder
             .max('rentalRate')
             .limit(2)
@@ -210,7 +210,7 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Query', 'actor', query)
-        const builder = new ActorFindByIdBuilder(options, 10).resolveInfo(info)
+        const builder = client.models.Actor.findById(10).resolveInfo(info)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -236,7 +236,7 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Query', 'actor', query)
-        const builder = new ActorFindByIdBuilder(options, 10).resolveInfo(info)
+        const builder = client.models.Actor.findById(10).resolveInfo(info)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -277,7 +277,7 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Query', 'actor', query)
-        const builder = new ActorFindByIdBuilder(options, 10).resolveInfo(info)
+        const builder = client.models.Actor.findById(10).resolveInfo(info)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -298,7 +298,7 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Query', 'actor', query)
-        const builder = new ActorFindByIdBuilder(options, 10).resolveInfo(info)
+        const builder = client.models.Actor.findById(10).resolveInfo(info)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -316,7 +316,7 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
-        const builder = new FilmFindByIdBuilder(options, 10).resolveInfo(info, 'film')
+        const builder = client.models.Film.findById(10).resolveInfo(info, 'film')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -334,14 +334,16 @@ describe('FindByIdBuilder', () => {
           }
         }`
         const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
-        expect(() => new FilmFindByIdBuilder(options, 10).resolveInfo(info, 'foo')).toThrow('Invalid path')
+        expect(() => client.models.Film.findById(10).resolveInfo(info, 'foo')).toThrow('Invalid path')
       })
     })
 
     describe('transaction', () => {
       test('with transaction', async () => {
-        await options.knex.transaction(async trx => {
-          const result = await new ActorFindByIdBuilder(options, 10).transaction(trx).execute()
+        await client.transaction(async trx => {
+          const result = await client.models.Actor.findById(10)
+            .transaction(trx)
+            .execute()
           expect(result).toBeObject()
         })
       })

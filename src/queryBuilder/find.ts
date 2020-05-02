@@ -218,7 +218,9 @@ export abstract class FindBuilder<
 
     const fieldName = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : associationName
     const getBuilderFn = typeof aliasOrGetBuilder === 'string' ? getBuilder : aliasOrGetBuilder
-    const initialBuilder = association.builder(this._options)
+    const builders = this._models[association.modelName].builders
+    const Builder = association.isMany ? builders.findMany : builders.findOne
+    const initialBuilder = new Builder(this._options)
     this._loadedAssociations[fieldName] = [
       associationName,
       getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName][0]) : initialBuilder,
@@ -257,7 +259,8 @@ export abstract class FindBuilder<
       throw new Error(`Invalid association name: ${associationName}`)
     }
 
-    const initialBuilder = association.aggregateBuilder(this._options)
+    const Builder = this._models[association.modelName].builders.aggregate
+    const initialBuilder = new Builder(this._options)
     this._loadedAggregates[alias] = [
       associationName,
       getBuilder ? getBuilder(initialBuilder as TAssociations[TName][1]) : initialBuilder,

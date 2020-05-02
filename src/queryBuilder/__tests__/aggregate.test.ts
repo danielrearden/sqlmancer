@@ -1,11 +1,10 @@
 import { withDialects } from './__utilties__'
-import { FilmAggregateBuilder, LanguageAggregateBuilder } from './__fixtures__/models'
 
 describe('AggregateBuilder', () => {
-  withDialects(options => {
+  withDialects(client => {
     describe('basic queries', () => {
       test('count', async () => {
-        const builder = new FilmAggregateBuilder(options).count()
+        const builder = client.models.Film.aggregate().count()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.count).toBeDefined()
@@ -14,7 +13,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('avg', async () => {
-        const builder = new FilmAggregateBuilder(options).avg('rentalRate')
+        const builder = client.models.Film.aggregate().avg('rentalRate')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.avg.rentalRate).toBeDefined()
@@ -23,7 +22,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('sum', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('replacementCost')
+        const builder = client.models.Film.aggregate().sum('replacementCost')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.replacementCost).toBeDefined()
@@ -32,7 +31,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('min', async () => {
-        const builder = new FilmAggregateBuilder(options).min('title')
+        const builder = client.models.Film.aggregate().min('title')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.min.title).toBeDefined()
@@ -41,7 +40,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('max', async () => {
-        const builder = new FilmAggregateBuilder(options).max('title')
+        const builder = client.models.Film.aggregate().max('title')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.title).toBeDefined()
@@ -50,7 +49,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('multiple functions', async () => {
-        const builder = new FilmAggregateBuilder(options)
+        const builder = client.models.Film.aggregate()
           .max('title')
           .max('description')
           .count()
@@ -68,7 +67,9 @@ describe('AggregateBuilder', () => {
 
     describe('where', () => {
       test('with one field', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({ title: { equal: 'FILM' } })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({ title: { equal: 'FILM' } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -77,10 +78,12 @@ describe('AggregateBuilder', () => {
       })
 
       test('with two field', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          title: { equal: 'FILM' },
-          description: { equal: 'description' },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            title: { equal: 'FILM' },
+            description: { equal: 'description' },
+          })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
@@ -90,9 +93,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('equals null', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          title: { equal: null },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            title: { equal: null },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -101,9 +106,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('notEqual null', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          title: { notEqual: null },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            title: { notEqual: null },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -112,9 +119,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with extra operators', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          title: { equal: 'FILM', notEqual: 'MOVIE' },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            title: { equal: 'FILM', notEqual: 'MOVIE' },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -123,9 +132,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with non-existent field', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          titl: { equal: 'FILM' },
-        } as any)
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            titl: { equal: 'FILM' },
+          } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -134,7 +145,9 @@ describe('AggregateBuilder', () => {
       })
 
       test('with empty object', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({})
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({})
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -143,9 +156,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('and', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          and: [{ title: { equal: 'FILM' } }, { description: { equal: 'description' } }],
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            and: [{ title: { equal: 'FILM' } }, { description: { equal: 'description' } }],
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -154,9 +169,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('or', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          or: [{ title: { equal: 'FILM' } }, { description: { equal: 'description' } }],
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            or: [{ title: { equal: 'FILM' } }, { description: { equal: 'description' } }],
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -165,9 +182,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('not', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          not: { title: { equal: 'FILM' } },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            not: { title: { equal: 'FILM' } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -176,9 +195,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (single)', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          language: { name: { equal: 'English' } },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            language: { name: { equal: 'English' } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -187,9 +208,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (multi)', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').where({
-          films: { title: { equal: 'FILM' } },
-        })
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .where({
+            films: { title: { equal: 'FILM' } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -198,9 +221,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (through)', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').where({
-          actors: { firstName: { equal: 'BOB' } },
-        })
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .where({
+            actors: { firstName: { equal: 'BOB' } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -209,9 +234,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (aggregate)', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').where({
-          films: { avg: { replacementCost: { greaterThan: 10 } } },
-        })
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .where({
+            films: { avg: { replacementCost: { greaterThan: 10 } } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -220,9 +247,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (count)', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').where({
-          films: { count: { greaterThan: 1 } },
-        })
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .where({
+            films: { count: { greaterThan: 1 } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -231,9 +260,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (both field and aggregate)', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').where({
-          films: { avg: { replacementCost: { greaterThan: 20 } }, title: { equal: 'BEAR GRACELAND' } },
-        })
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .where({
+            films: { avg: { replacementCost: { greaterThan: 20 } }, title: { equal: 'BEAR GRACELAND' } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -242,9 +273,11 @@ describe('AggregateBuilder', () => {
       })
 
       test('with nested association', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').where({
-          films: { language: { name: { equal: 'English' } } },
-        })
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .where({
+            films: { language: { name: { equal: 'English' } } },
+          })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -253,7 +286,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('merge', async () => {
-        const builder = new FilmAggregateBuilder(options)
+        const builder = client.models.Film.aggregate()
           .sum('rentalRate')
           .where({ title: { equal: 'FILM' } })
           .mergeWhere({
@@ -269,7 +302,9 @@ describe('AggregateBuilder', () => {
 
     describe('orderBy', () => {
       test('with one field', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').orderBy([{ title: 'ASC' }])
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .orderBy([{ title: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -278,7 +313,9 @@ describe('AggregateBuilder', () => {
       })
 
       test('with no fields', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').orderBy([])
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .orderBy([])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -287,7 +324,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('with multiple fields', async () => {
-        const builder = new FilmAggregateBuilder(options)
+        const builder = client.models.Film.aggregate()
           .sum('rentalRate')
           .orderBy([{ id: 'ASC' }, { lastUpdate: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -298,7 +335,9 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (field)', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').orderBy([{ language: { name: 'ASC' } }])
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .orderBy([{ language: { name: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -307,7 +346,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (aggregate)', async () => {
-        const builder = new LanguageAggregateBuilder(options)
+        const builder = client.models.Language.aggregate()
           .max('name')
           .orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -318,7 +357,7 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (aggregate and through)', async () => {
-        const builder = new FilmAggregateBuilder(options)
+        const builder = client.models.Film.aggregate()
           .sum('rentalRate')
           .orderBy([{ actors: { min: { lastUpdate: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -329,7 +368,9 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (count)', async () => {
-        const builder = new LanguageAggregateBuilder(options).max('name').orderBy([{ films: { count: 'ASC' } }])
+        const builder = client.models.Language.aggregate()
+          .max('name')
+          .orderBy([{ films: { count: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.max.name).toBeDefined()
@@ -338,7 +379,9 @@ describe('AggregateBuilder', () => {
       })
 
       test('with empty object', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').orderBy([{}])
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .orderBy([{}])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -347,14 +390,14 @@ describe('AggregateBuilder', () => {
       })
 
       test('with association (missing field)', async () => {
-        const builder = new FilmAggregateBuilder(options)
+        const builder = client.models.Film.aggregate()
           .sum('rentalRate')
           .orderBy([{ originalLanguage: { nam: 'ASC' } as any }])
         expect(() => builder.toQueryBuilder()).toThrow('Invalid field name')
       })
 
       test('with association (missing aggregate field)', async () => {
-        const builder = new LanguageAggregateBuilder(options)
+        const builder = client.models.Language.aggregate()
           .max('name')
           .orderBy([{ films: { avg: { replacementCostt: 'ASC' } as any } }])
         expect(() => builder.toQueryBuilder()).toThrow('Invalid field name')
@@ -363,7 +406,9 @@ describe('AggregateBuilder', () => {
 
     describe('limit', () => {
       test('with number', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').limit(10)
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .limit(10)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()
@@ -374,7 +419,9 @@ describe('AggregateBuilder', () => {
 
     describe('offset', () => {
       test('with number', async () => {
-        const builder = new FilmAggregateBuilder(options).sum('rentalRate').offset(20)
+        const builder = client.models.Film.aggregate()
+          .sum('rentalRate')
+          .offset(20)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result.sum.rentalRate).toBeDefined()

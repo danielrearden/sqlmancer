@@ -1,11 +1,10 @@
 import { withDialects } from './__utilties__'
-import { ActorUpdateByIdBuilder } from './__fixtures__/models'
 
 describe('UpdateManyBuilder', () => {
-  withDialects((options, rollback) => {
+  withDialects((client, rollback) => {
     describe('basic queries', () => {
       test('no additional options', async () => {
-        const builder = new ActorUpdateByIdBuilder(options, 10, { firstName: 'YENNEFER' })
+        const builder = client.models.Actor.updateById(10, { firstName: 'YENNEFER' })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         await rollback(builder, result => expect(result).toBeBoolean())
         expect(sql).toMatchSnapshot()
@@ -13,7 +12,7 @@ describe('UpdateManyBuilder', () => {
       })
 
       test('non-existent field', async () => {
-        const builder = new ActorUpdateByIdBuilder(options, 10, {
+        const builder = client.models.Actor.updateById(10, {
           firstName: 'YENNEFER',
           lastNam: 'OF VENGERBERG',
         } as any)

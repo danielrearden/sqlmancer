@@ -1,11 +1,10 @@
 import { withDialects } from './__utilties__'
-import { ActorCreateManyBuilder } from './__fixtures__/models'
 
 describe('CreateManyBuilder', () => {
-  withDialects((options, rollback) => {
+  withDialects((client, rollback) => {
     describe('basic queries', () => {
       test('no additional options', async () => {
-        const builder = new ActorCreateManyBuilder(options, [
+        const builder = client.models.Actor.createMany([
           { firstName: 'SUSAN', lastName: 'ANTHONY' },
           { firstName: 'VIRGINIA', lastName: 'WOLF' },
         ])
@@ -16,7 +15,7 @@ describe('CreateManyBuilder', () => {
       })
 
       test('non-existent field', async () => {
-        const builder = new ActorCreateManyBuilder(options, [
+        const builder = client.models.Actor.createMany([
           { firstName: 'SUSAN', lastName: 'ANTHONY', foo: 'bar' },
           { firstName: 'VIRGINIA', lastName: 'WOLF', foo: 'bar' },
         ] as any)

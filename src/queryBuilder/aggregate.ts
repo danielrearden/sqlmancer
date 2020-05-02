@@ -264,9 +264,9 @@ export class AggregateBuilder<
             const fields = _.uniq(aggregatesByFunction[fn].map(agg => (agg as { field: string }).field))
             acc += `'${fn}', ${jsonObjectFn}(`
             fields.forEach((field, index) => {
-              const { column, type } = this._model.fields[field]
+              const { column, mappedType } = this._model.fields[field]
               const arg = this._knex.ref(`${subqueryAlias}.${column}`)
-              acc += `'${field}', ${type === 'number' ? `coalesce(${fn}(${arg}), 0)` : `${fn}(${arg})`}`
+              acc += `'${field}', ${mappedType === 'number' ? `coalesce(${fn}(${arg}), 0)` : `${fn}(${arg})`}`
               if (index !== fields.length - 1) {
                 acc += ', '
               }
