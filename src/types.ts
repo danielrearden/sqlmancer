@@ -27,7 +27,7 @@ export type Dialect = 'postgres' | 'mysql' | 'mariadb' | 'sqlite'
 
 export type FieldNameTransformation = 'CAMEL_CASE' | 'PASCAL_CASE' | 'SNAKE_CASE'
 
-export type PossibleScalarTypes = 'string' | 'number' | 'boolean' | 'JSON' | 'ID'
+export type PossibleScalarTypes = 'string' | 'number' | 'boolean' | 'JSON' | 'Date' | 'ID'
 
 export type Models = Record<string, Model>
 

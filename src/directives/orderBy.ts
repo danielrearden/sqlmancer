@@ -108,6 +108,7 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
       mappedType === 'string' ||
       mappedType === 'ID' ||
       mappedType === 'boolean' ||
+      mappedType === 'Date' ||
       nullableType instanceof GraphQLEnumType
     ) {
       return true
@@ -155,7 +156,7 @@ export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {
           acc.avg.push(fieldName)
           acc.sum.push(fieldName)
         }
-        if (mappedType === 'number' || mappedType === 'string') {
+        if (mappedType === 'number' || mappedType === 'string' || mappedType === 'Date') {
           acc.min.push(fieldName)
           acc.max.push(fieldName)
         }

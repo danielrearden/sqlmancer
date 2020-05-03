@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { GraphQLJSON, GraphQLJSONObject } from 'graphql-type-json'
+import { GraphQLJSON, GraphQLJSONObject } from 'graphql-scalars'
 import { makeSqlmancerSchema } from '../..'
 
 const typeDefs = gql`

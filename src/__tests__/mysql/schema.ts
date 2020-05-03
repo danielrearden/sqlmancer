@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { GraphQLJSON, GraphQLJSONObject } from 'graphql-type-json'
+import { GraphQLJSON, GraphQLJSONObject, GraphQLDateTime } from 'graphql-scalars'
 import { makeSqlmancerSchema } from '../..'
 
 const typeDefs = gql`
@@ -73,5 +73,6 @@ export const schema = makeSqlmancerSchema({
   resolvers: {
     JSON: GraphQLJSON,
     JSONObject: GraphQLJSONObject,
+    DateTime: GraphQLDateTime,
   },
 })

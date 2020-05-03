@@ -35,7 +35,7 @@ export declare type JSONArray = Array<JSON>;
 
     stream.write(`
 export declare type ${name}Fields = {\n${Object.keys(fields)
-      .map(fieldName => `  ${fieldName}: ${fields[fieldName].mappedType};`)
+      .map(fieldName => `  ${fieldName}: ${getOutputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
 }
     `)
@@ -76,7 +76,7 @@ export declare type ${name}CreateFields = {\n${Object.keys(fields)
       .map(fieldName => {
         const field = fields[fieldName]
         const required = isNonNullType(field.type) && !field.hasDefault
-        return `  ${fieldName}${required ? '' : '?'}: ${field.mappedType};`
+        return `  ${fieldName}${required ? '' : '?'}: ${getInputFieldType(field.mappedType)};`
       })
       .join('\n')}
 };
@@ -85,7 +85,7 @@ export declare type ${name}CreateFields = {\n${Object.keys(fields)
     stream.write(`
 export declare type ${name}UpdateFields = {\n${Object.keys(fields)
       .filter(fieldName => fields[fieldName].column !== primaryKey)
-      .map(fieldName => `  ${fieldName}?: ${fields[fieldName].mappedType};`)
+      .map(fieldName => `  ${fieldName}?: ${getInputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
 };
     `)
@@ -209,4 +209,26 @@ type SqlmancerClient = Knex & {
   };
 };
   `)
+}
+
+function getOutputFieldType(mappedType: string) {
+  switch (mappedType) {
+    case 'Date':
+      return 'string'
+    case 'Date[]':
+      return 'string[]'
+    default:
+      return mappedType
+  }
+}
+
+function getInputFieldType(mappedType: string) {
+  switch (mappedType) {
+    case 'Date':
+      return 'Date | string'
+    case 'Date[]':
+      return 'Date[] | string[]'
+    default:
+      return mappedType
+  }
 }

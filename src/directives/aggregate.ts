@@ -43,7 +43,7 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
               acc.avg.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
               acc.sum.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
             }
-            if (mappedType === 'number' || mappedType === 'string' || mappedType === 'ID') {
+            if (mappedType === 'number' || mappedType === 'string' || mappedType === 'ID' || mappedType === 'Date') {
               const nullableType = makeNullable(type)
               acc.min.push({ fieldName, type: nullableType })
               acc.max.push({ fieldName, type: nullableType })

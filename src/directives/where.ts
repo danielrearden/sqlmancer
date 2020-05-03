@@ -115,7 +115,7 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
             ...getEqualOperatorsTypeFields(unwrappedType as GraphQLInputType),
             ...getInOperatorsTypeFields(unwrappedType as GraphQLInputType),
           }
-        } else if (mappedType === 'ID' || mappedType === 'number') {
+        } else if (mappedType === 'ID' || mappedType === 'number' || mappedType === 'Date') {
           fields = {
             ...getEqualOperatorsTypeFields(unwrappedType as GraphQLInputType),
             ...getInOperatorsTypeFields(unwrappedType as GraphQLInputType),
@@ -214,7 +214,7 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
           acc.avg.push(fieldName)
           acc.sum.push(fieldName)
         }
-        if (mappedType === 'number' || mappedType === 'string') {
+        if (mappedType === 'number' || mappedType === 'string' || mappedType === 'Date') {
           acc.min.push(fieldName)
           acc.max.push(fieldName)
         }

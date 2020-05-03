@@ -54,6 +54,7 @@ function getScalarMap(customScalars?: { string?: string[]; number?: string[]; bo
     number: ['Int', 'Float'],
     boolean: ['Boolean'],
     JSON: [],
+    Date: [],
     ID: ['ID'],
   }
   const scalarsByType = _.mergeWith({}, baseScalars, customScalars, (obj, src) => {
@@ -62,7 +63,14 @@ function getScalarMap(customScalars?: { string?: string[]; number?: string[]; bo
     }
   }) as Record<string, string[]>
   return Object.keys(scalarsByType).reduce((acc, tsType) => {
-    if (tsType === 'string' || tsType === 'number' || tsType === 'boolean' || tsType === 'JSON' || tsType === 'ID') {
+    if (
+      tsType === 'string' ||
+      tsType === 'number' ||
+      tsType === 'boolean' ||
+      tsType === 'JSON' ||
+      tsType === 'ID' ||
+      tsType === 'Date'
+    ) {
       scalarsByType[tsType].forEach(scalarName => {
         acc[scalarName] = tsType
       })

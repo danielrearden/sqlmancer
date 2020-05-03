@@ -1,5 +1,5 @@
 import { makeExecutableSchema } from 'graphql-tools'
-import { GraphQLJSON, GraphQLJSONObject } from 'graphql-type-json'
+import { GraphQLJSON, GraphQLJSONObject } from 'graphql-scalars'
 
 import { typeDefs as directiveTypeDefs, schemaDirectives } from '../..'
 
