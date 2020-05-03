@@ -81,7 +81,8 @@ export function getModels(
     const type = schema.getType(typeName)! as GraphQLCompositeType
     const modelDirective = getDirectiveByName(type, 'model')
     if (modelDirective) {
-      const { table, pk, include } = getArgumentValues(schema.getDirective('model')!, modelDirective)
+      const { table, cte, pk, include, readOnly } = getArgumentValues(schema.getDirective('model')!, modelDirective)
+      const isReadOnly = !!cte || readOnly
 
       const builders = {
         findById: class extends FindByIdBuilder<any, any, any, any> {
@@ -104,48 +105,62 @@ export function getModels(
             super(options, type.name, models)
           }
         },
-        createOne: class extends CreateOneBuilder<any> {
-          constructor(options: BuilderOptions, data: any) {
-            super(options, type.name, models, data)
-          }
-        },
-        createMany: class extends CreateManyBuilder<any> {
-          constructor(options: BuilderOptions, data: any[]) {
-            super(options, type.name, models, data)
-          }
-        },
-        deleteById: class extends DeleteByIdBuilder {
-          constructor(options: BuilderOptions, pk: ID) {
-            super(options, type.name, models, pk)
-          }
-        },
-        deleteMany: class extends DeleteManyBuilder<any, any, any, any, any> {
-          constructor(options: BuilderOptions) {
-            super(options, type.name, models)
-          }
-        },
-        updateById: class extends UpdateByIdBuilder<any> {
-          constructor(options: BuilderOptions, pk: ID, data: any) {
-            super(options, type.name, models, pk, data)
-          }
-        },
-        updateMany: class extends UpdateManyBuilder<any, any, any, any, any, any> {
-          constructor(options: BuilderOptions, data: any) {
-            super(options, type.name, models, data)
-          }
-        },
+        createOne: isReadOnly
+          ? undefined
+          : class extends CreateOneBuilder<any> {
+              constructor(options: BuilderOptions, data: any) {
+                super(options, type.name, models, data)
+              }
+            },
+        createMany: isReadOnly
+          ? undefined
+          : class extends CreateManyBuilder<any> {
+              constructor(options: BuilderOptions, data: any[]) {
+                super(options, type.name, models, data)
+              }
+            },
+        deleteById: isReadOnly
+          ? undefined
+          : class extends DeleteByIdBuilder {
+              constructor(options: BuilderOptions, pk: ID) {
+                super(options, type.name, models, pk)
+              }
+            },
+        deleteMany: isReadOnly
+          ? undefined
+          : class extends DeleteManyBuilder<any, any, any, any, any> {
+              constructor(options: BuilderOptions) {
+                super(options, type.name, models)
+              }
+            },
+        updateById: isReadOnly
+          ? undefined
+          : class extends UpdateByIdBuilder<any> {
+              constructor(options: BuilderOptions, pk: ID, data: any) {
+                super(options, type.name, models, pk, data)
+              }
+            },
+        updateMany: isReadOnly
+          ? undefined
+          : class extends UpdateManyBuilder<any, any, any, any, any, any> {
+              constructor(options: BuilderOptions, data: any) {
+                super(options, type.name, models, data)
+              }
+            },
       }
 
       Object.defineProperty(builders.findById, 'name', { value: `${type.name}FindByIdBuilder` })
       Object.defineProperty(builders.findOne, 'name', { value: `${type.name}FindOneBuilder` })
       Object.defineProperty(builders.findMany, 'name', { value: `${type.name}FindManyBuilder` })
       Object.defineProperty(builders.aggregate, 'name', { value: `${type.name}AggregateBuilder` })
-      Object.defineProperty(builders.createOne, 'name', { value: `${type.name}CreateOneBuilder` })
-      Object.defineProperty(builders.createMany, 'name', { value: `${type.name}CreateManyBuilder` })
-      Object.defineProperty(builders.deleteById, 'name', { value: `${type.name}DeleteByIdBuilder` })
-      Object.defineProperty(builders.deleteMany, 'name', { value: `${type.name}DeleteManyBuilder` })
-      Object.defineProperty(builders.updateById, 'name', { value: `${type.name}UpdateByIdBuilder` })
-      Object.defineProperty(builders.updateMany, 'name', { value: `${type.name}UpdateManyBuilder` })
+      if (!isReadOnly) {
+        Object.defineProperty(builders.createOne, 'name', { value: `${type.name}CreateOneBuilder` })
+        Object.defineProperty(builders.createMany, 'name', { value: `${type.name}CreateManyBuilder` })
+        Object.defineProperty(builders.deleteById, 'name', { value: `${type.name}DeleteByIdBuilder` })
+        Object.defineProperty(builders.deleteMany, 'name', { value: `${type.name}DeleteManyBuilder` })
+        Object.defineProperty(builders.updateById, 'name', { value: `${type.name}UpdateByIdBuilder` })
+        Object.defineProperty(builders.updateMany, 'name', { value: `${type.name}UpdateManyBuilder` })
+      }
 
       const implementingTypes = isObjectType(type) ? [type] : schema.getPossibleTypes(type)
       acc[type.name] = implementingTypes.reduce(
@@ -205,6 +220,8 @@ export function getModels(
         },
         {
           tableName: table,
+          cte,
+          readOnly: isReadOnly,
           primaryKey: pk,
           include: include || [],
           builders,

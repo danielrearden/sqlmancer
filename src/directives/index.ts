@@ -61,8 +61,10 @@ export const typeDefs: DocumentNode = parse(`
   ) on FIELD_DEFINITION
 
   directive @model(
-    table: String!
+    table: String
+    cte: String
     pk: String!
+    readOnly: Boolean = false
     include: [String!]
   ) on OBJECT | UNION | INTERFACE
 

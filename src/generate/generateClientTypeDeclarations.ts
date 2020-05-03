@@ -185,21 +185,26 @@ export declare class ${name}UpdateByIdBuilder extends UpdateByIdBuilder<${name}U
   stream.write(`
 type SqlmancerClient = Knex & {
   models: {${Object.keys(models)
-    .map(
-      name => `
+    .map(name => {
+      const { readOnly } = models[name]
+      return `
     ${name}: {
       findById: (id: ID) => ${name}FindByIdBuilder;
       findMany: () => ${name}FindManyBuilder;
       findOne: () => ${name}FindOneBuilder;
-      aggregate: () => ${name}AggregateBuilder;
+      aggregate: () => ${name}AggregateBuilder;${
+        readOnly
+          ? ''
+          : `
       createMany: (input: ${name}CreateFields[]) => ${name}CreateManyBuilder;
       createOne: (input: ${name}CreateFields) => ${name}CreateOneBuilder;
       deleteById: (id: ID) => ${name}DeleteByIdBuilder;
       deleteMany: () => ${name}DeleteManyBuilder;
       updateById: (id: ID, input: ${name}UpdateFields) => ${name}UpdateByIdBuilder;
-      updateMany: (input: ${name}UpdateFields) => ${name}UpdateManyBuilder;
+      updateMany: (input: ${name}UpdateFields) => ${name}UpdateManyBuilder;`
+      }
     };`
-    )
+    })
     .join('')}
   };
 };

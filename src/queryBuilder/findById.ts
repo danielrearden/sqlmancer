@@ -255,7 +255,7 @@ export abstract class FindByIdBuilder<
     if (!context) {
       return this.toQueryBuilder({ alias: {} })
     }
-    const tableAlias = getAlias(this._tableName, context)
+    const tableAlias = getAlias(this._tableName || this._modelName, context)
     const throughAlias =
       context.nested && context.nested.association.through ? getAlias(context.nested.association.through, context) : ''
     const expressions: Expressions = {
@@ -277,7 +277,11 @@ export abstract class FindByIdBuilder<
       query.select(this._knex.raw('null'))
     }
 
-    query.from({ [tableAlias]: this._tableName })
+    if (this._tableName) {
+      query.from({ [tableAlias]: this._tableName })
+    } else {
+      query.with(tableAlias, this._knex.raw(this._cte!)).from(tableAlias)
+    }
 
     expressions.join.forEach(join => (query as any)[join.type](join.table, join.on))
 

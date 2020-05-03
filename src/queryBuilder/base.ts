@@ -31,7 +31,8 @@ export abstract class BaseBuilder {
   protected readonly _modelName: string
   protected readonly _models: Models
   protected readonly _model: Models[string]
-  protected readonly _tableName: string
+  protected readonly _tableName?: string
+  protected readonly _cte?: string
   protected readonly _primaryKey: string
   protected readonly _options: BuilderOptions
   protected readonly _knex: Knex
@@ -55,6 +56,7 @@ export abstract class BaseBuilder {
     this._models = models
     this._model = models[modelName]
     this._tableName = this._model.tableName
+    this._cte = this._model.cte
     this._primaryKey = this._model.primaryKey
   }
 
@@ -259,13 +261,16 @@ export abstract class BaseBuilder {
   ): WhereArgs {
     const association = this._models[modelName].associations[associationName]
     const associationModel = this._models[association.modelName]
-    const associationAlias = getAlias(associationModel.tableName, context)
+    const associationAlias = getAlias(associationModel.tableName || association.modelName, context)
     const throughAlias = association.through ? getAlias(association.through, context) : ''
 
-    const query = this._knex
-      .queryBuilder()
-      .select(this._knex.raw('null'))
-      .from({ [associationAlias]: associationModel.tableName })
+    const query = this._knex.queryBuilder().select(this._knex.raw('null'))
+
+    if (associationModel.tableName) {
+      query.from({ [associationAlias]: associationModel.tableName })
+    } else {
+      query.with(associationAlias, this._knex.raw(this._cte!)).from(associationAlias)
+    }
 
     query.where({
       [`${tableAlias}.${association.on[0].from}`]: this._knex.ref(
@@ -367,7 +372,7 @@ export abstract class BaseBuilder {
   ): void {
     const association = this._model.associations[associationName]
     const associationModel = this._models[association.modelName]
-    const joinedAlias = getAlias(associationModel.tableName, context)
+    const joinedAlias = getAlias(associationModel.tableName || this._modelName, context)
     const throughAlias = association.through ? getAlias(association.through, context) : ''
     const { direction, selectExpression } = (association.isMany
       ? this._getAssociationAggregateOrderByExpressionParts
@@ -378,15 +383,25 @@ export abstract class BaseBuilder {
 
     query.select(selectExpression)
 
-    query.from({
-      [association.through ? throughAlias : joinedAlias]: association.through || associationModel.tableName,
-    })
+    if (association.through) {
+      query.from({ [throughAlias]: association.through })
+    } else if (associationModel.tableName) {
+      query.from({ [joinedAlias]: associationModel.tableName })
+    } else {
+      query.with(joinedAlias, this._knex.raw(this._cte!)).from(joinedAlias)
+    }
 
     if (association.through) {
-      query.innerJoin(
-        { [joinedAlias]: associationModel.tableName },
-        { [`${throughAlias}.${association.on[1].from}`]: `${joinedAlias}.${association.on[1].to}` }
-      )
+      if (associationModel.tableName) {
+        query.innerJoin(
+          { [joinedAlias]: associationModel.tableName },
+          { [`${throughAlias}.${association.on[1].from}`]: `${joinedAlias}.${association.on[1].to}` }
+        )
+      } else {
+        query.with(joinedAlias, this._knex.raw(this._cte!)).innerJoin(joinedAlias, {
+          [`${throughAlias}.${association.on[1].from}`]: `${joinedAlias}.${association.on[1].to}`,
+        })
+      }
     }
 
     query.where(
@@ -416,7 +431,7 @@ export abstract class BaseBuilder {
     const associationFieldName = associationFieldNames[0]
 
     if (!associationFields[associationFieldName]) {
-      throw new Error(`Invalid field name for table ${associationModel.tableName}: ${associationFieldName}`)
+      throw new Error(`Invalid field name for model ${association.modelName}: ${associationFieldName}`)
     }
 
     const orderByColumnName = associationFields[associationFieldName].column
@@ -456,7 +471,7 @@ export abstract class BaseBuilder {
       const field = associationFields[fieldName]
 
       if (!field) {
-        throw new Error(`Invalid field name for table ${associationModel.tableName}: ${fieldName}`)
+        throw new Error(`Invalid field name for model ${association.modelName}: ${fieldName}`)
       }
 
       selectExpression = this._knex.raw(

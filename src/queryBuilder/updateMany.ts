@@ -114,7 +114,7 @@ export class UpdateManyBuilder<
       orderBy: [],
     }
     const context = { alias: {} }
-    const tableAlias = getAlias(this._tableName, context)
+    const tableAlias = getAlias(this._tableName!, context)
 
     this._addOrderByExpressions(tableAlias, expressions, context)
     this._addWhereExpressions(tableAlias, '', expressions, context)
@@ -123,7 +123,7 @@ export class UpdateManyBuilder<
 
     query.select(`${tableAlias}.${this._primaryKey}`)
 
-    query.from({ [tableAlias]: this._tableName })
+    query.from({ [tableAlias]: this._tableName! })
 
     this._applyExpressions(query, expressions)
 

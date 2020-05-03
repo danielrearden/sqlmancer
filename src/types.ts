@@ -32,7 +32,9 @@ export type PossibleScalarTypes = 'string' | 'number' | 'boolean' | 'JSON' | 'ID
 export type Models = Record<string, Model>
 
 export type Model = {
-  tableName: string
+  tableName?: string
+  cte?: string
+  readOnly: boolean
   primaryKey: string
   fields: Record<string, Field>
   include: string[]
@@ -44,12 +46,12 @@ export type Model = {
     findOne: new (...args: any[]) => FindOneBuilder<any, any, any, any, any, any, any, any>
     findMany: new (...args: any[]) => FindManyBuilder<any, any, any, any, any, any, any, any>
     aggregate: new (...args: any[]) => AggregateBuilder<any, any, any, any, any, any>
-    createOne: new (...args: any[]) => CreateOneBuilder<any>
-    createMany: new (...args: any[]) => CreateManyBuilder<any>
-    deleteById: new (...args: any[]) => DeleteByIdBuilder
-    deleteMany: new (...args: any[]) => DeleteManyBuilder<any, any, any, any, any>
-    updateById: new (...args: any[]) => UpdateByIdBuilder<any>
-    updateMany: new (...args: any[]) => UpdateManyBuilder<any, any, any, any, any, any>
+    createOne?: new (...args: any[]) => CreateOneBuilder<any>
+    createMany?: new (...args: any[]) => CreateManyBuilder<any>
+    deleteById?: new (...args: any[]) => DeleteByIdBuilder
+    deleteMany?: new (...args: any[]) => DeleteManyBuilder<any, any, any, any, any>
+    updateById?: new (...args: any[]) => UpdateByIdBuilder<any>
+    updateMany?: new (...args: any[]) => UpdateManyBuilder<any, any, any, any, any, any>
   }
 }
 

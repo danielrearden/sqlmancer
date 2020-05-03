@@ -249,7 +249,7 @@ export class AggregateBuilder<
       return this.toQueryBuilder({ alias: {} })
     }
 
-    const subqueryAlias = getAlias(this._tableName, context)
+    const subqueryAlias = getAlias(this._tableName || this._modelName, context)
     const query = this._knex.queryBuilder()
     const jsonObjectFn = this._dialect === 'postgres' ? 'json_build_object' : 'json_object'
     const aggregatesByFunction = _.groupBy(this._aggregates, 'fn')
@@ -291,7 +291,7 @@ export class AggregateBuilder<
   }
 
   protected _getSubqueryBuilder(context: QueryBuilderContext): Knex.QueryBuilder {
-    const tableAlias = getAlias(this._tableName, context)
+    const tableAlias = getAlias(this._tableName || this._modelName, context)
     const throughAlias =
       context.nested && context.nested.association.through ? getAlias(context.nested.association.through, context) : ''
     const expressions: Expressions = {
@@ -321,7 +321,11 @@ export class AggregateBuilder<
 
     query.select(...columns)
 
-    query.from({ [tableAlias]: this._tableName })
+    if (this._tableName) {
+      query.from({ [tableAlias]: this._tableName })
+    } else {
+      query.with(tableAlias, this._knex.raw(this._cte!)).from(tableAlias)
+    }
 
     this._applyExpressions(query, expressions)
 
