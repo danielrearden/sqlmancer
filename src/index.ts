@@ -1,5 +1,5 @@
 export * from './queryBuilder'
 export * from './directives'
 export * from './types'
-export * from './generate/createSqlmancerClient'
+export * from './client'
 export { default as Knex } from 'knex'

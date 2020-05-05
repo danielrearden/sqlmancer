@@ -9,7 +9,8 @@ import {
   GraphQLObjectType,
   GraphQLOutputType,
 } from 'graphql'
-import { unwrap, getSqlmancerConfig, makeNullable } from '../utilities'
+import { unwrap, makeNullable } from '../utilities'
+import { getSqlmancerConfig } from '../client'
 import { SqlmancerConfig } from '../types'
 
 export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {

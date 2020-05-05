@@ -13,7 +13,8 @@ import {
   GraphQLString,
 } from 'graphql'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
-import { unwrap, getSqlmancerConfig } from '../utilities'
+import { unwrap } from '../utilities'
+import { getSqlmancerConfig } from '../client'
 import { Association, Field, SqlmancerConfig } from '../types'
 
 export class WhereDirective extends SchemaDirectiveVisitor<any, any> {

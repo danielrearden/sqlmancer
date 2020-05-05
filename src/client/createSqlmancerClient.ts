@@ -13,10 +13,10 @@ import {
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from '../queryBuilder'
-import { getSqlmancerConfig } from '../utilities'
+import { getSqlmancerConfig } from '.'
 import { makeSqlmancerSchema } from '../directives'
 import { ID } from '../types'
-import { getTypeDefsFromGlob } from './getTypeDefsFromGlob'
+import { getTypeDefsFromGlob } from '../generate/getTypeDefsFromGlob'
 
 type GenericSqlmancerClient = Knex & {
   models: Record<

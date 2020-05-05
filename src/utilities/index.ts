@@ -1,5 +1,3 @@
-export * from './getDirectiveByName'
-export * from './getSqlmancerConfig'
 export * from './makeNullable'
 export * from './parseResolveInfo'
 export * from './unwrap'

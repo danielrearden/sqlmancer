@@ -47,9 +47,9 @@ const typeDefs = gql`
     lastName: String!
     lastUpdate: DateTime! @hasDefault
     films: [Film!]!
-      @associate(on: [{ from: "actor_id", to: "actor_id" }, { from: "film_id", to: "film_id" }], through: "film_actor")
+      @relate(on: [{ from: "actor_id", to: "actor_id" }, { from: "film_id", to: "film_id" }], through: "film_actor")
       @many
-    filmsAggregate: Film @associate(aggregate: "films") @aggregate @many(model: "Film")
+    filmsAggregate: Film @relate(aggregate: "films") @aggregate @many(model: "Film")
   }
 
   type Film @model(table: "film", pk: "film_id") {
@@ -66,25 +66,25 @@ const typeDefs = gql`
     extraData: JSON!
     lastUpdate: DateTime! @hasDefault
     actors: [Actor!]!
-      @associate(on: [{ from: "film_id", to: "film_id" }, { from: "actor_id", to: "actor_id" }], through: "film_actor")
+      @relate(on: [{ from: "film_id", to: "film_id" }, { from: "actor_id", to: "actor_id" }], through: "film_actor")
       @many
     categories: [Category!]!
-      @associate(
+      @relate(
         on: [{ from: "film_id", to: "film_id" }, { from: "category_id", to: "category_id" }]
         through: "film_category"
       )
       @many
-    actorsAggregate: Actor @associate(aggregate: "actors") @aggregate @many(model: "Actor")
-    language: Language! @associate(on: { from: "language_id", to: "language_id" })
-    originalLanguage: Language @associate(on: { from: "original_language_id", to: "language_id" })
+    actorsAggregate: Actor @relate(aggregate: "actors") @aggregate @many(model: "Actor")
+    language: Language! @relate(on: { from: "language_id", to: "language_id" })
+    originalLanguage: Language @relate(on: { from: "original_language_id", to: "language_id" })
   }
 
   type Language @model(table: "language", pk: "language_id") {
     id: ID! @col(name: "language_id") @hasDefault
     name: String!
     lastUpdate: DateTime! @hasDefault
-    films: [Film!]! @associate(on: { from: "language_id", to: "language_id" }) @many
-    filmsAggregate: Film @associate(aggregate: "films") @aggregate @many(model: "Film")
+    films: [Film!]! @relate(on: { from: "language_id", to: "language_id" }) @many
+    filmsAggregate: Film @relate(aggregate: "films") @aggregate @many(model: "Film")
   }
 
   type Customer @model(table: "customer", pk: "customer_id") {
@@ -117,7 +117,7 @@ const typeDefs = gql`
     name: String!
     lastUpdate: DateTime! @hasDefault
     films: [Film!]!
-      @associate(
+      @relate(
         on: [{ from: "category_id", to: "category_id" }, { from: "film_id", to: "film_id" }]
         through: "film_category"
       )

@@ -2,7 +2,7 @@ import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefiniti
 import { parse, DocumentNode } from 'graphql'
 
 import { AggregateDirective } from './aggregate'
-import { AssociateDirective } from './associate'
+import { RelateDirective } from './relate'
 import { ColumnDirective } from './column'
 import { HasDefaultDirective } from './has-default'
 import { DependDirective } from './depend'
@@ -18,7 +18,6 @@ import { WhereDirective } from './where'
 
 export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
   aggregate: AggregateDirective,
-  associate: AssociateDirective,
   col: ColumnDirective,
   depend: DependDirective,
   hasDefault: HasDefaultDirective,
@@ -27,6 +26,7 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
   offset: OffsetDirective,
   orderBy: OrderByDirective,
   private: PrivateDirective,
+  relate: RelateDirective,
   many: ManyDirective,
   model: ModelDirective,
   value: ValueDirective,
@@ -35,12 +35,6 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
 
 export const typeDefs: DocumentNode = parse(`
   directive @aggregate on FIELD_DEFINITION
-
-  directive @associate(
-    on: [SqlmancerJoinOn!]
-    through: String
-    aggregate: String
-  ) on FIELD_DEFINITION
 
   directive @col(
     name: String!
@@ -75,6 +69,12 @@ export const typeDefs: DocumentNode = parse(`
   ) on FIELD_DEFINITION
 
   directive @private on FIELD_DEFINITION | OBJECT | UNION | INTERFACE
+
+  directive @relate(
+    on: [SqlmancerJoinOn!]
+    through: String
+    aggregate: String
+  ) on FIELD_DEFINITION
 
   directive @sqlmancer(
     dialect: SqlmancerDialect!
@@ -131,7 +131,6 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
   })
 
 export { AggregateDirective } from './aggregate'
-export { AssociateDirective } from './associate'
 export { ColumnDirective } from './column'
 export { HasDefaultDirective } from './has-default'
 export { DependDirective } from './depend'
@@ -142,5 +141,6 @@ export { ModelDirective } from './model'
 export { OffsetDirective } from './offset'
 export { OrderByDirective } from './orderBy'
 export { PrivateDirective } from './private'
+export { RelateDirective } from './relate'
 export { ValueDirective } from './value'
 export { WhereDirective } from './where'

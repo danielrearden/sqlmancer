@@ -1,7 +1,8 @@
 import { isEnumType, GraphQLEnumType, GraphQLSchema, isNonNullType } from 'graphql'
 import { Writable } from 'stream'
 
-import { getSqlmancerConfig, unwrap } from '../utilities'
+import { unwrap } from '../utilities'
+import { getSqlmancerConfig } from '../client'
 
 export function generateClientTypeDeclarations(schema: GraphQLSchema, stream: Writable): void {
   const { dialect, models } = getSqlmancerConfig(schema)

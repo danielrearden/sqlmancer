@@ -9,7 +9,8 @@ import {
   GraphQLNonNull,
 } from 'graphql'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
-import { getSqlmancerConfig, makeNullable, unwrap } from '../utilities'
+import { makeNullable, unwrap } from '../utilities'
+import { getSqlmancerConfig } from '../client'
 import { Association, Field, SqlmancerConfig } from '../types'
 
 export class OrderByDirective extends SchemaDirectiveVisitor<any, any> {

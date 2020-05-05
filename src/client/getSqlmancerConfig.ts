@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { isListType, isObjectType, DirectiveNode, GraphQLCompositeType, GraphQLSchema, isEnumType } from 'graphql'
-import { getArgumentValues } from 'graphql/execution/values'
+import { isListType, isObjectType, GraphQLCompositeType, GraphQLSchema, isEnumType } from 'graphql'
+import { getDirectives } from '@graphql-toolkit/common'
 
 import {
   AggregateBuilder,
@@ -24,9 +24,8 @@ import {
   PossibleScalarTypes,
   SqlmancerConfig,
 } from '../types'
-import { getDirectiveByName } from './getDirectiveByName'
-import { unwrap } from './unwrap'
-import { makeNullable } from './makeNullable'
+import { unwrap } from '../utilities/unwrap'
+import { makeNullable } from '../utilities/makeNullable'
 
 const cache = new WeakMap()
 
@@ -36,7 +35,7 @@ export function getSqlmancerConfig(schema: GraphQLSchema): SqlmancerConfig {
     return cached
   }
 
-  const sqlmancerDirective = getDirectiveByName(schema.getQueryType(), 'sqlmancer')
+  const { sqlmancer: sqlmancerDirective } = getDirectives(schema, schema.getQueryType())
 
   if (!sqlmancerDirective) {
     throw new Error(
@@ -44,14 +43,13 @@ export function getSqlmancerConfig(schema: GraphQLSchema): SqlmancerConfig {
     )
   }
 
-  const args = getArgumentValues(schema.getDirective('sqlmancer')!, sqlmancerDirective)!
-  const customScalarMap = getScalarMap(args.customScalars)
-  const dialect = _.lowerCase(args.dialect) as Dialect
+  const customScalarMap = getScalarMap(sqlmancerDirective.customScalars)
+  const dialect = _.lowerCase(sqlmancerDirective.dialect) as Dialect
 
   const config = {
-    ...args,
+    ...sqlmancerDirective,
     dialect,
-    models: getModels(schema, dialect, args.transformFieldNames, customScalarMap),
+    models: getModels(schema, dialect, sqlmancerDirective.transformFieldNames, customScalarMap),
     customScalarMap,
   }
   cache.set(schema, config)
@@ -98,9 +96,9 @@ export function getModels(
 ): Models {
   const models = Object.keys(schema.getTypeMap()).reduce((acc, typeName) => {
     const type = schema.getType(typeName)! as GraphQLCompositeType
-    const modelDirective = getDirectiveByName(type, 'model')
+    const { model: modelDirective } = getDirectives(schema, type)
     if (modelDirective) {
-      const { table, cte, pk, include, readOnly } = getArgumentValues(schema.getDirective('model')!, modelDirective)
+      const { table, cte, pk, include, readOnly } = modelDirective
       const isReadOnly = !!cte || readOnly
 
       const builders = {
@@ -188,20 +186,13 @@ export function getModels(
           const fieldNames = Object.keys(fieldMap)
           fieldNames.forEach(fieldName => {
             const field = fieldMap[fieldName]
-            const directives = field.astNode!.directives!
-            const columnDir = getDirectiveNode('col', directives)
-            const columnArgs = columnDir && getArgumentValues(schema.getDirective('col')!, columnDir)
-            const associateDir = getDirectiveNode('associate', directives)
-            const associateArgs = associateDir && getArgumentValues(schema.getDirective('associate')!, associateDir)
-            const dependDir = getDirectiveNode('depend', directives)
-            const dependArgs = dependDir && getArgumentValues(schema.getDirective('depend')!, dependDir)
-            const ignoreDirective = getDirectiveNode('ignore', directives)
-            const hasDefaultDirective = getDirectiveNode('hasDefault', directives)
+            const { col, relate, depend, ignore, hasDefault } = getDirectives(schema, field)
+
             const unwrappedType = unwrap(field.type)
             const nullableType = makeNullable(field.type)
             const isList = isListType(nullableType)
 
-            if (!ignoreDirective && !associateArgs && !dependArgs) {
+            if (!ignore && !relate && !depend) {
               const mappedType = isEnumType(nullableType)
                 ? nullableType.name
                 : dialect === 'postgres' && isEnumType(unwrappedType) && isList
@@ -212,27 +203,27 @@ export function getModels(
 
               if (mappedType) {
                 acc.fields[fieldName] = {
-                  column: (columnArgs && columnArgs.name) || transformFieldName(fieldName, transformFieldNames),
+                  column: (col && col.name) || transformFieldName(fieldName, transformFieldNames),
                   mappedType,
                   type: field.type,
-                  hasDefault: !!hasDefaultDirective,
+                  hasDefault: !!hasDefault,
                 }
               }
-            } else if (associateArgs) {
-              if (associateArgs.aggregate) {
+            } else if (relate) {
+              if (relate.aggregate) {
                 // TODO: Assert valid association field name
-                acc.aggregates[fieldName] = associateArgs.aggregate
+                acc.aggregates[fieldName] = relate.aggregate
               } else {
                 // TODO: Assert type is model
                 acc.associations[fieldName] = {
                   modelName: unwrappedType.name,
                   isMany: isList,
-                  on: associateArgs.on,
-                  through: associateArgs.through,
+                  on: relate.on,
+                  through: relate.through,
                 }
               }
-            } else if (dependArgs) {
-              acc.dependencies[fieldName] = dependArgs.on
+            } else if (depend) {
+              acc.dependencies[fieldName] = depend.on
             }
           })
           return acc
@@ -255,11 +246,6 @@ export function getModels(
   }, {} as Models)
 
   return models
-}
-
-function getDirectiveNode(name: string, directives: ReadonlyArray<DirectiveNode>) {
-  const directive = directives.find(directive => directive.name.value === name)
-  return directive || null
 }
 
 function transformFieldName(fieldName: string, transformation?: FieldNameTransformation) {
