@@ -1,11 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generateClientTypeDeclarations correct usage 1`] = `
-"
-import Knex from 'knex';
+"import Knex from 'knex';
 import {
   AggregateBuilder,
-  BuilderOptions,
   CreateManyBuilder,
   CreateOneBuilder,
   DeleteByIdBuilder,
@@ -17,214 +15,174 @@ import {
   UpdateManyBuilder
 } from 'sqlmancer';
 
-export declare type ID = number | string;
-export declare type JSON = boolean | number | string | null | JSONArray | JSONObject;
+export type ID = number | string;
+export type JSON = boolean | number | string | null | JSONArray | JSONObject;
 export interface JSONObject {
   [key: string]: JSON;
 }
-export declare type JSONArray = Array<JSON>;
+export type JSONArray = Array<JSON>;
 
-export declare type ActorFields = {
+export type ActorFields = {
   id: ID;
   firstName: string;
   lastName: string;
 }
     
-export declare type ActorIds = 'id';
+export type ActorIds = 'id';
     
-export declare type ActorEnums = unknown;
+export type ActorEnums = unknown;
     
-export declare type ActorAssociations = {
+export type ActorAssociations = {
   films: [FilmFindManyBuilder, FilmAggregateBuilder];
 }
     
-export declare type ActorCreateFields = {
+export type ActorCreateFields = {
   id: ID;
   firstName: string;
   lastName: string;
 };
     
-export declare type ActorUpdateFields = {
+export type ActorUpdateFields = {
   firstName?: string;
   lastName?: string;
 };
     
-export declare class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
+export type ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> = FindOneBuilder<
   'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
   ActorAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ActorFindManyBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindManyBuilder<
+export type ActorFindManyBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> = FindManyBuilder<
   'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
   ActorAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindByIdBuilder<
+export type ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> = FindByIdBuilder<
   ActorFields,
   ActorIds,
   ActorEnums,
   ActorAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions, pk: ID);
-}
+>
 
-export declare class ActorAggregateBuilder<
+export type ActorAggregateBuilder<
   TSelected extends Pick<ActorFields, any> = ActorFields
-> extends AggregateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations> {
-  constructor(options: BuilderOptions);
-}
+> = AggregateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
       
-export declare class ActorDeleteManyBuilder extends DeleteManyBuilder<
+export type ActorDeleteManyBuilder = DeleteManyBuilder<
   'postgres',
   ActorFields,
   ActorIds,
   ActorEnums,
   ActorAssociations
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ActorDeleteByIdBuilder extends DeleteByIdBuilder {
-  constructor(options: BuilderOptions, pk: ID);
-}
+export type ActorDeleteByIdBuilder = DeleteByIdBuilder
 
-export declare class ActorCreateManyBuilder extends CreateManyBuilder<ActorCreateFields> {
-  constructor(options: BuilderOptions, data: ActorCreateFields[]);
-}
+export type ActorCreateManyBuilder = CreateManyBuilder<ActorCreateFields>
 
-export declare class ActorCreateOneBuilder extends CreateOneBuilder<ActorCreateFields> {
-  constructor(options: BuilderOptions, data: ActorCreateFields);
-}
+export type ActorCreateOneBuilder = CreateOneBuilder<ActorCreateFields>
 
-export declare class ActorUpdateManyBuilder extends UpdateManyBuilder<
+export type ActorUpdateManyBuilder = UpdateManyBuilder<
   'postgres',
   ActorUpdateFields,
   ActorFields,
   ActorIds,
   ActorEnums,
   ActorAssociations
-> {
-  constructor(options: BuilderOptions, data: ActorUpdateFields);
-}
+>
 
-export declare class ActorUpdateByIdBuilder extends UpdateByIdBuilder<ActorUpdateFields> {
-  constructor(options: BuilderOptions, pk: ID, data: ActorUpdateFields);
-}
+export type ActorUpdateByIdBuilder = UpdateByIdBuilder<ActorUpdateFields>
   
-export declare type FilmFields = {
+export type FilmFields = {
   id: ID;
   title: string;
   releaseYear: number;
 }
     
-export declare type FilmIds = 'id';
+export type FilmIds = 'id';
     
-export declare type FilmEnums = unknown;
+export type FilmEnums = unknown;
     
-export declare type FilmAssociations = {
+export type FilmAssociations = {
   actors: [ActorFindManyBuilder, ActorAggregateBuilder];
 }
     
-export declare type FilmCreateFields = {
+export type FilmCreateFields = {
   id: ID;
   title: string;
   releaseYear: number;
 };
     
-export declare type FilmUpdateFields = {
+export type FilmUpdateFields = {
   title?: string;
   releaseYear?: number;
 };
     
-export declare class FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindOneBuilder<
+export type FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> = FindOneBuilder<
   'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
   FilmAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class FilmFindManyBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindManyBuilder<
+export type FilmFindManyBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> = FindManyBuilder<
   'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
   FilmAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> extends FindByIdBuilder<
+export type FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> = FindByIdBuilder<
   FilmFields,
   FilmIds,
   FilmEnums,
   FilmAssociations,
   TSelected
-> {
-  constructor(options: BuilderOptions, pk: ID);
-}
+>
 
-export declare class FilmAggregateBuilder<
+export type FilmAggregateBuilder<
   TSelected extends Pick<FilmFields, any> = FilmFields
-> extends AggregateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations> {
-  constructor(options: BuilderOptions);
-}
+> = AggregateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
       
-export declare class FilmDeleteManyBuilder extends DeleteManyBuilder<
+export type FilmDeleteManyBuilder = DeleteManyBuilder<
   'postgres',
   FilmFields,
   FilmIds,
   FilmEnums,
   FilmAssociations
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class FilmDeleteByIdBuilder extends DeleteByIdBuilder {
-  constructor(options: BuilderOptions, pk: ID);
-}
+export type FilmDeleteByIdBuilder = DeleteByIdBuilder
 
-export declare class FilmCreateManyBuilder extends CreateManyBuilder<FilmCreateFields> {
-  constructor(options: BuilderOptions, data: FilmCreateFields[]);
-}
+export type FilmCreateManyBuilder = CreateManyBuilder<FilmCreateFields>
 
-export declare class FilmCreateOneBuilder extends CreateOneBuilder<FilmCreateFields> {
-  constructor(options: BuilderOptions, data: FilmCreateFields);
-}
+export type FilmCreateOneBuilder = CreateOneBuilder<FilmCreateFields>
 
-export declare class FilmUpdateManyBuilder extends UpdateManyBuilder<
+export type FilmUpdateManyBuilder = UpdateManyBuilder<
   'postgres',
   FilmUpdateFields,
   FilmFields,
   FilmIds,
   FilmEnums,
   FilmAssociations
-> {
-  constructor(options: BuilderOptions, data: FilmUpdateFields);
-}
+>
 
-export declare class FilmUpdateByIdBuilder extends UpdateByIdBuilder<FilmUpdateFields> {
-  constructor(options: BuilderOptions, pk: ID, data: FilmUpdateFields);
-}
+export type FilmUpdateByIdBuilder = UpdateByIdBuilder<FilmUpdateFields>
   
-type SqlmancerClient = Knex & {
+export type SqlmancerClient = Knex & {
   models: {
     Actor: {
       findById: (id: ID) => ActorFindByIdBuilder;

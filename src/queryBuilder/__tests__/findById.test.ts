@@ -323,19 +323,6 @@ describe('FindByIdBuilder', () => {
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
-
-      test('invalid path', async () => {
-        const query = `mutation {
-          createCustomerWithPayload {
-            customer {
-              id
-              email
-            }
-          }
-        }`
-        const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
-        expect(() => client.models.Customer.findById(10).resolveInfo(info, 'foo')).toThrow('Invalid path')
-      })
     })
 
     describe('transaction', () => {

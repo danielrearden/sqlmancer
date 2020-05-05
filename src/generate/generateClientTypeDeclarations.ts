@@ -6,11 +6,9 @@ import { getSqlmancerConfig, unwrap } from '../utilities'
 export function generateClientTypeDeclarations(schema: GraphQLSchema, stream: Writable): void {
   const { dialect, models } = getSqlmancerConfig(schema)
 
-  stream.write(`
-import Knex from 'knex';
+  stream.write(`import Knex from 'knex';
 import {
   AggregateBuilder,
-  BuilderOptions,
   CreateManyBuilder,
   CreateOneBuilder,
   DeleteByIdBuilder,
@@ -22,19 +20,19 @@ import {
   UpdateManyBuilder
 } from 'sqlmancer';
 
-export declare type ID = number | string;
-export declare type JSON = boolean | number | string | null | JSONArray | JSONObject;
+export type ID = number | string;
+export type JSON = boolean | number | string | null | JSONArray | JSONObject;
 export interface JSONObject {
   [key: string]: JSON;
 }
-export declare type JSONArray = Array<JSON>;
+export type JSONArray = Array<JSON>;
 `)
 
   Object.keys(models).forEach(name => {
     const { primaryKey, fields, associations } = models[name]
 
     stream.write(`
-export declare type ${name}Fields = {\n${Object.keys(fields)
+export type ${name}Fields = {\n${Object.keys(fields)
       .map(fieldName => `  ${fieldName}: ${getOutputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
 }
@@ -42,9 +40,7 @@ export declare type ${name}Fields = {\n${Object.keys(fields)
 
     const idFields = Object.keys(fields).filter(fieldName => fields[fieldName].mappedType === 'ID')
     stream.write(`
-export declare type ${name}Ids = ${
-      idFields.length ? idFields.map(fieldName => `'${fieldName}'`).join(' | ') : 'unknown'
-    };
+export type ${name}Ids = ${idFields.length ? idFields.map(fieldName => `'${fieldName}'`).join(' | ') : 'unknown'};
     `)
 
     const enums = Object.keys(fields).reduce((acc, fieldName) => {
@@ -56,11 +52,11 @@ export declare type ${name}Ids = ${
       return acc
     }, {} as Record<string, GraphQLEnumType>)
     stream.write(`
-export declare type ${name}Enums = ${Object.keys(enums).length ? Object.keys(enums).join(' | ') : 'unknown'};
+export type ${name}Enums = ${Object.keys(enums).length ? Object.keys(enums).join(' | ') : 'unknown'};
     `)
 
     stream.write(`
-export declare type ${name}Associations = {\n${Object.keys(associations)
+export type ${name}Associations = {\n${Object.keys(associations)
       .map(
         name =>
           `  ${name}: [${associations[name].modelName}Find${associations[name].isMany ? 'Many' : 'One'}Builder, ${
@@ -72,7 +68,7 @@ export declare type ${name}Associations = {\n${Object.keys(associations)
     `)
 
     stream.write(`
-export declare type ${name}CreateFields = {\n${Object.keys(fields)
+export type ${name}CreateFields = {\n${Object.keys(fields)
       .map(fieldName => {
         const field = fields[fieldName]
         const required = isNonNullType(field.type) && !field.hasDefault
@@ -83,7 +79,7 @@ export declare type ${name}CreateFields = {\n${Object.keys(fields)
     `)
 
     stream.write(`
-export declare type ${name}UpdateFields = {\n${Object.keys(fields)
+export type ${name}UpdateFields = {\n${Object.keys(fields)
       .filter(fieldName => fields[fieldName].column !== primaryKey)
       .map(fieldName => `  ${fieldName}?: ${getInputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
@@ -93,7 +89,7 @@ export declare type ${name}UpdateFields = {\n${Object.keys(fields)
     Object.keys(enums).forEach(enumName => {
       const enumType = enums[enumName]
       stream.write(`
-export declare enum ${enumName} {\n${enumType
+export enum ${enumName} {\n${enumType
         .getValues()
         .map(enumValue => `  ${enumValue.name} = ${JSON.stringify(enumValue.value)},`)
         .join('\n')}
@@ -102,88 +98,68 @@ export declare enum ${enumName} {\n${enumType
 
     stream.write(
       `
-export declare class ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindOneBuilder<
+export type ${name}FindOneBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> = FindOneBuilder<
   '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
   ${name}Associations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ${name}FindManyBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindManyBuilder<
+export type ${name}FindManyBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> = FindManyBuilder<
   '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
   ${name}Associations,
   TSelected
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> extends FindByIdBuilder<
+export type ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> = ${name}Fields> = FindByIdBuilder<
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
   ${name}Associations,
   TSelected
-> {
-  constructor(options: BuilderOptions, pk: ID);
-}
+>
 
-export declare class ${name}AggregateBuilder<
+export type ${name}AggregateBuilder<
   TSelected extends Pick<${name}Fields, any> = ${name}Fields
-> extends AggregateBuilder<'postgres', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations> {
-  constructor(options: BuilderOptions);
-}
+> = AggregateBuilder<'${dialect}', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations>
       `
     )
 
     stream.write(`
-export declare class ${name}DeleteManyBuilder extends DeleteManyBuilder<
+export type ${name}DeleteManyBuilder = DeleteManyBuilder<
   '${dialect}',
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
   ${name}Associations
-> {
-  constructor(options: BuilderOptions);
-}
+>
 
-export declare class ${name}DeleteByIdBuilder extends DeleteByIdBuilder {
-  constructor(options: BuilderOptions, pk: ID);
-}
+export type ${name}DeleteByIdBuilder = DeleteByIdBuilder
 
-export declare class ${name}CreateManyBuilder extends CreateManyBuilder<${name}CreateFields> {
-  constructor(options: BuilderOptions, data: ${name}CreateFields[]);
-}
+export type ${name}CreateManyBuilder = CreateManyBuilder<${name}CreateFields>
 
-export declare class ${name}CreateOneBuilder extends CreateOneBuilder<${name}CreateFields> {
-  constructor(options: BuilderOptions, data: ${name}CreateFields);
-}
+export type ${name}CreateOneBuilder = CreateOneBuilder<${name}CreateFields>
 
-export declare class ${name}UpdateManyBuilder extends UpdateManyBuilder<
+export type ${name}UpdateManyBuilder = UpdateManyBuilder<
   '${dialect}',
   ${name}UpdateFields,
   ${name}Fields,
   ${name}Ids,
   ${name}Enums,
   ${name}Associations
-> {
-  constructor(options: BuilderOptions, data: ${name}UpdateFields);
-}
+>
 
-export declare class ${name}UpdateByIdBuilder extends UpdateByIdBuilder<${name}UpdateFields> {
-  constructor(options: BuilderOptions, pk: ID, data: ${name}UpdateFields);
-}
+export type ${name}UpdateByIdBuilder = UpdateByIdBuilder<${name}UpdateFields>
   `)
   })
 
   stream.write(`
-type SqlmancerClient = Knex & {
+export type SqlmancerClient = Knex & {
   models: {${Object.keys(models)
     .map(name => {
       const { readOnly } = models[name]

@@ -671,7 +671,7 @@ describe('FindBuilder', () => {
 
       test('valid path', async () => {
         const query = `mutation {
-          createCustomer {
+          createCustomerWithPayload {
             customer {
               id
               email
@@ -685,19 +685,6 @@ describe('FindBuilder', () => {
         expect(result).toBeObject()
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
-      })
-
-      test('invalid path', async () => {
-        const query = `mutation {
-          createCustomerWithPayload {
-            customer {
-              id
-              email
-            }
-          }
-        }`
-        const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
-        expect(() => client.models.Customer.findOne().resolveInfo(info, 'foo')).toThrow('Invalid path')
       })
     })
 

@@ -83,7 +83,7 @@ function generate(typeDefs: string, output: string): void {
   }
 
   const dirPath = join(process.cwd(), output)
-  const filePath = join(dirPath, 'sqlmancer.d.ts')
+  const filePath = join(dirPath, 'sqlmancer.ts')
 
   mkdirp.sync(dirPath)
 
