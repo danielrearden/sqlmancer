@@ -86,7 +86,8 @@ CREATE TABLE film (
     rating mpaa_rating DEFAULT 'G'::mpaa_rating,
     last_update timestamp without time zone DEFAULT now() NOT NULL,
     special_features text[],
-    fulltext tsvector NOT NULL
+    fulltext tsvector NOT NULL,
+    extra_data jsonb DEFAULT '{"imdbRating": 0}' NOT NULL
 );
 
 ALTER TABLE public.film OWNER TO postgres;

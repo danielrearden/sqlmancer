@@ -260,8 +260,8 @@ export type IdOperators = {
   greaterThanOrEqual?: string | number
   lessThan?: string | number
   lessThanOrEqual?: string | number
-  in?: string | number[]
-  notIn?: string | number[]
+  in?: (string | number)[]
+  notIn?: (string | number)[]
 }
 
 export type IdArrayOperators = {

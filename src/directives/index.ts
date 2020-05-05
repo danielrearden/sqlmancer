@@ -93,6 +93,7 @@ export const typeDefs: DocumentNode = parse(`
     number: [String!]
     boolean: [String!]
     JSON: [String!]
+    Date: [String!]
   }
 
   input SqlmancerJoinOn {

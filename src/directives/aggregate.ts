@@ -10,8 +10,16 @@ import {
   GraphQLOutputType,
 } from 'graphql'
 import { unwrap, getSqlmancerConfig, makeNullable } from '../utilities'
+import { SqlmancerConfig } from '../types'
 
 export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
+  private config: SqlmancerConfig
+
+  constructor(config: any) {
+    super(config)
+    this.config = getSqlmancerConfig(this.schema)
+  }
+
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
     return { ...field, type: this.getAggregateType(field) }
   }
@@ -24,7 +32,7 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
     if (existingType) {
       return existingType as GraphQLOutputType
     }
-    const { models } = getSqlmancerConfig(this.schema)
+    const { models } = this.config
     const model = models[unwrappedType.name]
 
     if (!model) {

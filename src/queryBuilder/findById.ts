@@ -214,7 +214,7 @@ export abstract class FindByIdBuilder<
       )
 
       if (!tree) {
-        throw new Error(`Invalid path provided to resolveInfo: ${path}`)
+        return this
       }
     }
 
@@ -245,6 +245,19 @@ export abstract class FindByIdBuilder<
    */
   public async execute<TRow = TSelected & TRawSelected & TLoaded>() {
     const rows = await this.toQueryBuilder()
+
+    // We use JSON aggregation for loading related models and SQLite returns those fields as strings
+    if (this._dialect === 'sqlite') {
+      const jsonFields = [...Object.keys(this._loadedAssociations), ...Object.keys(this._loadedAggregates)]
+      rows.forEach((row: any) => {
+        Object.keys(row).forEach(fieldName => {
+          if (jsonFields.includes(fieldName)) {
+            row[fieldName] = JSON.parse(row[fieldName])
+          }
+        })
+      })
+    }
+
     return (rows[0] as TRow) || null
   }
 

@@ -24,7 +24,6 @@ export declare type ActorFields = {
   id: ID
   firstName: string
   lastName: string
-  lastUpdate: string
 }
 
 export declare type ActorIds = 'id'
@@ -39,13 +38,11 @@ export declare type ActorCreateFields = {
   id?: ID
   firstName: string
   lastName: string
-  lastUpdate?: string
 }
 
 export declare type ActorUpdateFields = {
   firstName?: string
   lastName?: string
-  lastUpdate?: string
 }
 
 export declare class ActorFindOneBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> extends FindOneBuilder<
@@ -124,7 +121,6 @@ export declare type FilmFields = {
   rentalRate: number
   rentalDuration: number
   replacementCost: number
-  lastUpdate: string
 }
 
 export declare type FilmIds = 'id'
@@ -133,6 +129,7 @@ export declare type FilmEnums = FilmRating
 
 export declare type FilmAssociations = {
   actors: [ActorFindManyBuilder, ActorAggregateBuilder]
+  categories: [CategoryFindManyBuilder, CategoryAggregateBuilder]
   language: [LanguageFindOneBuilder, LanguageAggregateBuilder]
   originalLanguage: [LanguageFindOneBuilder, LanguageAggregateBuilder]
 }
@@ -147,7 +144,6 @@ export declare type FilmCreateFields = {
   rentalRate: number
   rentalDuration: number
   replacementCost: number
-  lastUpdate?: string
 }
 
 export declare type FilmUpdateFields = {
@@ -159,7 +155,6 @@ export declare type FilmUpdateFields = {
   rentalRate?: number
   rentalDuration?: number
   replacementCost?: number
-  lastUpdate?: string
 }
 
 export declare enum FilmRating {
@@ -244,10 +239,92 @@ export declare class FilmUpdateByIdBuilder extends UpdateByIdBuilder<FilmUpdateF
   constructor(options: BuilderOptions, pk: ID, data: FilmUpdateFields)
 }
 
+export declare type CategoryFields = {
+  id: ID
+  name: string
+}
+
+export declare type CategoryIds = 'id'
+
+export declare type CategoryEnums = unknown
+
+export declare type CategoryAssociations = {
+  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+}
+
+export declare type CategoryCreateFields = {
+  id?: ID
+  name: string
+}
+
+export declare type CategoryUpdateFields = {
+  name?: string
+}
+
+export declare class CategoryFindOneBuilder<
+  TSelected extends Pick<CategoryFields, any> = CategoryFields
+> extends FindOneBuilder<'mysql', CategoryFields, CategoryIds, CategoryEnums, CategoryAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CategoryFindManyBuilder<
+  TSelected extends Pick<CategoryFields, any> = CategoryFields
+> extends FindManyBuilder<'mysql', CategoryFields, CategoryIds, CategoryEnums, CategoryAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CategoryFindByIdBuilder<
+  TSelected extends Pick<CategoryFields, any> = CategoryFields
+> extends FindByIdBuilder<CategoryFields, CategoryIds, CategoryEnums, CategoryAssociations, TSelected> {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class CategoryAggregateBuilder<
+  TSelected extends Pick<CategoryFields, any> = CategoryFields
+> extends AggregateBuilder<'postgres', CategoryFields, CategoryIds, CategoryEnums, CategoryAssociations> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CategoryDeleteManyBuilder extends DeleteManyBuilder<
+  'mysql',
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations
+> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CategoryDeleteByIdBuilder extends DeleteByIdBuilder {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class CategoryCreateManyBuilder extends CreateManyBuilder<CategoryCreateFields> {
+  constructor(options: BuilderOptions, data: CategoryCreateFields[])
+}
+
+export declare class CategoryCreateOneBuilder extends CreateOneBuilder<CategoryCreateFields> {
+  constructor(options: BuilderOptions, data: CategoryCreateFields)
+}
+
+export declare class CategoryUpdateManyBuilder extends UpdateManyBuilder<
+  'mysql',
+  CategoryUpdateFields,
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations
+> {
+  constructor(options: BuilderOptions, data: CategoryUpdateFields)
+}
+
+export declare class CategoryUpdateByIdBuilder extends UpdateByIdBuilder<CategoryUpdateFields> {
+  constructor(options: BuilderOptions, pk: ID, data: CategoryUpdateFields)
+}
+
 export declare type LanguageFields = {
   id: ID
   name: string
-  lastUpdate: string
 }
 
 export declare type LanguageIds = 'id'
@@ -261,12 +338,10 @@ export declare type LanguageAssociations = {
 export declare type LanguageCreateFields = {
   id?: ID
   name: string
-  lastUpdate?: string
 }
 
 export declare type LanguageUpdateFields = {
   name?: string
-  lastUpdate?: string
 }
 
 export declare class LanguageFindOneBuilder<
@@ -330,6 +405,186 @@ export declare class LanguageUpdateByIdBuilder extends UpdateByIdBuilder<Languag
   constructor(options: BuilderOptions, pk: ID, data: LanguageUpdateFields)
 }
 
+export declare type CustomerFields = {
+  id: ID
+  firstName: string
+  lastName: string
+  email: string
+}
+
+export declare type CustomerIds = 'id'
+
+export declare type CustomerEnums = unknown
+
+export declare type CustomerAssociations = {}
+
+export declare type CustomerCreateFields = {
+  id?: ID
+  firstName: string
+  lastName: string
+  email?: string
+}
+
+export declare type CustomerUpdateFields = {
+  firstName?: string
+  lastName?: string
+  email?: string
+}
+
+export declare class CustomerFindOneBuilder<
+  TSelected extends Pick<CustomerFields, any> = CustomerFields
+> extends FindOneBuilder<'mysql', CustomerFields, CustomerIds, CustomerEnums, CustomerAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CustomerFindManyBuilder<
+  TSelected extends Pick<CustomerFields, any> = CustomerFields
+> extends FindManyBuilder<'mysql', CustomerFields, CustomerIds, CustomerEnums, CustomerAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CustomerFindByIdBuilder<
+  TSelected extends Pick<CustomerFields, any> = CustomerFields
+> extends FindByIdBuilder<CustomerFields, CustomerIds, CustomerEnums, CustomerAssociations, TSelected> {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class CustomerAggregateBuilder<
+  TSelected extends Pick<CustomerFields, any> = CustomerFields
+> extends AggregateBuilder<'postgres', CustomerFields, CustomerIds, CustomerEnums, CustomerAssociations> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CustomerDeleteManyBuilder extends DeleteManyBuilder<
+  'mysql',
+  CustomerFields,
+  CustomerIds,
+  CustomerEnums,
+  CustomerAssociations
+> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class CustomerDeleteByIdBuilder extends DeleteByIdBuilder {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class CustomerCreateManyBuilder extends CreateManyBuilder<CustomerCreateFields> {
+  constructor(options: BuilderOptions, data: CustomerCreateFields[])
+}
+
+export declare class CustomerCreateOneBuilder extends CreateOneBuilder<CustomerCreateFields> {
+  constructor(options: BuilderOptions, data: CustomerCreateFields)
+}
+
+export declare class CustomerUpdateManyBuilder extends UpdateManyBuilder<
+  'mysql',
+  CustomerUpdateFields,
+  CustomerFields,
+  CustomerIds,
+  CustomerEnums,
+  CustomerAssociations
+> {
+  constructor(options: BuilderOptions, data: CustomerUpdateFields)
+}
+
+export declare class CustomerUpdateByIdBuilder extends UpdateByIdBuilder<CustomerUpdateFields> {
+  constructor(options: BuilderOptions, pk: ID, data: CustomerUpdateFields)
+}
+
+export declare type AddressFields = {
+  id: ID
+  addressLine: string
+  addressLine2: string
+  postalCode: string
+  city: string
+  country: string
+}
+
+export declare type AddressIds = 'id'
+
+export declare type AddressEnums = unknown
+
+export declare type AddressAssociations = {}
+
+export declare type AddressCreateFields = {
+  id: ID
+  addressLine: string
+  addressLine2?: string
+  postalCode: string
+  city: string
+  country: string
+}
+
+export declare type AddressUpdateFields = {
+  addressLine?: string
+  addressLine2?: string
+  postalCode?: string
+  city?: string
+  country?: string
+}
+
+export declare class AddressFindOneBuilder<
+  TSelected extends Pick<AddressFields, any> = AddressFields
+> extends FindOneBuilder<'mysql', AddressFields, AddressIds, AddressEnums, AddressAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class AddressFindManyBuilder<
+  TSelected extends Pick<AddressFields, any> = AddressFields
+> extends FindManyBuilder<'mysql', AddressFields, AddressIds, AddressEnums, AddressAssociations, TSelected> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class AddressFindByIdBuilder<
+  TSelected extends Pick<AddressFields, any> = AddressFields
+> extends FindByIdBuilder<AddressFields, AddressIds, AddressEnums, AddressAssociations, TSelected> {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class AddressAggregateBuilder<
+  TSelected extends Pick<AddressFields, any> = AddressFields
+> extends AggregateBuilder<'postgres', AddressFields, AddressIds, AddressEnums, AddressAssociations> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class AddressDeleteManyBuilder extends DeleteManyBuilder<
+  'mysql',
+  AddressFields,
+  AddressIds,
+  AddressEnums,
+  AddressAssociations
+> {
+  constructor(options: BuilderOptions)
+}
+
+export declare class AddressDeleteByIdBuilder extends DeleteByIdBuilder {
+  constructor(options: BuilderOptions, pk: ID)
+}
+
+export declare class AddressCreateManyBuilder extends CreateManyBuilder<AddressCreateFields> {
+  constructor(options: BuilderOptions, data: AddressCreateFields[])
+}
+
+export declare class AddressCreateOneBuilder extends CreateOneBuilder<AddressCreateFields> {
+  constructor(options: BuilderOptions, data: AddressCreateFields)
+}
+
+export declare class AddressUpdateManyBuilder extends UpdateManyBuilder<
+  'mysql',
+  AddressUpdateFields,
+  AddressFields,
+  AddressIds,
+  AddressEnums,
+  AddressAssociations
+> {
+  constructor(options: BuilderOptions, data: AddressUpdateFields)
+}
+
+export declare class AddressUpdateByIdBuilder extends UpdateByIdBuilder<AddressUpdateFields> {
+  constructor(options: BuilderOptions, pk: ID, data: AddressUpdateFields)
+}
+
 type SqlmancerClient = Knex & {
   models: {
     Actor: {
@@ -356,6 +611,12 @@ type SqlmancerClient = Knex & {
       updateById: (id: ID, input: FilmUpdateFields) => FilmUpdateByIdBuilder
       updateMany: (input: FilmUpdateFields) => FilmUpdateManyBuilder
     }
+    Category: {
+      findById: (id: ID) => CategoryFindByIdBuilder
+      findMany: () => CategoryFindManyBuilder
+      findOne: () => CategoryFindOneBuilder
+      aggregate: () => CategoryAggregateBuilder
+    }
     Language: {
       findById: (id: ID) => LanguageFindByIdBuilder
       findMany: () => LanguageFindManyBuilder
@@ -367,6 +628,24 @@ type SqlmancerClient = Knex & {
       deleteMany: () => LanguageDeleteManyBuilder
       updateById: (id: ID, input: LanguageUpdateFields) => LanguageUpdateByIdBuilder
       updateMany: (input: LanguageUpdateFields) => LanguageUpdateManyBuilder
+    }
+    Customer: {
+      findById: (id: ID) => CustomerFindByIdBuilder
+      findMany: () => CustomerFindManyBuilder
+      findOne: () => CustomerFindOneBuilder
+      aggregate: () => CustomerAggregateBuilder
+      createMany: (input: CustomerCreateFields[]) => CustomerCreateManyBuilder
+      createOne: (input: CustomerCreateFields) => CustomerCreateOneBuilder
+      deleteById: (id: ID) => CustomerDeleteByIdBuilder
+      deleteMany: () => CustomerDeleteManyBuilder
+      updateById: (id: ID, input: CustomerUpdateFields) => CustomerUpdateByIdBuilder
+      updateMany: (input: CustomerUpdateFields) => CustomerUpdateManyBuilder
+    }
+    Address: {
+      findById: (id: ID) => AddressFindByIdBuilder
+      findMany: () => AddressFindManyBuilder
+      findOne: () => AddressFindOneBuilder
+      aggregate: () => AddressAggregateBuilder
     }
   }
 }

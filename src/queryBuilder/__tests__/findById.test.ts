@@ -308,15 +308,15 @@ describe('FindByIdBuilder', () => {
 
       test('valid path', async () => {
         const query = `mutation {
-          createFilm {
-            film {
+          createCustomerWithPayload {
+            customer {
               id
-              title
+              email
             }
           }
         }`
-        const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
-        const builder = client.models.Film.findById(10).resolveInfo(info, 'film')
+        const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
+        const builder = client.models.Customer.findById(10).resolveInfo(info, 'customer')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -326,15 +326,15 @@ describe('FindByIdBuilder', () => {
 
       test('invalid path', async () => {
         const query = `mutation {
-          createFilm {
-            film {
+          createCustomerWithPayload {
+            customer {
               id
-              title
+              email
             }
           }
         }`
-        const info = await mockResolveInfo(schema, 'Mutation', 'createFilm', query)
-        expect(() => client.models.Film.findById(10).resolveInfo(info, 'foo')).toThrow('Invalid path')
+        const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
+        expect(() => client.models.Customer.findById(10).resolveInfo(info, 'foo')).toThrow('Invalid path')
       })
     })
 

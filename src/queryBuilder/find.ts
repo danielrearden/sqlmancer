@@ -298,7 +298,7 @@ export abstract class FindBuilder<
       )
 
       if (!tree) {
-        throw new Error(`Invalid path provided to resolveInfo: ${path}`)
+        return this
       }
     }
 

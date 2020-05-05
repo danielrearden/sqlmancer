@@ -9,4 +9,5 @@ module.exports = Knex({
   connection: {
     filename: path.resolve(__dirname, '../../../sakila.db'),
   },
+  useNullAsDefault: true,
 })

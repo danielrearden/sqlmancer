@@ -28,7 +28,14 @@ import { getDirectiveByName } from './getDirectiveByName'
 import { unwrap } from './unwrap'
 import { makeNullable } from './makeNullable'
 
+const cache = new WeakMap()
+
 export function getSqlmancerConfig(schema: GraphQLSchema): SqlmancerConfig {
+  const cached = cache.get(schema)
+  if (cached) {
+    return cached
+  }
+
   const sqlmancerDirective = getDirectiveByName(schema.getQueryType(), 'sqlmancer')
 
   if (!sqlmancerDirective) {
@@ -40,12 +47,16 @@ export function getSqlmancerConfig(schema: GraphQLSchema): SqlmancerConfig {
   const args = getArgumentValues(schema.getDirective('sqlmancer')!, sqlmancerDirective)!
   const customScalarMap = getScalarMap(args.customScalars)
   const dialect = _.lowerCase(args.dialect) as Dialect
-  return {
+
+  const config = {
     ...args,
     dialect,
     models: getModels(schema, dialect, args.transformFieldNames, customScalarMap),
     customScalarMap,
   }
+  cache.set(schema, config)
+
+  return config
 }
 
 function getScalarMap(customScalars?: { string?: string[]; number?: string[]; boolean?: string[]; JSON?: string[] }) {
