@@ -110,6 +110,7 @@ export type FilmFields = {
   rentalRate: number
   rentalDuration: number
   replacementCost: number
+  extraData: JSON
   lastUpdate: string
 }
 
@@ -134,6 +135,7 @@ export type FilmCreateFields = {
   rentalRate: number
   rentalDuration: number
   replacementCost: number
+  extraData: JSON
   lastUpdate?: Date | string
 }
 
@@ -146,6 +148,7 @@ export type FilmUpdateFields = {
   rentalRate?: number
   rentalDuration?: number
   replacementCost?: number
+  extraData?: JSON
   lastUpdate?: Date | string
 }
 

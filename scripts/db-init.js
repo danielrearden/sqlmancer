@@ -7,12 +7,13 @@ const dialects = _.pickBy(
   {
     postgres: require('../src/__tests__/postgres/knex'),
     mysql: require('../src/__tests__/mysql/knex'),
-    name: require('../src/__tests__/sqlite/knex'),
+    sqlite: require('../src/__tests__/sqlite/knex'),
   },
   (_value, key) => dialectsToMigrate.includes(key)
 )
 
-dialects.reduce((previousPromise, { name, knex }) => {
+Object.keys(dialects).reduce((previousPromise, name) => {
+  const knex = dialects[name]
   return previousPromise.then(async () => {
     await knex.transaction(async trx => {
       process.stdout.write(`Migrating ${name} database... `)
@@ -35,7 +36,7 @@ async function runFromFile(transaction, dialectName, action) {
     action === 'migrate' ? 'schema.sql' : 'seed.sql'
   )
   const sql = fs.readFileSync(filePath, 'utf-8')
-  if (dialectName === 'sqlite3') {
+  if (dialectName === 'sqlite') {
     await sql.split(/\n\n/).reduce((previousPromise, statement) => {
       return previousPromise.then(async () => transaction.raw(statement))
     }, Promise.resolve())

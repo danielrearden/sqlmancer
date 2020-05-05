@@ -111,12 +111,12 @@ CREATE TRIGGER category_trigger_au AFTER UPDATE ON category
 
 CREATE TABLE customer (
   customer_id INTEGER PRIMARY KEY,
-  store_id INT NOT NULL,
+  store_id INT,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   email VARCHAR(50) DEFAULT NULL,
-  address_id INT NOT NULL,
-  active SMALLINT DEFAULT 1 NOT NULL,
+  address_id INT,
+  active SMALLINT DEFAULT 1,
   create_date TIMESTAMP,
   last_update TIMESTAMP,
   CONSTRAINT fk_customer_store FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE NO ACTION ON UPDATE CASCADE,

@@ -235,21 +235,15 @@ export abstract class BaseBuilder {
     const { fields } = this._models[modelName]
     const key = Object.keys(operatorAndValue!)[0]
     const value = (operatorAndValue as any)[key]
-    return aggregateKey
-      ? getComparisonExpression(
-          this._knex,
-          this._dialect,
-          `${getAggregateFunction(aggregateKey)}(${this._knex.ref(`${tableAlias}.${fields[field].column}`)})`,
-          key,
-          value
-        )
-      : getComparisonExpression(
-          this._knex,
-          this._dialect,
-          this._knex.ref(`${tableAlias}.${fields[field].column}`),
-          key,
-          value
-        )
+    return getComparisonExpression(
+      this._knex,
+      this._dialect,
+      aggregateKey
+        ? `${getAggregateFunction(aggregateKey)}(${this._knex.ref(`${tableAlias}.${fields[field].column}`)})`
+        : this._knex.ref(`${tableAlias}.${fields[field].column}`),
+      key,
+      value
+    )
   }
 
   protected _getAssociationWhereExpression(

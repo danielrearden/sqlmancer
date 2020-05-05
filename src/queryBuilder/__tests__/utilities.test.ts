@@ -29,8 +29,8 @@ describe('utilities', () => {
 
       expect(exp('equal', 10)).toStrictEqual('"x"."y" = ?')
       expect(exp('notEqual', 10)).toStrictEqual('"x"."y" <> ?')
-      expect(exp('in', [10])).toStrictEqual('"x"."y" in ?')
-      expect(exp('notIn', [10])).toStrictEqual('"x"."y" not in ?')
+      expect(exp('in', [10])).toStrictEqual('"x"."y" in (?)')
+      expect(exp('notIn', [10])).toStrictEqual('"x"."y" not in (?)')
       expect(exp('contains', [10])).toStrictEqual('"x"."y" @> ?')
       expect(exp('containedBy', [10])).toStrictEqual('"x"."y" <@ ?')
       expect(exp('overlaps', [10])).toStrictEqual('"x"."y" && ?')
@@ -53,8 +53,8 @@ describe('utilities', () => {
 
       expect(exp('equal', 10)).toStrictEqual('`x`.`y` = ?')
       expect(exp('notEqual', 10)).toStrictEqual('`x`.`y` <> ?')
-      expect(exp('in', [10])).toStrictEqual('`x`.`y` in ?')
-      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in ?')
+      expect(exp('in', [10])).toStrictEqual('`x`.`y` in (?)')
+      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in (?)')
       expect(exp('greaterThan', 10)).toStrictEqual('`x`.`y` > ?')
       expect(exp('greaterThanOrEqual', 10)).toStrictEqual('`x`.`y` >= ?')
       expect(exp('lessThan', 10)).toStrictEqual('`x`.`y` < ?')
@@ -78,8 +78,8 @@ describe('utilities', () => {
 
       expect(exp('equal', 10)).toStrictEqual('`x`.`y` = ?')
       expect(exp('notEqual', 10)).toStrictEqual('`x`.`y` <> ?')
-      expect(exp('in', [10])).toStrictEqual('`x`.`y` in ?')
-      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in ?')
+      expect(exp('in', [10])).toStrictEqual('`x`.`y` in (?)')
+      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in (?)')
       expect(exp('greaterThan', 10)).toStrictEqual('`x`.`y` > ?')
       expect(exp('greaterThanOrEqual', 10)).toStrictEqual('`x`.`y` >= ?')
       expect(exp('lessThan', 10)).toStrictEqual('`x`.`y` < ?')
@@ -103,8 +103,8 @@ describe('utilities', () => {
 
       expect(exp('equal', 10)).toStrictEqual('`x`.`y` = ?')
       expect(exp('notEqual', 10)).toStrictEqual('`x`.`y` <> ?')
-      expect(exp('in', [10])).toStrictEqual('`x`.`y` in ?')
-      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in ?')
+      expect(exp('in', [10])).toStrictEqual('`x`.`y` in (?)')
+      expect(exp('notIn', [10])).toStrictEqual('`x`.`y` not in (?)')
       expect(exp('greaterThan', 10)).toStrictEqual('`x`.`y` > ?')
       expect(exp('greaterThanOrEqual', 10)).toStrictEqual('`x`.`y` >= ?')
       expect(exp('lessThan', 10)).toStrictEqual('`x`.`y` < ?')

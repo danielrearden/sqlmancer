@@ -123,16 +123,51 @@ describe('integration (mysql)', () => {
       schema,
       `
         query {
-          films(limit: 3, offset: 1, orderBy: { id: DESC }, where: { title: { like: "BOO%" } }) {
-            id
+          a: films(limit: 3, offset: 1, orderBy: { id: DESC }, where: { title: { like: "BOO%" } }) {
+            title
+          }
+          b: films(where: { id: { equal: 99 } }) {
+            title
+          }
+          c: films(where: { id: { in: [99] } }) {
+            title
+          }
+          d: films(where: { id: { notIn: [99] } }) {
+            title
+          }
+          e: films(where: { length: { greaterThan: 120 } }) {
+            title
+          }
+          f: films(where: { lastUpdate: { lessThanOrEqual: "1987-07-22T03:15:30.000Z" } }) {
+            title
+          }
+          g: films(where: { title: { like: "FOO%" } }) {
+            title
+          }
+          h: films(where: { title: { notLike: "%A%" } }) {
+            title
+          }
+          i: films(where: { extraData: { contains: "{\\"foo\\": 42}" } }) {
+            title
+          }
+          j: films(where: { extraData: { containedBy: "{\\"foo\\": 42}" } }) {
+            title
+          }
+          k: films(where: { extraData: { hasKey: "foo" } }) {
+            title
+          }
+          l: films(where: { extraData: { hasAnyKeys: ["foo"] } }) {
+            title
+          }
+          m: films(where: { extraData: { hasAllKeys: ["foo"] } }) {
             title
           }
         }
       `
     )
     expect(errors).toBeUndefined()
-    expect(data.films).toHaveLength(1)
-    expect(data.films[0].title).toBe('BOOGIE AMELIE')
+    expect(data.a).toHaveLength(1)
+    expect(data.a[0].title).toBe('BOOGIE AMELIE')
   })
 
   test('aggregation', async () => {

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { GraphQLDateTime } from 'graphql-scalars'
+import { GraphQLDateTime, GraphQLJSON } from 'graphql-scalars'
 import { IResolvers } from 'graphql-tools'
 
 import knex from './knex'
@@ -8,8 +8,10 @@ import { SqlmancerClient } from './sqlmancer'
 
 const typeDefs = gql`
   scalar DateTime
+  scalar JSON
 
-  type Query @sqlmancer(dialect: MYSQL, transformFieldNames: SNAKE_CASE, customScalars: { Date: ["DateTime"] }) {
+  type Query
+    @sqlmancer(dialect: MYSQL, transformFieldNames: SNAKE_CASE, customScalars: { Date: ["DateTime"], JSON: ["JSON"] }) {
     actors: [Actor!]! @many
     actor(id: ID!): Actor
     actorsAggregate: Actor @aggregate @many(model: "Actor")
@@ -26,7 +28,7 @@ const typeDefs = gql`
     createCustomer(input: CreateCustomerInput!): Customer
     createCustomers(input: [CreateCustomerInput!]!): Customer
     deleteCustomer(id: ID): Boolean!
-    deleteCustomers(id: ID): Boolean! @where(model: "Customer")
+    deleteCustomers: Boolean! @where(model: "Customer")
     updateCustomer(id: ID, input: UpdateCustomerInput!): Customer
     updateCustomers(input: UpdateCustomerInput!): [Customer!]! @where
 
@@ -55,6 +57,7 @@ const typeDefs = gql`
     rentalRate: Float!
     rentalDuration: Int!
     replacementCost: Float!
+    extraData: JSON!
     lastUpdate: DateTime! @hasDefault
     actors: [Actor!]!
       @associate(on: [{ from: "film_id", to: "film_id" }, { from: "actor_id", to: "actor_id" }], through: "film_actor")
@@ -159,6 +162,7 @@ const { Film, Actor, Customer, Address } = client.models
 
 const resolvers: IResolvers = {
   DateTime: GraphQLDateTime,
+  JSON: GraphQLJSON,
   Query: {
     actors: (_root, _args, _ctx, info) => {
       return Actor.findMany()

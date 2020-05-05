@@ -56,9 +56,9 @@ export function getComparisonExpression(
     case 'notEqual':
       return knex.raw(`${column} <> ?`, [value])
     case 'in':
-      return knex.raw(`${column} in ?`, [value])
+      return knex.raw(`${column} in (${value.map(() => '?').join(', ')})`, value)
     case 'notIn':
-      return knex.raw(`${column} not in ?`, [value])
+      return knex.raw(`${column} not in (${value.map(() => '?').join(', ')})`, value)
     case 'greaterThan':
       return knex.raw(`${column} > ?`, [value])
     case 'greaterThanOrEqual':

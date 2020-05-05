@@ -172,11 +172,11 @@ ALTER TABLE public.customer_customer_id_seq OWNER TO postgres;
 
 CREATE TABLE customer (
     customer_id integer DEFAULT nextval('customer_customer_id_seq'::regclass) NOT NULL,
-    store_id smallint NOT NULL,
+    store_id smallint,
     first_name character varying(45) NOT NULL,
     last_name character varying(45) NOT NULL,
     email character varying(50),
-    address_id smallint NOT NULL,
+    address_id smallint,
     activebool boolean DEFAULT true NOT NULL,
     create_date date DEFAULT ('now'::text)::date NOT NULL,
     last_update timestamp without time zone DEFAULT now(),

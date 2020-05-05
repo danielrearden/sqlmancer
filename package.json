@@ -37,7 +37,8 @@
     "build": "rimraf dist && tsc",
     "test": "jest --runInBand --coverage",
     "lint": "eslint src",
-    "prettify": "prettier --write \"src/**/*.ts\""
+    "prettify": "prettier --write \"src/**/*.ts\"",
+    "db-init": "node scripts/db-init"
   },
   "engines": {
     "node": ">=10.0.0"

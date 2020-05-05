@@ -26,7 +26,7 @@ const typeDefs = gql`
     createCustomer(input: CreateCustomerInput!): Customer
     createCustomers(input: [CreateCustomerInput!]!): Customer
     deleteCustomer(id: ID): Boolean!
-    deleteCustomers(id: ID): Boolean! @where(model: "Customer")
+    deleteCustomers: Boolean! @where(model: "Customer")
     updateCustomer(id: ID, input: UpdateCustomerInput!): Customer
     updateCustomers(input: UpdateCustomerInput!): [Customer!]! @where
 
