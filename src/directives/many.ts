@@ -1,44 +1,32 @@
-import { GraphQLField, GraphQLInt } from 'graphql'
+import { GraphQLField } from 'graphql'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
+
+import { LimitDirective } from './limit'
+import { OffsetDirective } from './offset'
 import { OrderByDirective } from './orderBy'
 import { WhereDirective } from './where'
+import { mergeFields } from '../utilities/mergeFields'
 
 export class ManyDirective extends SchemaDirectiveVisitor<any, any> {
-  private where: WhereDirective
+  private limit: LimitDirective
+  private offset: OffsetDirective
   private orderBy: OrderByDirective
+  private where: WhereDirective
 
   constructor(config: any) {
     super(config)
-    this.where = new WhereDirective(config)
+    this.limit = new LimitDirective(config)
+    this.offset = new OffsetDirective(config)
     this.orderBy = new OrderByDirective(config)
+    this.where = new WhereDirective(config)
   }
 
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
-    const whereArg = this.where.visitFieldDefinition(field).args.pop()!
-    const orderByArg = this.orderBy.visitFieldDefinition(field).args.pop()!
-    return {
-      ...field,
-      args: [
-        ...field.args,
-        whereArg,
-        orderByArg,
-        {
-          name: 'limit',
-          type: GraphQLInt,
-          description: '',
-          defaultValue: undefined,
-          extensions: undefined,
-          astNode: undefined,
-        },
-        {
-          name: 'offset',
-          type: GraphQLInt,
-          description: '',
-          defaultValue: undefined,
-          extensions: undefined,
-          astNode: undefined,
-        },
-      ],
-    }
+    return mergeFields([
+      this.limit.visitFieldDefinition(field),
+      this.offset.visitFieldDefinition(field),
+      this.orderBy.visitFieldDefinition(field),
+      this.where.visitFieldDefinition(field),
+    ])
   }
 }

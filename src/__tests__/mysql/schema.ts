@@ -25,12 +25,12 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createCustomer(input: CreateCustomerInput!): Customer
-    createCustomers(input: [CreateCustomerInput!]!): Customer
+    createCustomer: Customer @input(action: CREATE)
+    createCustomers: [Customer!]! @input(action: CREATE, list: true)
     deleteCustomer(id: ID): Boolean!
     deleteCustomers: Boolean! @where(model: "Customer")
-    updateCustomer(id: ID, input: UpdateCustomerInput!): Customer
-    updateCustomers(input: UpdateCustomerInput!): [Customer!]! @where
+    updateCustomer(id: ID): Customer @input(action: UPDATE)
+    updateCustomers: [Customer!]! @where @input(action: UPDATE)
 
     # This is an example of a mutation with a payload type. See the resolver for implementation details.
     createCustomerWithPayload: CreateCustomerPayload!
@@ -92,16 +92,6 @@ const typeDefs = gql`
   type CreateCustomerPayload {
     customer: Film
     message: String
-  }
-
-  input CreateCustomerInput {
-    firstName: String!
-    lastName: String!
-    email: String
-  }
-
-  input UpdateCustomerInput {
-    email: String!
   }
 
   # This is an example of a read-only model. The client will not include any create, update or delete
@@ -255,9 +245,10 @@ const resolvers: IResolvers = {
     },
     createCustomerWithPayload: async (_root, args, _ctx, info) => {
       const id = await Customer.createOne(args.input).execute()
-      return Customer.findById(id)
+      const customer = await Customer.findById(id)
         .resolveInfo(info, 'customer')
         .execute()
+      return { customer }
     },
   },
 }

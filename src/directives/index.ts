@@ -2,18 +2,20 @@ import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefiniti
 import { parse, DocumentNode } from 'graphql'
 
 import { AggregateDirective } from './aggregate'
-import { RelateDirective } from './relate'
+import { InputDirective } from './input'
 import { LimitDirective } from './limit'
 import { ManyDirective } from './many'
 import { ModelDirective } from './model'
 import { OffsetDirective } from './offset'
 import { OrderByDirective } from './orderBy'
 import { PrivateDirective } from './private'
+import { RelateDirective } from './relate'
 import { ValueDirective } from './value'
 import { WhereDirective } from './where'
 
 export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
   aggregate: AggregateDirective,
+  input: InputDirective,
   limit: LimitDirective,
   offset: OffsetDirective,
   orderBy: OrderByDirective,
@@ -37,6 +39,12 @@ export const typeDefs: DocumentNode = parse(`
   ) on FIELD_DEFINITION
 
   directive @hasDefault on FIELD_DEFINITION
+
+  directive @input(
+    action: SqlmancerInputAction!
+    model: String
+    list: Boolean = false
+  ) on FIELD_DEFINITION
 
   directive @ignore on FIELD_DEFINITION
 
@@ -113,6 +121,11 @@ export const typeDefs: DocumentNode = parse(`
     min
     sum
   }
+
+  enum SqlmancerInputAction {
+    CREATE
+    UPDATE
+  }
 `)
 
 export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
@@ -123,6 +136,7 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
   })
 
 export { AggregateDirective } from './aggregate'
+export { InputDirective } from './input'
 export { LimitDirective } from './limit'
 export { ManyDirective } from './many'
 export { ModelDirective } from './model'

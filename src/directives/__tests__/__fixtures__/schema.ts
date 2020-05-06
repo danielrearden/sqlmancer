@@ -1,7 +1,6 @@
-import { makeExecutableSchema } from 'graphql-tools'
 import { GraphQLJSON, GraphQLJSONObject } from 'graphql-scalars'
 
-import { typeDefs as directiveTypeDefs, schemaDirectives } from '../..'
+import { makeSqlmancerSchema } from '../..'
 
 const typeDefs = `
   scalar JSON
@@ -19,8 +18,15 @@ const typeDefs = `
     someMoreWidgets: [Widget!]! @many
   }
 
+  type Mutation {
+    createWidget: Widget! @input(action: CREATE)
+    createWidgets: [Widget!]! @input(action: CREATE, list: true)
+    updateWidget: Widget! @input(action: UPDATE)
+    updateWidgets: [Widget!]! @input(model: "Widget", action: UPDATE)
+  }
+
   type Widget @model(table: "widgets", pk: "id") {
-    id: ID! 
+    id: ID! @hasDefault
     idNullable: ID
     idList: [ID!]!
     string: String!
@@ -103,13 +109,12 @@ const typeDefs = `
     someField: String!
   }
 `
-export const schema = makeExecutableSchema({
-  typeDefs: [directiveTypeDefs, typeDefs],
+export const schema = makeSqlmancerSchema({
+  typeDefs: typeDefs,
   resolvers: {
     JSON: GraphQLJSON,
     JSONObject: GraphQLJSONObject,
   },
-  schemaDirectives,
   resolverValidationOptions: {
     requireResolversForResolveType: false,
   },
