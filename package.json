@@ -36,9 +36,18 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "jest --runInBand --coverage",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint src",
-    "prettify": "prettier --write \"src/**/*.ts\"",
-    "db-init": "node scripts/db-init"
+    "format": "prettier --write \"src/**/*.ts\"",
+    "check:format": "prettier --check \"src/**/*.ts\"",
+    "check:ts": "tsc --noemit",
+    "db:init": "node scripts/db-init",
+    "prepublishOnly": "npm run lint && npm run check:format && npm run test && npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run check:format && npm run check:ts && npm run test"
+    }
   },
   "engines": {
     "node": ">=10.0.0"
@@ -50,9 +59,10 @@
     "@graphql-toolkit/schema-merging": "^0.10.5",
     "chokidar": "^3.3.1",
     "commander": "^5.0.0",
+    "coveralls": "^3.1.0",
     "graphql-parse-resolve-info": "^4.5.0",
     "graphql-tools": "^5.0.1-065f82a.0",
-    "knex": "^0.20.13",
+    "knex": "^0.21.1",
     "lodash": "^4.17.15",
     "mkdirp": "^1.0.4",
     "ora": "^4.0.3",
@@ -70,10 +80,11 @@
     "graphql-middleware": "^4.0.2",
     "graphql-scalars": "^1.1.2",
     "graphql-tag": "^2.10.3",
+    "husky": "^4.2.5",
     "jest": "^25.1.0",
     "jest-extended": "^0.11.5",
     "mysql2": "^2.1.0",
-    "pg": "^7.18.2",
+    "pg": "^8.0.3",
     "prettier": "1.19.1",
     "sqlite3": "^4.1.1",
     "stream-mock": "^2.0.5",

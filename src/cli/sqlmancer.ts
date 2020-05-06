@@ -78,7 +78,6 @@ function generate(typeDefs: string, output: string): void {
     spinner.fail(
       `An error was encountered while building a schema from the provided type definitions:\n\n${e.message}\n`
     )
-    throw e
     process.exit(1)
   }
 

@@ -10,6 +10,7 @@ module.exports = Knex({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
+    port: process.env.MYSQL_PORT || 3306,
     multipleStatements: true,
   },
   debug: process.env.DEBUG === 'true',

@@ -1,0 +1,37 @@
+language: node_js
+
+env:
+  global:
+    - MYSQL_USER=testuser
+    - MYSQL_PASSWORD=testpassword
+    - MYSQL_DATABASE=testdb
+    - MYSQL_PORT=23306
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=testpassword
+    - POSTGRES_DB=testdb
+    - POSTGRES_PORT=25432
+
+node_js:
+  - 14
+  - 12
+  - 10
+
+install:
+  - npm install
+
+before_script:
+  - docker-compose -f scripts/docker-compose.yml up --build -d mysql postgres
+  - docker-compose -f scripts/docker-compose.yml up waitmysql waitpostgres
+  - npm run db:init
+
+script:
+  - npm run test
+
+after_success:
+  - npm run coveralls
+
+notifications:
+  email: false
+
+services:
+  - docker

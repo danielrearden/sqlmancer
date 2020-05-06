@@ -12,20 +12,25 @@ const dialects = _.pickBy(
   (_value, key) => dialectsToMigrate.includes(key)
 )
 
-Object.keys(dialects).reduce((previousPromise, name) => {
-  const knex = dialects[name]
-  return previousPromise.then(async () => {
-    await knex.transaction(async trx => {
-      process.stdout.write(`Migrating ${name} database... `)
-      await runFromFile(trx, name, 'migrate')
-      console.log('Done!')
-      process.stdout.write(`Seeding ${name} database... `)
-      await runFromFile(trx, name, 'seed')
-      console.log('Done!')
+Object.keys(dialects)
+  .reduce((previousPromise, name) => {
+    const knex = dialects[name]
+    return previousPromise.then(async () => {
+      await knex.transaction(async trx => {
+        process.stdout.write(`Migrating ${name} database... `)
+        await runFromFile(trx, name, 'migrate')
+        console.log('Done!')
+        process.stdout.write(`Seeding ${name} database... `)
+        await runFromFile(trx, name, 'seed')
+        console.log('Done!')
+      })
+      await knex.destroy()
     })
-    await knex.destroy()
+  }, Promise.resolve())
+  .catch(e => {
+    console.error(e)
+    process.exit(1)
   })
-}, Promise.resolve())
 
 async function runFromFile(transaction, dialectName, action) {
   const filePath = path.join(
