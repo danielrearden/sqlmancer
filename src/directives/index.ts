@@ -3,10 +3,6 @@ import { parse, DocumentNode } from 'graphql'
 
 import { AggregateDirective } from './aggregate'
 import { RelateDirective } from './relate'
-import { ColumnDirective } from './column'
-import { HasDefaultDirective } from './has-default'
-import { DependDirective } from './depend'
-import { IgnoreDirective } from './ignore'
 import { LimitDirective } from './limit'
 import { ManyDirective } from './many'
 import { ModelDirective } from './model'
@@ -18,10 +14,6 @@ import { WhereDirective } from './where'
 
 export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
   aggregate: AggregateDirective,
-  col: ColumnDirective,
-  depend: DependDirective,
-  hasDefault: HasDefaultDirective,
-  ignore: IgnoreDirective,
   limit: LimitDirective,
   offset: OffsetDirective,
   orderBy: OrderByDirective,
@@ -131,10 +123,6 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
   })
 
 export { AggregateDirective } from './aggregate'
-export { ColumnDirective } from './column'
-export { HasDefaultDirective } from './has-default'
-export { DependDirective } from './depend'
-export { IgnoreDirective } from './ignore'
 export { LimitDirective } from './limit'
 export { ManyDirective } from './many'
 export { ModelDirective } from './model'
