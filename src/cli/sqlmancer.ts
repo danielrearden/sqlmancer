@@ -6,7 +6,7 @@ import chokidar from 'chokidar'
 import Ora from 'ora'
 import { Command } from 'commander'
 import { createWriteStream } from 'fs'
-import { join } from 'path'
+import { join, dirname } from 'path'
 
 import { generateClientTypeDeclarations, getTypeDefsFromGlob } from '../generate'
 import { makeSqlmancerSchema } from '../directives'
@@ -21,24 +21,22 @@ const program = new Command()
 program.version(pkg.version)
 
 program
-  .command('generate <typeDefs> <outputPath>')
+  .command('generate <typeDefs> <output>')
   .description('generates TypeScript typings for the database client from the provided GraphQL type definitions', {
     typeDefs:
       'Glob pattern to match any files containing your type definitions. These can be plain text files or JavaScript/TypeScript files that use the gql tag',
-    outputPath:
-      "Directory where the generated files will be created. If a directory doesn't already exist, one will be created.",
+    output: 'Relative file path for the generated TypeScript file.',
   })
   .action(generate)
 
 program
-  .command('watch <typeDefs> <outputPath>')
+  .command('watch <typeDefs> <output>')
   .description(
     'watches the provided GraphQL type definitions and generates typings for the database client again if any type definitions changed',
     {
       typeDefs:
         'Glob pattern to match any files containing your type definitions. These can be plain text files or JavaScript/TypeScript files that use the gql tag',
-      outputPath:
-        "Directory where the generated files will be created. If a directory doesn't already exist, one will be created.",
+      output: 'Relative file path for the generated TypeScript file.',
     }
   )
   .action((typeDefs: string, output: string) => {
@@ -81,8 +79,8 @@ function generate(typeDefs: string, output: string): void {
     process.exit(1)
   }
 
-  const dirPath = join(process.cwd(), output)
-  const filePath = join(dirPath, 'sqlmancer.ts')
+  const filePath = join(process.cwd(), output)
+  const dirPath = dirname(filePath)
 
   mkdirp.sync(dirPath)
 
