@@ -26,6 +26,7 @@ import {
 } from '../types'
 import { unwrap } from '../utilities/unwrap'
 import { makeNullable } from '../utilities/makeNullable'
+import { assertValidSqlmancerConfig } from './assertValidSqlmancerConfig'
 
 const cache = new WeakMap()
 
@@ -53,6 +54,8 @@ export function getSqlmancerConfig(schema: GraphQLSchema): SqlmancerConfig {
     customScalarMap,
   }
   cache.set(schema, config)
+
+  assertValidSqlmancerConfig(config)
 
   return config
 }
