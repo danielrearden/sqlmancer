@@ -5,11 +5,12 @@ import {
   BuilderOptions,
   Dialect,
   Expressions,
+  FromAggregateBuilder,
+  FromFindBuilder,
   OrderBy,
   QueryBuilderContext,
   Models,
   Where,
-  LoadedFromBuilder,
 } from '../types'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
@@ -173,7 +174,7 @@ export abstract class FindBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TName]: LoadedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TName]: FromFindBuilder<ReturnType<TGetBuilder>>
       }
   >
 
@@ -198,7 +199,7 @@ export abstract class FindBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TAlias]: LoadedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TAlias]: FromFindBuilder<ReturnType<TGetBuilder>>
       }
   >
   public load<
@@ -250,7 +251,7 @@ export abstract class FindBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TAlias]: string | number
+        [key in TAlias]: FromAggregateBuilder<ReturnType<TGetBuilder>>
       }
   > {
     const association = this._model.associations[associationName]

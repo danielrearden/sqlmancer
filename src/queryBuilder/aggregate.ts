@@ -39,56 +39,35 @@ export class AggregateBuilder<
   /**
    * Gets a count of all the records in the associated table
    */
-  public count<TKey extends 'count'>(): AggregateBuilder<
-    TDialect,
-    TFields,
-    TIds,
-    TEnums,
-    TAssociations,
-    TAggregates & { [K in TKey]: number }
-  > {
+  public count(): AggregateBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TAggregates & { count: number }> {
     this._aggregates.push({ fn: 'count' })
-    return this
+    return this as any
   }
 
   /**
    * Gets the average of the provided field
    */
-  public avg<TKey extends 'avg', TField extends AggregateNumberFields<TFields>>(
+  public avg<TField extends AggregateNumberFields<TFields>>(
     field: TField
-  ): AggregateBuilder<
-    TDialect,
-    TFields,
-    TIds,
-    TEnums,
-    TAssociations,
-    TAggregates & { [K in TKey]: Record<TField, number> }
-  > {
+  ): AggregateBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TAggregates & { avg: Record<TField, number> }> {
     this._aggregates.push({ fn: 'avg', field })
-    return this
+    return this as any
   }
 
   /**
    * Gets the sum of the provided field
    */
-  public sum<TKey extends 'sum', TField extends AggregateNumberFields<TFields>>(
+  public sum<TField extends AggregateNumberFields<TFields>>(
     field: TField
-  ): AggregateBuilder<
-    TDialect,
-    TFields,
-    TIds,
-    TEnums,
-    TAssociations,
-    TAggregates & { [K in TKey]: Record<TField, number> }
-  > {
+  ): AggregateBuilder<TDialect, TFields, TIds, TEnums, TAssociations, TAggregates & { sum: Record<TField, number> }> {
     this._aggregates.push({ fn: 'sum', field })
-    return this
+    return this as any
   }
 
   /**
    * Gets the minimum value of the provided field, or null if no matching records are found
    */
-  public min<TKey extends 'min', TField extends AggregateStringOrNumberFields<TFields>>(
+  public min<TField extends AggregateStringOrNumberFields<TFields>>(
     field: TField
   ): AggregateBuilder<
     TDialect,
@@ -96,16 +75,16 @@ export class AggregateBuilder<
     TIds,
     TEnums,
     TAssociations,
-    TAggregates & { [K in TKey]: Record<TField, TFields[TField] | null> }
+    TAggregates & { min: Record<TField, TFields[TField] | null> }
   > {
     this._aggregates.push({ fn: 'min', field })
-    return this
+    return this as any
   }
 
   /**
    * Gets the maximum value of the provided field, or null if no matching records are found
    */
-  public max<TKey extends 'max', TField extends AggregateStringOrNumberFields<TFields>>(
+  public max<TField extends AggregateStringOrNumberFields<TFields>>(
     field: TField
   ): AggregateBuilder<
     TDialect,
@@ -113,10 +92,10 @@ export class AggregateBuilder<
     TIds,
     TEnums,
     TAssociations,
-    TAggregates & { [K in TKey]: Record<TField, TFields[TField] | null> }
+    TAggregates & { max: Record<TField, TFields[TField] | null> }
   > {
     this._aggregates.push({ fn: 'max', field })
-    return this
+    return this as any
   }
 
   /**

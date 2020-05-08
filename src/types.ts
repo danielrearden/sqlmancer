@@ -407,7 +407,7 @@ export type WhereLogicOperators<
   not?: Where<TDialect, TFields, TIds, TEnums, TAssociations>
 }
 
-export type LoadedFromBuilder<T> = T extends FindBuilder<
+export type FromFindBuilder<T> = T extends FindBuilder<
   any,
   any,
   any,
@@ -421,4 +421,8 @@ export type LoadedFromBuilder<T> = T extends FindBuilder<
   ? TMany extends true
     ? (TSelected & TRawSelected & TLoaded)[]
     : (TSelected & TRawSelected & TLoaded) | null
+  : never
+
+export type FromAggregateBuilder<T> = T extends AggregateBuilder<any, any, any, any, any, infer TAggregates>
+  ? TAggregates
   : never

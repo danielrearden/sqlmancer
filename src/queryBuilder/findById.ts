@@ -1,7 +1,15 @@
 import _ from 'lodash'
 import Knex from 'knex'
 
-import { BuilderOptions, Expressions, ID, QueryBuilderContext, Models, LoadedFromBuilder } from '../types'
+import {
+  BuilderOptions,
+  Expressions,
+  ID,
+  FromAggregateBuilder,
+  FromFindBuilder,
+  Models,
+  QueryBuilderContext,
+} from '../types'
 import { BaseBuilder } from './base'
 import { AggregateBuilder } from './aggregate'
 import { FindBuilder } from './find'
@@ -98,7 +106,7 @@ export abstract class FindByIdBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TName]: LoadedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TName]: FromFindBuilder<ReturnType<TGetBuilder>>
       }
   >
 
@@ -123,7 +131,7 @@ export abstract class FindByIdBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TAlias]: LoadedFromBuilder<ReturnType<TGetBuilder>>
+        [key in TAlias]: FromFindBuilder<ReturnType<TGetBuilder>>
       }
   >
   public load<
@@ -173,7 +181,7 @@ export abstract class FindByIdBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TAlias]: string | number
+        [key in TAlias]: FromAggregateBuilder<ReturnType<TGetBuilder>>
       }
   > {
     const association = this._model.associations[associationName]
