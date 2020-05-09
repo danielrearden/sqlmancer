@@ -35,3 +35,7 @@ notifications:
 
 services:
   - docker
+
+branches:
+  only:
+    - master
