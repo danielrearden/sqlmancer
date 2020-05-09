@@ -76,7 +76,7 @@
     "@typescript-eslint/parser": "2.31.0",
     "eslint": "6.8.0",
     "eslint-plugin-jest": "23.9.0",
-    "graphql": "^15.0.0",
+    "graphql": "15.0.0",
     "graphql-middleware": "4.0.2",
     "graphql-scalars": "1.1.2",
     "graphql-tag": "2.10.3",
