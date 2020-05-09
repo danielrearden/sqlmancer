@@ -39,3 +39,4 @@ services:
 branches:
   only:
     - master
+    - develop
