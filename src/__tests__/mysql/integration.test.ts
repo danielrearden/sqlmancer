@@ -254,4 +254,37 @@ describe('integration (mysql)', () => {
     expect(data?.actor.filmsAggregate.avg.length).toBeDefined()
     expect(data?.actor.filmsAggregate.sum.length).toBeDefined()
   })
+
+  test('abstract types', async () => {
+    const { data, errors } = await graphql(
+      schema,
+      `
+        query {
+          movies {
+            __typename
+            id
+            title
+          }
+          people {
+            __typename
+            ... on Actor {
+              id
+              firstName
+              lastName
+            }
+            ... on Customer {
+              id
+              firstName
+              lastName
+            }
+          }
+        }
+      `
+    )
+    expect(errors).toBeUndefined()
+    expect(data?.movies.filter((m: any) => m.__typename === 'ShortMovie').length).toBeGreaterThan(0)
+    expect(data?.movies.filter((m: any) => m.__typename === 'LongMovie').length).toBeGreaterThan(0)
+    expect(data?.people.filter((p: any) => p.__typename === 'Actor').length).toBeGreaterThan(0)
+    expect(data?.people.filter((p: any) => p.__typename === 'Customer').length).toBeGreaterThan(0)
+  })
 })

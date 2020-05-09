@@ -25,7 +25,7 @@ export function parseResolveInfo(info: GraphQLResolveInfo): FlattenedResolveTree
 
 function flattenFieldsByType(fieldsByType: FieldsByTypeName) {
   return Object.keys(fieldsByType).reduce((acc, typeName) => {
-    Object.keys(fieldsByType[typeName]).forEach(fieldName => {
+    Object.keys(fieldsByType[typeName]).forEach((fieldName) => {
       const { name, alias, args, fieldsByTypeName } = fieldsByType[typeName][fieldName]
       acc[fieldName] = { name, alias, args, fields: flattenFieldsByType(fieldsByTypeName) }
     })

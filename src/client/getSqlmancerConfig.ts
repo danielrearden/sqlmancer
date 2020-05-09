@@ -83,7 +83,7 @@ function getScalarMap(customScalars?: { string?: string[]; number?: string[]; bo
       tsType === 'ID' ||
       tsType === 'Date'
     ) {
-      scalarsByType[tsType].forEach(scalarName => {
+      scalarsByType[tsType].forEach((scalarName) => {
         acc[scalarName] = tsType
       })
     }
@@ -187,7 +187,7 @@ export function getModels(
         (acc, implementingType) => {
           const fieldMap = implementingType.getFields()
           const fieldNames = Object.keys(fieldMap)
-          fieldNames.forEach(fieldName => {
+          fieldNames.forEach((fieldName) => {
             const field = fieldMap[fieldName]
             const { col, relate, depend, ignore, hasDefault } = getDirectives(schema, field)
 

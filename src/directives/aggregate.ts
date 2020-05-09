@@ -69,7 +69,7 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
           },
         } as GraphQLFieldConfigMap<any, any>
 
-        Object.keys(fieldsByAggregateFunction).forEach(fn => {
+        Object.keys(fieldsByAggregateFunction).forEach((fn) => {
           if (fieldsByAggregateFunction[fn].length) {
             aggregateFields[fn] = {
               type: new GraphQLObjectType({

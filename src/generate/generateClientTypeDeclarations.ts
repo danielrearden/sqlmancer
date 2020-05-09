@@ -29,19 +29,21 @@ export interface JSONObject {
 export type JSONArray = Array<JSON>;
 `)
 
-  Object.keys(models).forEach(name => {
+  let allEnums: Record<string, GraphQLEnumType> = {}
+
+  Object.keys(models).forEach((name) => {
     const { primaryKey, fields, associations } = models[name]
 
     stream.write(`
 export type ${name}Fields = {\n${Object.keys(fields)
-      .map(fieldName => `  ${fieldName}: ${getOutputFieldType(fields[fieldName].mappedType)};`)
+      .map((fieldName) => `  ${fieldName}: ${getOutputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
 }
     `)
 
-    const idFields = Object.keys(fields).filter(fieldName => fields[fieldName].mappedType === 'ID')
+    const idFields = Object.keys(fields).filter((fieldName) => fields[fieldName].mappedType === 'ID')
     stream.write(`
-export type ${name}Ids = ${idFields.length ? idFields.map(fieldName => `'${fieldName}'`).join(' | ') : 'unknown'};
+export type ${name}Ids = ${idFields.length ? idFields.map((fieldName) => `'${fieldName}'`).join(' | ') : 'unknown'};
     `)
 
     const enums = Object.keys(fields).reduce((acc, fieldName) => {
@@ -52,6 +54,7 @@ export type ${name}Ids = ${idFields.length ? idFields.map(fieldName => `'${field
       }
       return acc
     }, {} as Record<string, GraphQLEnumType>)
+    allEnums = { ...enums, ...allEnums }
     stream.write(`
 export type ${name}Enums = ${Object.keys(enums).length ? Object.keys(enums).join(' | ') : 'unknown'};
     `)
@@ -59,7 +62,7 @@ export type ${name}Enums = ${Object.keys(enums).length ? Object.keys(enums).join
     stream.write(`
 export type ${name}Associations = {\n${Object.keys(associations)
       .map(
-        name =>
+        (name) =>
           `  ${name}: [${associations[name].modelName}Find${associations[name].isMany ? 'Many' : 'One'}Builder, ${
             associations[name].modelName
           }AggregateBuilder];`
@@ -70,7 +73,7 @@ export type ${name}Associations = {\n${Object.keys(associations)
 
     stream.write(`
 export type ${name}CreateFields = {\n${Object.keys(fields)
-      .map(fieldName => {
+      .map((fieldName) => {
         const field = fields[fieldName]
         const required = isNonNullType(field.type) && !field.hasDefault
         return `  ${fieldName}${required ? '' : '?'}: ${getInputFieldType(field.mappedType)};`
@@ -81,21 +84,11 @@ export type ${name}CreateFields = {\n${Object.keys(fields)
 
     stream.write(`
 export type ${name}UpdateFields = {\n${Object.keys(fields)
-      .filter(fieldName => fields[fieldName].column !== primaryKey)
-      .map(fieldName => `  ${fieldName}?: ${getInputFieldType(fields[fieldName].mappedType)};`)
+      .filter((fieldName) => fields[fieldName].column !== primaryKey)
+      .map((fieldName) => `  ${fieldName}?: ${getInputFieldType(fields[fieldName].mappedType)};`)
       .join('\n')}
 };
     `)
-
-    Object.keys(enums).forEach(enumName => {
-      const enumType = enums[enumName]
-      stream.write(`
-export enum ${enumName} {\n${enumType
-        .getValues()
-        .map(enumValue => `  ${enumValue.name} = ${JSON.stringify(enumValue.value)},`)
-        .join('\n')}
-}`)
-    })
 
     stream.write(
       `
@@ -125,9 +118,7 @@ export type ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> = 
   TSelected
 >
 
-export type ${name}AggregateBuilder<
-  TSelected extends Pick<${name}Fields, any> = ${name}Fields
-> = AggregateBuilder<'${dialect}', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations>
+export type ${name}AggregateBuilder = AggregateBuilder<'${dialect}', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations>
       `
     )
 
@@ -159,10 +150,20 @@ export type ${name}UpdateByIdBuilder = UpdateByIdBuilder<${name}UpdateFields>
   `)
   })
 
+  Object.keys(allEnums).forEach((enumName) => {
+    const enumType = allEnums[enumName]
+    stream.write(`
+export enum ${enumName} {\n${enumType
+      .getValues()
+      .map((enumValue) => `  ${enumValue.name} = ${JSON.stringify(enumValue.value)},`)
+      .join('\n')}
+}`)
+  })
+
   stream.write(`
 export type SqlmancerClient = Knex & {
   models: {${Object.keys(models)
-    .map(name => {
+    .map((name) => {
       const { readOnly } = models[name]
       return `
     ${name}: {

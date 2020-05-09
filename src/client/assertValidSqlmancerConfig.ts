@@ -4,7 +4,7 @@ export class SqlmancerConfigError extends Error {}
 
 export class SqlmancerConfigValueError extends SqlmancerConfigError {
   constructor(key: string, value: any, possibleValues: any[]) {
-    const possibleValuesString = possibleValues.map(value => `${JSON.stringify(value)}`).join(', ')
+    const possibleValuesString = possibleValues.map((value) => `${JSON.stringify(value)}`).join(', ')
     const message = `"${value}" is not a valid value for ${key}. Possible values: ${possibleValuesString}.`
     super(message)
   }
@@ -34,7 +34,7 @@ function assertValidTransformFieldNames({ transformFieldNames }: SqlmancerConfig
 function assertValidCustomScalarMap({ customScalarMap }: SqlmancerConfig): void {
   const mappedTypes = ['ID', 'string', 'number', 'boolean', 'JSON', 'Date']
   if (customScalarMap) {
-    Object.keys(customScalarMap).forEach(scalarName => {
+    Object.keys(customScalarMap).forEach((scalarName) => {
       const mappedType = customScalarMap[scalarName]
       if (!mappedTypes.includes(mappedType)) {
         throw new SqlmancerConfigValueError('customScalarMap', mappedType, mappedTypes)
@@ -44,7 +44,7 @@ function assertValidCustomScalarMap({ customScalarMap }: SqlmancerConfig): void 
 }
 
 function assertValidModels({ models }: SqlmancerConfig): void {
-  Object.keys(models).forEach(modelName => {
+  Object.keys(models).forEach((modelName) => {
     const { tableName, cte, readOnly, associations } = models[modelName]
     if (!tableName && !cte) {
       throw new SqlmancerConfigError(`Model ${modelName} should include either a table name or a CTE`)
@@ -55,7 +55,7 @@ function assertValidModels({ models }: SqlmancerConfig): void {
     if (cte && readOnly === false) {
       throw new SqlmancerConfigError(`Model ${modelName} cannot be read-only if it includes a CTE`)
     }
-    Object.keys(associations).forEach(associationName => {
+    Object.keys(associations).forEach((associationName) => {
       const { on, through } = associations[associationName]
       if (through) {
         if (on.length !== 2) {

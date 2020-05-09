@@ -73,13 +73,7 @@ export type ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Acto
   TSelected
 >
 
-export type ActorAggregateBuilder<TSelected extends Pick<ActorFields, any> = ActorFields> = AggregateBuilder<
-  'sqlite',
-  ActorFields,
-  ActorIds,
-  ActorEnums,
-  ActorAssociations
->
+export type ActorAggregateBuilder = AggregateBuilder<'sqlite', ActorFields, ActorIds, ActorEnums, ActorAssociations>
 
 export type ActorDeleteManyBuilder = DeleteManyBuilder<'sqlite', ActorFields, ActorIds, ActorEnums, ActorAssociations>
 
@@ -149,13 +143,6 @@ export type FilmUpdateFields = {
   lastUpdate?: Date | string
 }
 
-export enum FilmRating {
-  G = 'G',
-  PG = 'PG',
-  PG13 = 'PG13',
-  R = 'R',
-  NC17 = 'NC17',
-}
 export type FilmFindOneBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> = FindOneBuilder<
   'sqlite',
   FilmFields,
@@ -182,13 +169,7 @@ export type FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFi
   TSelected
 >
 
-export type FilmAggregateBuilder<TSelected extends Pick<FilmFields, any> = FilmFields> = AggregateBuilder<
-  'sqlite',
-  FilmFields,
-  FilmIds,
-  FilmEnums,
-  FilmAssociations
->
+export type FilmAggregateBuilder = AggregateBuilder<'sqlite', FilmFields, FilmIds, FilmEnums, FilmAssociations>
 
 export type FilmDeleteManyBuilder = DeleteManyBuilder<'sqlite', FilmFields, FilmIds, FilmEnums, FilmAssociations>
 
@@ -208,90 +189,6 @@ export type FilmUpdateManyBuilder = UpdateManyBuilder<
 >
 
 export type FilmUpdateByIdBuilder = UpdateByIdBuilder<FilmUpdateFields>
-
-export type CategoryFields = {
-  id: ID
-  name: string
-  lastUpdate: string
-}
-
-export type CategoryIds = 'id'
-
-export type CategoryEnums = unknown
-
-export type CategoryAssociations = {
-  films: [FilmFindManyBuilder, FilmAggregateBuilder]
-}
-
-export type CategoryCreateFields = {
-  id?: ID
-  name: string
-  lastUpdate?: Date | string
-}
-
-export type CategoryUpdateFields = {
-  name?: string
-  lastUpdate?: Date | string
-}
-
-export type CategoryFindOneBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindOneBuilder<
-  'sqlite',
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations,
-  TSelected
->
-
-export type CategoryFindManyBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindManyBuilder<
-  'sqlite',
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations,
-  TSelected
->
-
-export type CategoryFindByIdBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindByIdBuilder<
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations,
-  TSelected
->
-
-export type CategoryAggregateBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = AggregateBuilder<
-  'sqlite',
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations
->
-
-export type CategoryDeleteManyBuilder = DeleteManyBuilder<
-  'sqlite',
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations
->
-
-export type CategoryDeleteByIdBuilder = DeleteByIdBuilder
-
-export type CategoryCreateManyBuilder = CreateManyBuilder<CategoryCreateFields>
-
-export type CategoryCreateOneBuilder = CreateOneBuilder<CategoryCreateFields>
-
-export type CategoryUpdateManyBuilder = UpdateManyBuilder<
-  'sqlite',
-  CategoryUpdateFields,
-  CategoryFields,
-  CategoryIds,
-  CategoryEnums,
-  CategoryAssociations
->
-
-export type CategoryUpdateByIdBuilder = UpdateByIdBuilder<CategoryUpdateFields>
 
 export type LanguageFields = {
   id: ID
@@ -344,7 +241,7 @@ export type LanguageFindByIdBuilder<TSelected extends Pick<LanguageFields, any> 
   TSelected
 >
 
-export type LanguageAggregateBuilder<TSelected extends Pick<LanguageFields, any> = LanguageFields> = AggregateBuilder<
+export type LanguageAggregateBuilder = AggregateBuilder<
   'sqlite',
   LanguageFields,
   LanguageIds,
@@ -432,7 +329,7 @@ export type CustomerFindByIdBuilder<TSelected extends Pick<CustomerFields, any> 
   TSelected
 >
 
-export type CustomerAggregateBuilder<TSelected extends Pick<CustomerFields, any> = CustomerFields> = AggregateBuilder<
+export type CustomerAggregateBuilder = AggregateBuilder<
   'sqlite',
   CustomerFields,
   CustomerIds,
@@ -464,6 +361,90 @@ export type CustomerUpdateManyBuilder = UpdateManyBuilder<
 >
 
 export type CustomerUpdateByIdBuilder = UpdateByIdBuilder<CustomerUpdateFields>
+
+export type CategoryFields = {
+  id: ID
+  name: string
+  lastUpdate: string
+}
+
+export type CategoryIds = 'id'
+
+export type CategoryEnums = unknown
+
+export type CategoryAssociations = {
+  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+}
+
+export type CategoryCreateFields = {
+  id?: ID
+  name: string
+  lastUpdate?: Date | string
+}
+
+export type CategoryUpdateFields = {
+  name?: string
+  lastUpdate?: Date | string
+}
+
+export type CategoryFindOneBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindOneBuilder<
+  'sqlite',
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations,
+  TSelected
+>
+
+export type CategoryFindManyBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindManyBuilder<
+  'sqlite',
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations,
+  TSelected
+>
+
+export type CategoryFindByIdBuilder<TSelected extends Pick<CategoryFields, any> = CategoryFields> = FindByIdBuilder<
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations,
+  TSelected
+>
+
+export type CategoryAggregateBuilder = AggregateBuilder<
+  'sqlite',
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations
+>
+
+export type CategoryDeleteManyBuilder = DeleteManyBuilder<
+  'sqlite',
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations
+>
+
+export type CategoryDeleteByIdBuilder = DeleteByIdBuilder
+
+export type CategoryCreateManyBuilder = CreateManyBuilder<CategoryCreateFields>
+
+export type CategoryCreateOneBuilder = CreateOneBuilder<CategoryCreateFields>
+
+export type CategoryUpdateManyBuilder = UpdateManyBuilder<
+  'sqlite',
+  CategoryUpdateFields,
+  CategoryFields,
+  CategoryIds,
+  CategoryEnums,
+  CategoryAssociations
+>
+
+export type CategoryUpdateByIdBuilder = UpdateByIdBuilder<CategoryUpdateFields>
 
 export type AddressFields = {
   id: ID
@@ -526,7 +507,7 @@ export type AddressFindByIdBuilder<TSelected extends Pick<AddressFields, any> = 
   TSelected
 >
 
-export type AddressAggregateBuilder<TSelected extends Pick<AddressFields, any> = AddressFields> = AggregateBuilder<
+export type AddressAggregateBuilder = AggregateBuilder<
   'sqlite',
   AddressFields,
   AddressIds,
@@ -559,6 +540,194 @@ export type AddressUpdateManyBuilder = UpdateManyBuilder<
 
 export type AddressUpdateByIdBuilder = UpdateByIdBuilder<AddressUpdateFields>
 
+export type MovieFields = {
+  id: ID
+  title: string
+  description: string
+  releaseYear: number
+  length: number
+  rating: FilmRating
+  rentalRate: number
+  rentalDuration: number
+  replacementCost: number
+  lastUpdate: string
+}
+
+export type MovieIds = 'id'
+
+export type MovieEnums = FilmRating
+
+export type MovieAssociations = {}
+
+export type MovieCreateFields = {
+  id?: ID
+  title: string
+  description: string
+  releaseYear: number
+  length: number
+  rating: FilmRating
+  rentalRate: number
+  rentalDuration: number
+  replacementCost: number
+  lastUpdate?: Date | string
+}
+
+export type MovieUpdateFields = {
+  title?: string
+  description?: string
+  releaseYear?: number
+  length?: number
+  rating?: FilmRating
+  rentalRate?: number
+  rentalDuration?: number
+  replacementCost?: number
+  lastUpdate?: Date | string
+}
+
+export type MovieFindOneBuilder<TSelected extends Pick<MovieFields, any> = MovieFields> = FindOneBuilder<
+  'sqlite',
+  MovieFields,
+  MovieIds,
+  MovieEnums,
+  MovieAssociations,
+  TSelected
+>
+
+export type MovieFindManyBuilder<TSelected extends Pick<MovieFields, any> = MovieFields> = FindManyBuilder<
+  'sqlite',
+  MovieFields,
+  MovieIds,
+  MovieEnums,
+  MovieAssociations,
+  TSelected
+>
+
+export type MovieFindByIdBuilder<TSelected extends Pick<MovieFields, any> = MovieFields> = FindByIdBuilder<
+  MovieFields,
+  MovieIds,
+  MovieEnums,
+  MovieAssociations,
+  TSelected
+>
+
+export type MovieAggregateBuilder = AggregateBuilder<'sqlite', MovieFields, MovieIds, MovieEnums, MovieAssociations>
+
+export type MovieDeleteManyBuilder = DeleteManyBuilder<'sqlite', MovieFields, MovieIds, MovieEnums, MovieAssociations>
+
+export type MovieDeleteByIdBuilder = DeleteByIdBuilder
+
+export type MovieCreateManyBuilder = CreateManyBuilder<MovieCreateFields>
+
+export type MovieCreateOneBuilder = CreateOneBuilder<MovieCreateFields>
+
+export type MovieUpdateManyBuilder = UpdateManyBuilder<
+  'sqlite',
+  MovieUpdateFields,
+  MovieFields,
+  MovieIds,
+  MovieEnums,
+  MovieAssociations
+>
+
+export type MovieUpdateByIdBuilder = UpdateByIdBuilder<MovieUpdateFields>
+
+export type PersonFields = {
+  id: ID
+  firstName: string
+  lastName: string
+  lastUpdate: string
+  email: string
+}
+
+export type PersonIds = 'id'
+
+export type PersonEnums = unknown
+
+export type PersonAssociations = {
+  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+}
+
+export type PersonCreateFields = {
+  id?: ID
+  firstName: string
+  lastName: string
+  lastUpdate?: Date | string
+  email?: string
+}
+
+export type PersonUpdateFields = {
+  firstName?: string
+  lastName?: string
+  lastUpdate?: Date | string
+  email?: string
+}
+
+export type PersonFindOneBuilder<TSelected extends Pick<PersonFields, any> = PersonFields> = FindOneBuilder<
+  'sqlite',
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations,
+  TSelected
+>
+
+export type PersonFindManyBuilder<TSelected extends Pick<PersonFields, any> = PersonFields> = FindManyBuilder<
+  'sqlite',
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations,
+  TSelected
+>
+
+export type PersonFindByIdBuilder<TSelected extends Pick<PersonFields, any> = PersonFields> = FindByIdBuilder<
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations,
+  TSelected
+>
+
+export type PersonAggregateBuilder = AggregateBuilder<
+  'sqlite',
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations
+>
+
+export type PersonDeleteManyBuilder = DeleteManyBuilder<
+  'sqlite',
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations
+>
+
+export type PersonDeleteByIdBuilder = DeleteByIdBuilder
+
+export type PersonCreateManyBuilder = CreateManyBuilder<PersonCreateFields>
+
+export type PersonCreateOneBuilder = CreateOneBuilder<PersonCreateFields>
+
+export type PersonUpdateManyBuilder = UpdateManyBuilder<
+  'sqlite',
+  PersonUpdateFields,
+  PersonFields,
+  PersonIds,
+  PersonEnums,
+  PersonAssociations
+>
+
+export type PersonUpdateByIdBuilder = UpdateByIdBuilder<PersonUpdateFields>
+
+export enum FilmRating {
+  G = 'G',
+  PG = 'PG',
+  PG13 = 'PG13',
+  R = 'R',
+  NC17 = 'NC17',
+}
 export type SqlmancerClient = Knex & {
   models: {
     Actor: {
@@ -585,12 +754,6 @@ export type SqlmancerClient = Knex & {
       updateById: (id: ID, input: FilmUpdateFields) => FilmUpdateByIdBuilder
       updateMany: (input: FilmUpdateFields) => FilmUpdateManyBuilder
     }
-    Category: {
-      findById: (id: ID) => CategoryFindByIdBuilder
-      findMany: () => CategoryFindManyBuilder
-      findOne: () => CategoryFindOneBuilder
-      aggregate: () => CategoryAggregateBuilder
-    }
     Language: {
       findById: (id: ID) => LanguageFindByIdBuilder
       findMany: () => LanguageFindManyBuilder
@@ -615,11 +778,35 @@ export type SqlmancerClient = Knex & {
       updateById: (id: ID, input: CustomerUpdateFields) => CustomerUpdateByIdBuilder
       updateMany: (input: CustomerUpdateFields) => CustomerUpdateManyBuilder
     }
+    Category: {
+      findById: (id: ID) => CategoryFindByIdBuilder
+      findMany: () => CategoryFindManyBuilder
+      findOne: () => CategoryFindOneBuilder
+      aggregate: () => CategoryAggregateBuilder
+    }
     Address: {
       findById: (id: ID) => AddressFindByIdBuilder
       findMany: () => AddressFindManyBuilder
       findOne: () => AddressFindOneBuilder
       aggregate: () => AddressAggregateBuilder
+    }
+    Movie: {
+      findById: (id: ID) => MovieFindByIdBuilder
+      findMany: () => MovieFindManyBuilder
+      findOne: () => MovieFindOneBuilder
+      aggregate: () => MovieAggregateBuilder
+      createMany: (input: MovieCreateFields[]) => MovieCreateManyBuilder
+      createOne: (input: MovieCreateFields) => MovieCreateOneBuilder
+      deleteById: (id: ID) => MovieDeleteByIdBuilder
+      deleteMany: () => MovieDeleteManyBuilder
+      updateById: (id: ID, input: MovieUpdateFields) => MovieUpdateByIdBuilder
+      updateMany: (input: MovieUpdateFields) => MovieUpdateManyBuilder
+    }
+    Person: {
+      findById: (id: ID) => PersonFindByIdBuilder
+      findMany: () => PersonFindManyBuilder
+      findOne: () => PersonFindOneBuilder
+      aggregate: () => PersonAggregateBuilder
     }
   }
 }

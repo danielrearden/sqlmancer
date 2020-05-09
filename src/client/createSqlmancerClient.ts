@@ -50,7 +50,7 @@ export function createSqlmancerClient<T extends GenericSqlmancerClient = Generic
   const { dialect, models } = getSqlmancerConfig(schema)
 
   return Object.assign(knex, {
-    models: _.mapValues(models, model => {
+    models: _.mapValues(models, (model) => {
       const options = { knex, dialect }
       const { builders, readOnly } = model
       return {

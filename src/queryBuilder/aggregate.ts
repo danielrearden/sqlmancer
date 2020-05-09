@@ -156,7 +156,7 @@ export class AggregateBuilder<
     }
 
     if (avg) {
-      Object.keys(avg.fields).forEach(fieldName => {
+      Object.keys(avg.fields).forEach((fieldName) => {
         if (fieldName in this._model.fields) {
           this.avg(fieldName as any)
         }
@@ -164,7 +164,7 @@ export class AggregateBuilder<
     }
 
     if (sum) {
-      Object.keys(sum.fields).forEach(fieldName => {
+      Object.keys(sum.fields).forEach((fieldName) => {
         if (fieldName in this._model.fields) {
           this.sum(fieldName as any)
         }
@@ -172,7 +172,7 @@ export class AggregateBuilder<
     }
 
     if (min) {
-      Object.keys(min.fields).forEach(fieldName => {
+      Object.keys(min.fields).forEach((fieldName) => {
         if (fieldName in this._model.fields) {
           this.min(fieldName as any)
         }
@@ -180,7 +180,7 @@ export class AggregateBuilder<
     }
 
     if (max) {
-      Object.keys(max.fields).forEach(fieldName => {
+      Object.keys(max.fields).forEach((fieldName) => {
         if (fieldName in this._model.fields) {
           this.max(fieldName as any)
         }
@@ -240,7 +240,7 @@ export class AggregateBuilder<
           if (fn === 'count') {
             acc += `'count', coalesce(count(${this._knex.ref(`${subqueryAlias}.${this._model.primaryKey}`)}), 0)`
           } else {
-            const fields = _.uniq(aggregatesByFunction[fn].map(agg => (agg as { field: string }).field))
+            const fields = _.uniq(aggregatesByFunction[fn].map((agg) => (agg as { field: string }).field))
             acc += `'${fn}', ${jsonObjectFn}(`
             fields.forEach((field, index) => {
               const { column, mappedType } = this._model.fields[field]

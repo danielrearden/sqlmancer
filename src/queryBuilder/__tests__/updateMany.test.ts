@@ -6,7 +6,7 @@ describe('UpdateManyBuilder', () => {
       test('no additional options', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -14,7 +14,7 @@ describe('UpdateManyBuilder', () => {
       test('non-existent field', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER', lastNam: 'OF VENGERBERG' } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -26,7 +26,7 @@ describe('UpdateManyBuilder', () => {
           firstName: { equal: 'BOB' },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -38,7 +38,7 @@ describe('UpdateManyBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -49,7 +49,7 @@ describe('UpdateManyBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -60,7 +60,7 @@ describe('UpdateManyBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -70,7 +70,7 @@ describe('UpdateManyBuilder', () => {
           firstName: { equal: 'BOB', notEqual: 'SUSAN' },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -80,7 +80,7 @@ describe('UpdateManyBuilder', () => {
           firstNam: { equal: 'BOB' },
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -88,7 +88,7 @@ describe('UpdateManyBuilder', () => {
       test('with empty object', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).where({})
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -99,7 +99,7 @@ describe('UpdateManyBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -110,7 +110,7 @@ describe('UpdateManyBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -120,7 +120,7 @@ describe('UpdateManyBuilder', () => {
           not: { firstName: { equal: 'BOB' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -130,7 +130,7 @@ describe('UpdateManyBuilder', () => {
           language: { name: { equal: 'English' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -140,7 +140,7 @@ describe('UpdateManyBuilder', () => {
           films: { title: { equal: 'BEAR GRACELAND' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -150,7 +150,7 @@ describe('UpdateManyBuilder', () => {
           films: { title: { equal: 'BEAR GRACELAND' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -160,7 +160,7 @@ describe('UpdateManyBuilder', () => {
           films: { avg: { replacementCost: { greaterThan: 10 } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -170,7 +170,7 @@ describe('UpdateManyBuilder', () => {
           films: { count: { greaterThan: 1 } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -180,7 +180,7 @@ describe('UpdateManyBuilder', () => {
           films: { avg: { replacementCost: { greaterThan: 20 } }, title: { equal: 'BEAR GRACELAND' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -190,7 +190,7 @@ describe('UpdateManyBuilder', () => {
           films: { language: { name: { equal: 'English' } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -213,7 +213,7 @@ describe('UpdateManyBuilder', () => {
       test('with one field', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).orderBy([{ firstName: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -221,7 +221,7 @@ describe('UpdateManyBuilder', () => {
       test('with no fields', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).orderBy([])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -232,7 +232,7 @@ describe('UpdateManyBuilder', () => {
           { lastUpdate: 'ASC' },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -242,7 +242,7 @@ describe('UpdateManyBuilder', () => {
           { language: { name: 'ASC' } },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -252,7 +252,7 @@ describe('UpdateManyBuilder', () => {
           { films: { avg: { replacementCost: 'ASC' } } },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -262,7 +262,7 @@ describe('UpdateManyBuilder', () => {
           { actors: { min: { lastUpdate: 'ASC' } } },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -270,7 +270,7 @@ describe('UpdateManyBuilder', () => {
       test('with association (count)', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).orderBy([{ films: { count: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -278,7 +278,7 @@ describe('UpdateManyBuilder', () => {
       test('with empty object', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).orderBy([{}])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -302,7 +302,7 @@ describe('UpdateManyBuilder', () => {
       test('with number', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).limit(10)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -312,7 +312,7 @@ describe('UpdateManyBuilder', () => {
       test('with number', async () => {
         const builder = client.models.Actor.updateMany({ firstName: 'YENNEFER' }).offset(20)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

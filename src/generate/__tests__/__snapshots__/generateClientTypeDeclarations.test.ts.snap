@@ -73,9 +73,7 @@ export type ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Acto
   TSelected
 >
 
-export type ActorAggregateBuilder<
-  TSelected extends Pick<ActorFields, any> = ActorFields
-> = AggregateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
+export type ActorAggregateBuilder = AggregateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
       
 export type ActorDeleteManyBuilder = DeleteManyBuilder<
   'postgres',
@@ -153,9 +151,7 @@ export type FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFi
   TSelected
 >
 
-export type FilmAggregateBuilder<
-  TSelected extends Pick<FilmFields, any> = FilmFields
-> = AggregateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
+export type FilmAggregateBuilder = AggregateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
       
 export type FilmDeleteManyBuilder = DeleteManyBuilder<
   'postgres',

@@ -73,18 +73,18 @@ export abstract class BaseBuilder {
   public abstract toQueryBuilder(): Knex.QueryBuilder
 
   protected _addSelectExpressions(tableAlias: string, expressions: Expressions, context: QueryBuilderContext): void {
-    this._select.forEach(fieldName => {
+    this._select.forEach((fieldName) => {
       const field = this._model.fields[fieldName]
       if (field) {
         expressions.select[fieldName as string] = `${tableAlias}.${field.column}`
       }
     })
 
-    this._model.include.forEach(included => {
+    this._model.include.forEach((included) => {
       expressions.select[included] = `${tableAlias}.${included}`
     })
 
-    Object.keys(this._rawSelect).forEach(alias => {
+    Object.keys(this._rawSelect).forEach((alias) => {
       expressions.select[alias] = `${tableAlias}.${this._rawSelect[alias]}`
     })
 
@@ -157,7 +157,7 @@ export abstract class BaseBuilder {
       ])
     }
 
-    this._getWhereExpressions(this._where, this._modelName, tableAlias, context).forEach(exp =>
+    this._getWhereExpressions(this._where, this._modelName, tableAlias, context).forEach((exp) =>
       expressions.where.push(exp)
     )
   }
@@ -185,11 +185,11 @@ export abstract class BaseBuilder {
         )
       } else if (key === 'and') {
         acc.push([
-          qb => {
+          (qb) => {
             const wheres = where[key] as NonNullable<Where<any, any, any, any, any>['and']>
-            wheres.forEach(where => {
-              qb.andWhere(qb => {
-                this._getWhereExpressions(where, modelName, tableAlias, context).forEach(where =>
+            wheres.forEach((where) => {
+              qb.andWhere((qb) => {
+                this._getWhereExpressions(where, modelName, tableAlias, context).forEach((where) =>
                   (qb.andWhere as any)(...where)
                 )
               })
@@ -198,11 +198,11 @@ export abstract class BaseBuilder {
         ])
       } else if (key === 'or') {
         acc.push([
-          qb => {
+          (qb) => {
             const wheres = where[key] as NonNullable<Where<any, any, any, any, any>['and']>
-            wheres.forEach(where => {
-              qb.orWhere(qb => {
-                this._getWhereExpressions(where, modelName, tableAlias, context).forEach(where =>
+            wheres.forEach((where) => {
+              qb.orWhere((qb) => {
+                this._getWhereExpressions(where, modelName, tableAlias, context).forEach((where) =>
                   (qb.andWhere as any)(...where)
                 )
               })
@@ -211,10 +211,10 @@ export abstract class BaseBuilder {
         ])
       } else if (key === 'not') {
         acc.push([
-          qb =>
-            qb.whereNot(qb => {
+          (qb) =>
+            qb.whereNot((qb) => {
               const whereNot = where[key] as NonNullable<Where<any, any, any, any, any>['not']>
-              this._getWhereExpressions(whereNot, modelName, tableAlias, context).forEach(whereArgs =>
+              this._getWhereExpressions(whereNot, modelName, tableAlias, context).forEach((whereArgs) =>
                 (qb.where as any)(...whereArgs)
               )
             }),
@@ -283,7 +283,7 @@ export abstract class BaseBuilder {
       association.modelName,
       associationAlias,
       context
-    ).forEach(args => (query.andWhere as any)(...args))
+    ).forEach((args) => (query.andWhere as any)(...args))
 
     if (association.through) {
       query.innerJoin(
@@ -308,7 +308,7 @@ export abstract class BaseBuilder {
             )
           )
         } else {
-          Object.keys(where!).forEach(key => {
+          Object.keys(where!).forEach((key) => {
             if (key in associationModel.fields) {
               query.having(
                 this._getFieldWhereExpression(
@@ -329,11 +329,11 @@ export abstract class BaseBuilder {
       ])
     }
 
-    return [qb => qb.whereExists(query)]
+    return [(qb) => qb.whereExists(query)]
   }
 
   protected _addOrderByExpressions(tableAlias: string, expressions: Expressions, context: QueryBuilderContext): void {
-    this._orderBy.forEach(orderBy => {
+    this._orderBy.forEach((orderBy) => {
       const keys = Object.keys(orderBy)
       const key = keys[0]
       if (key in this._model.fields) {
@@ -484,9 +484,9 @@ export abstract class BaseBuilder {
   }
 
   protected _applyExpressions(query: Knex.QueryBuilder, expressions: Expressions) {
-    expressions.join.forEach(join => (query as any)[join.type](join.table, join.on))
+    expressions.join.forEach((join) => (query as any)[join.type](join.table, join.on))
 
-    expressions.where.forEach(whereArgs => (query.where as any)(...whereArgs))
+    expressions.where.forEach((whereArgs) => (query.where as any)(...whereArgs))
 
     if (expressions.groupBy.length) {
       query.groupBy(expressions.groupBy)

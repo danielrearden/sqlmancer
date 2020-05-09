@@ -11,14 +11,14 @@ import { schema } from './__fixtures__/schema'
 
 describe('directives', () => {
   beforeAll(() => {
-    validateSchema(schema).forEach(error => {
+    validateSchema(schema).forEach((error) => {
       throw error
     })
   })
 
   describe('@private', () => {
     test('correct usage', async () => {
-      await new Promise(resolve => process.nextTick(resolve))
+      await new Promise((resolve) => process.nextTick(resolve))
       expect(schema.getType('Secret')).toBeUndefined()
       expect((schema.getType('Widget') as GraphQLObjectType).getFields().privateField).toBeUndefined()
     })
@@ -27,7 +27,7 @@ describe('directives', () => {
   describe('@limit', () => {
     test('correct usage', () => {
       const field = schema.getQueryType()!.getFields().widgets!
-      const argument = field.args.find(arg => arg.name === 'limit')
+      const argument = field.args.find((arg) => arg.name === 'limit')
       expect(argument).toBeDefined()
       expect(argument!.type).toBe(GraphQLInt)
     })
@@ -36,7 +36,7 @@ describe('directives', () => {
   describe('@offset', () => {
     test('correct usage', () => {
       const field = schema.getQueryType()!.getFields().widgets!
-      const argument = field.args.find(arg => arg.name === 'offset')
+      const argument = field.args.find((arg) => arg.name === 'offset')
       expect(argument).toBeDefined()
       expect(argument!.type).toBe(GraphQLInt)
     })
@@ -45,7 +45,7 @@ describe('directives', () => {
   describe('@where', () => {
     test('correct usage', () => {
       const field = schema.getQueryType()!.getFields().widgets!
-      const argument = field.args.find(arg => arg.name === 'where')
+      const argument = field.args.find((arg) => arg.name === 'where')
       const type = argument!.type as GraphQLInputObjectType
       const fields = type.getFields()
       expect(fields.id.type.toString()).toStrictEqual('IDOperators')
@@ -76,7 +76,7 @@ describe('directives', () => {
   describe('@orderBy', () => {
     test('correct usage', () => {
       const field = schema.getQueryType()!.getFields().widgets!
-      const argument = field.args.find(arg => arg.name === 'orderBy')
+      const argument = field.args.find((arg) => arg.name === 'orderBy')
       const type = argument!.type as GraphQLList<GraphQLNonNull<GraphQLInputObjectType>>
       const fields = type.ofType.ofType.getFields()
       const sortDirectionEnum = schema.getType('SortDirection')
@@ -110,10 +110,10 @@ describe('directives', () => {
   describe('@many', () => {
     test('correct usage', () => {
       const field = schema.getQueryType()!.getFields().someMoreWidgets!
-      expect(field.args.find(arg => arg.name === 'where')).toBeDefined()
-      expect(field.args.find(arg => arg.name === 'orderBy')).toBeDefined()
-      expect(field.args.find(arg => arg.name === 'limit')).toBeDefined()
-      expect(field.args.find(arg => arg.name === 'offset')).toBeDefined()
+      expect(field.args.find((arg) => arg.name === 'where')).toBeDefined()
+      expect(field.args.find((arg) => arg.name === 'orderBy')).toBeDefined()
+      expect(field.args.find((arg) => arg.name === 'limit')).toBeDefined()
+      expect(field.args.find((arg) => arg.name === 'offset')).toBeDefined()
     })
   })
 
@@ -124,10 +124,10 @@ describe('directives', () => {
       ) as GraphQLObjectType).getFields()
       const CreateWidgetInput = schema.getType('CreateWidgetInput') as GraphQLInputObjectType
       const UpdateWidgetInput = schema.getType('UpdateWidgetInput') as GraphQLInputObjectType
-      const createWidgetInputArgType = createWidget.args.find(arg => arg.name === 'input')!.type
-      const createWidgetsInputArgType = createWidgets.args.find(arg => arg.name === 'input')!.type
-      const updateWidgetInputArgType = updateWidget.args.find(arg => arg.name === 'input')!.type
-      const updateWidgetsInputArgType = updateWidgets.args.find(arg => arg.name === 'input')!.type
+      const createWidgetInputArgType = createWidget.args.find((arg) => arg.name === 'input')!.type
+      const createWidgetsInputArgType = createWidgets.args.find((arg) => arg.name === 'input')!.type
+      const updateWidgetInputArgType = updateWidget.args.find((arg) => arg.name === 'input')!.type
+      const updateWidgetsInputArgType = updateWidgets.args.find((arg) => arg.name === 'input')!.type
       expect(createWidgetInputArgType.toString()).toBe('CreateWidgetInput!')
       expect(createWidgetsInputArgType.toString()).toBe('[CreateWidgetInput!]!')
       expect(updateWidgetInputArgType.toString()).toBe('UpdateWidgetInput!')

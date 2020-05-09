@@ -217,7 +217,7 @@ export abstract class FindByIdBuilder<
         tree,
         path
           .split('.')
-          .map(fieldName => `fields.${fieldName}`)
+          .map((fieldName) => `fields.${fieldName}`)
           .join('.')
       )
 
@@ -228,18 +228,18 @@ export abstract class FindByIdBuilder<
 
     const { fields } = tree
 
-    Object.keys(fields).forEach(fieldName => {
+    Object.keys(fields).forEach((fieldName) => {
       const field = fields[fieldName]
       if (field.name in this._model.fields) {
         this.addSelect(field.name)
       } else if (field.name in this._model.dependencies) {
-        this._model.dependencies[field.name].forEach(columnName => this.addSelectRaw(columnName))
+        this._model.dependencies[field.name].forEach((columnName) => this.addSelectRaw(columnName))
       } else if (field.name in this._model.associations) {
-        this.load(field.name as Extract<keyof TAssociations, string>, field.alias, builder =>
+        this.load(field.name as Extract<keyof TAssociations, string>, field.alias, (builder) =>
           builder.resolveInfo(field)
         )
       } else if (field.name in this._model.aggregates) {
-        this.loadAggregate(this._model.aggregates[field.name] as any, field.alias, builder =>
+        this.loadAggregate(this._model.aggregates[field.name] as any, field.alias, (builder) =>
           builder.resolveInfo(field)
         )
       }
@@ -258,7 +258,7 @@ export abstract class FindByIdBuilder<
     if (this._dialect === 'sqlite') {
       const jsonFields = [...Object.keys(this._loadedAssociations), ...Object.keys(this._loadedAggregates)]
       rows.forEach((row: any) => {
-        Object.keys(row).forEach(fieldName => {
+        Object.keys(row).forEach((fieldName) => {
           if (jsonFields.includes(fieldName)) {
             row[fieldName] = JSON.parse(row[fieldName])
           }
@@ -304,11 +304,11 @@ export abstract class FindByIdBuilder<
       query.with(tableAlias, this._knex.raw(this._cte!)).from(tableAlias)
     }
 
-    expressions.join.forEach(join => (query as any)[join.type](join.table, join.on))
+    expressions.join.forEach((join) => (query as any)[join.type](join.table, join.on))
 
     query.where(`${tableAlias}.${this._primaryKey}`, this._id)
 
-    expressions.where.forEach(whereArgs => (query.where as any)(...whereArgs))
+    expressions.where.forEach((whereArgs) => (query.where as any)(...whereArgs))
 
     if (expressions.groupBy.length) {
       query.groupBy(expressions.groupBy)

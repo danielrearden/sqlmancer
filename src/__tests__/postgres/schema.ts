@@ -27,6 +27,8 @@ const typeDefs = gql`
     customer(id: ID!): Customer
     addresses: [Address!]! @many
     address(id: ID!): Address
+    movies: [Movie!]! @many
+    people: [Person!]! @many
   }
 
   type Mutation {
@@ -143,6 +145,77 @@ const typeDefs = gql`
     lastUpdate: DateTime!
   }
 
+  # This is an example of defining an abstract type using single table inheritance
+  interface Movie @model(table: "film", pk: "film_id", include: ["length"]) {
+    id: ID!
+    title: String!
+    description: String!
+    releaseYear: Int!
+    length: Int!
+    rating: FilmRating!
+    rentalRate: Float!
+    rentalDuration: Int!
+    replacementCost: Float!
+    extraData: JSON!
+    lastUpdate: DateTime!
+  }
+
+  type ShortMovie implements Movie {
+    id: ID! @col(name: "film_id") @hasDefault
+    title: String!
+    description: String!
+    releaseYear: Int!
+    length: Int!
+    rating: FilmRating!
+    rentalRate: Float!
+    rentalDuration: Int!
+    replacementCost: Float!
+    extraData: JSON!
+    lastUpdate: DateTime! @hasDefault
+  }
+
+  type LongMovie implements Movie {
+    id: ID! @col(name: "film_id") @hasDefault
+    title: String!
+    description: String!
+    releaseYear: Int!
+    length: Int!
+    rating: FilmRating!
+    rentalRate: Float!
+    rentalDuration: Int!
+    replacementCost: Float!
+    extraData: JSON!
+    lastUpdate: DateTime! @hasDefault
+  }
+
+  # This is an example of using an abstract type with an inline view
+  union Person
+    @model(
+      pk: "customer_id"
+      cte: """
+      SELECT
+      'customer_' || customer_id as customer_id,
+        first_name,
+        last_name,
+        email,
+        last_update,
+        'Customer' as __typename
+      FROM customer
+      UNION
+      SELECT
+        'actor' || actor_id as customer_id,
+        first_name,
+        last_name,
+        NULL as email,
+        last_update,
+        'Actor' as __typename
+      FROM actor
+      """
+      include: ["__typename"]
+    ) =
+      Actor
+    | Customer
+
   enum FilmRating {
     G
     PG
@@ -154,7 +227,7 @@ const typeDefs = gql`
 
 export const client = createSqlmancerClient<SqlmancerClient>(__filename, knex)
 
-const { Film, Actor, Customer, Address } = client.models
+const { Film, Actor, Customer, Address, Movie, Person } = client.models
 
 const resolvers: IResolvers = {
   DateTime: GraphQLDateTime,
@@ -162,62 +235,46 @@ const resolvers: IResolvers = {
   JSONObject: GraphQLJSONObject,
   Query: {
     actors: (_root, _args, _ctx, info) => {
-      return Actor.findMany()
-        .resolveInfo(info)
-        .execute()
+      return Actor.findMany().resolveInfo(info).execute()
     },
     actor: (_root, args, _ctx, info) => {
-      return Actor.findById(args.id)
-        .resolveInfo(info)
-        .execute()
+      return Actor.findById(args.id).resolveInfo(info).execute()
     },
     actorsAggregate: (_root, _args, _ctx, info) => {
-      return Actor.aggregate()
-        .resolveInfo(info)
-        .execute()
+      return Actor.aggregate().resolveInfo(info).execute()
     },
     films: (_root, _args, _ctx, info) => {
-      return Film.findMany()
-        .resolveInfo(info)
-        .execute()
+      return Film.findMany().resolveInfo(info).execute()
     },
     film: (_root, args, _ctx, info) => {
-      return Film.findById(args.id)
-        .resolveInfo(info)
-        .execute()
+      return Film.findById(args.id).resolveInfo(info).execute()
     },
     filmsAggregate: (_root, _args, _ctx, info) => {
-      return Film.aggregate()
-        .resolveInfo(info)
-        .execute()
+      return Film.aggregate().resolveInfo(info).execute()
     },
     customers: (_root, _args, _ctx, info) => {
-      return Customer.findMany()
-        .resolveInfo(info)
-        .execute()
+      return Customer.findMany().resolveInfo(info).execute()
     },
     customer: (_root, args, _ctx, info) => {
-      return Customer.findById(args.id)
-        .resolveInfo(info)
-        .execute()
+      return Customer.findById(args.id).resolveInfo(info).execute()
     },
     addresses: (_root, _args, _ctx, info) => {
-      return Address.findMany()
-        .resolveInfo(info)
-        .execute()
+      return Address.findMany().resolveInfo(info).execute()
     },
     address: (_root, args, _ctx, info) => {
-      return Address.findById(args.id)
-        .resolveInfo(info)
-        .execute()
+      return Address.findById(args.id).resolveInfo(info).execute()
+    },
+    movies: (_root, args, _ctx, info) => {
+      return Movie.findMany().resolveInfo(info).execute()
+    },
+    people: (_root, args, _ctx, info) => {
+      return Person.findMany().resolveInfo(info).execute()
     },
   },
   Mutation: {
     createCustomer: async (_root, args, _ctx, info) => {
       const id = await Customer.createOne(args.input).execute()
-      return Customer.findById(id)
-        .resolveInfo(info)
-        .execute()
+      return Customer.findById(id).resolveInfo(info).execute()
     },
     createCustomers: async (_root, args, _ctx, info) => {
       const ids = await Customer.createMany(args.input).execute()
@@ -230,33 +287,33 @@ const resolvers: IResolvers = {
       return Customer.deleteById(args.id).execute()
     },
     deleteCustomers: async (_root, args) => {
-      const numberDeleted = await Customer.deleteMany()
-        .where(args.where)
-        .execute()
+      const numberDeleted = await Customer.deleteMany().where(args.where).execute()
       return numberDeleted > 0
     },
     updateCustomer: async (_root, args, _ctx, info) => {
       await Customer.updateById(args.id, args.input).execute()
-      return Customer.findById(args.id)
-        .resolveInfo(info)
-        .execute()
+      return Customer.findById(args.id).resolveInfo(info).execute()
     },
     updateCustomers: async (_root, args, _ctx, info) => {
-      await Customer.updateMany(args.input)
-        .where(args.where)
-        .execute()
-      return Customer.findMany()
-        .resolveInfo(info)
-        .where(args.where)
-        .execute()
+      await Customer.updateMany(args.input).where(args.where).execute()
+      return Customer.findMany().resolveInfo(info).where(args.where).execute()
     },
     createCustomerWithPayload: async (_root, args, _ctx, info) => {
       const id = await Customer.createOne(args.input).execute()
-      const customer = await Customer.findById(id)
-        .resolveInfo(info, 'customer')
-        .execute()
+      const customer = await Customer.findById(id).resolveInfo(info, 'customer').execute()
       return { customer }
     },
+  },
+  Movie: {
+    __resolveType: (movie: any) => {
+      return movie.length >= 120 ? 'LongMovie' : 'ShortMovie'
+    },
+  },
+  Actor: {
+    id: (actor) => (actor.id.replace ? actor.id.replace(/\D/g, '') : actor.id),
+  },
+  Customer: {
+    id: (customer) => (customer.id.replace ? customer.id.replace(/\D/g, '') : customer.id),
   },
 }
 

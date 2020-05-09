@@ -7,10 +7,10 @@ import { SqlmancerClient } from '../../../__tests__/postgres/sqlmancer'
 const dialectsToTest = process.env.DB ? process.env.DB.split(' ') : ['postgres', 'mysql', 'sqlite']
 
 export function getRollback(client: SqlmancerClient) {
-  return async function(builder: BaseBuilder, fn: (result: any) => void) {
+  return async function (builder: BaseBuilder, fn: (result: any) => void) {
     const error = new Error('Rolling back transaction')
     await expect(
-      client.transaction(async trx => {
+      client.transaction(async (trx) => {
         const result = await builder.transaction(trx).execute()
         fn(result)
         throw error
@@ -26,7 +26,7 @@ export function withDialects(
     schema: GraphQLSchema
   ) => void
 ) {
-  dialectsToTest.forEach(name => {
+  dialectsToTest.forEach((name) => {
     const client = require(`../../../__tests__/${name}/client`).client as SqlmancerClient
     const schema = require(`../../../__tests__/${name}/schema`).schema as GraphQLSchema
     // eslint-disable-next-line jest/valid-title

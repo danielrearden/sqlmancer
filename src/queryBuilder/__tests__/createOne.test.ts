@@ -6,7 +6,7 @@ describe('CreateOneBuilder', () => {
       test('no additional options', async () => {
         const builder = client.models.Actor.createOne({ firstName: 'SUSAN', lastName: 'ANTHONY' })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -18,7 +18,7 @@ describe('CreateOneBuilder', () => {
           foo: 'bar',
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(result).toBeNumber())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

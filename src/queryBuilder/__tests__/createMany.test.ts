@@ -9,7 +9,7 @@ describe('CreateManyBuilder', () => {
           { firstName: 'VIRGINIA', lastName: 'WOLF' },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeArray())
+        await rollback(builder, (result) => expect(result).toBeArray())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -20,7 +20,7 @@ describe('CreateManyBuilder', () => {
           { firstName: 'VIRGINIA', lastName: 'WOLF', foo: 'bar' },
         ] as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeArray())
+        await rollback(builder, (result) => expect(result).toBeArray())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

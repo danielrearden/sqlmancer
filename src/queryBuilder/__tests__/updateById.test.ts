@@ -6,7 +6,7 @@ describe('UpdateManyBuilder', () => {
       test('no additional options', async () => {
         const builder = client.models.Actor.updateById(10, { firstName: 'YENNEFER' })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeBoolean())
+        await rollback(builder, (result) => expect(result).toBeBoolean())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -17,7 +17,7 @@ describe('UpdateManyBuilder', () => {
           lastNam: 'OF VENGERBERG',
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, result => expect(result).toBeBoolean())
+        await rollback(builder, (result) => expect(result).toBeBoolean())
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

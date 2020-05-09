@@ -10,4 +10,5 @@ module.exports = Knex({
     filename: path.resolve(__dirname, '../../../sakila.db'),
   },
   useNullAsDefault: true,
+  debug: process.env.DEBUG === 'true',
 })

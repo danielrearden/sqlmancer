@@ -9,7 +9,7 @@ export function getTypeDefsFromGlob(glob: string) {
     const documents = loadDocumentsSync(glob, {
       loaders: [new CodeFileLoader(), new GraphQLFileLoader()],
       filterKinds: OPERATION_KINDS,
-    }).map(source => source.document as DocumentNode)
+    }).map((source) => source.document as DocumentNode)
     return mergeTypeDefs(documents)
   } catch (e) {
     return null

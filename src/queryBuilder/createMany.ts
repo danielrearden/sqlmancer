@@ -23,17 +23,17 @@ export class CreateManyBuilder<TCreateFields extends Record<string, any>> extend
     const id = results[0]
 
     if (this._dialect === 'sqlite') {
-      return this._data.map((_record, index) => id - (this._data.length - 1) + index).filter(x => !isNaN(x))
+      return this._data.map((_record, index) => id - (this._data.length - 1) + index).filter((x) => !isNaN(x))
     }
 
-    return this._data.map((_record, index) => id + index).filter(x => !isNaN(x))
+    return this._data.map((_record, index) => id + index).filter((x) => !isNaN(x))
   }
 
   /**
    * Compiles the query into a Knex QueryBuilder instance
    */
   public toQueryBuilder(): Knex.QueryBuilder {
-    const data = this._data.map(object =>
+    const data = this._data.map((object) =>
       Object.keys(object).reduce((acc, key) => {
         const field = this._model.fields[key]
         if (field) {

@@ -85,7 +85,7 @@ function generate(typeDefs: string, output: string): void {
   mkdirp.sync(dirPath)
 
   const stream = createWriteStream(filePath)
-  stream.on('error', e => {
+  stream.on('error', (e) => {
     spinner.fail(`Failed\n\n${e.message}`)
     process.exit(1)
   })

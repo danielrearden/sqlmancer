@@ -51,9 +51,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('add', async () => {
-        const builder = client.models.Actor.findById(10)
-          .select('firstName', 'lastName')
-          .addSelect('id')
+        const builder = client.models.Actor.findById(10).select('firstName', 'lastName').addSelect('id')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -76,7 +74,7 @@ describe('FindByIdBuilder', () => {
 
     describe('load', () => {
       test('with FK on builder table', async () => {
-        const builder = client.models.Film.findById(10).load('language', builder => builder)
+        const builder = client.models.Film.findById(10).load('language', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -85,7 +83,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = client.models.Language.findById(5).load('films', builder => builder)
+        const builder = client.models.Language.findById(5).load('films', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -94,7 +92,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = client.models.Film.findById(10).load('actors', builder => builder)
+        const builder = client.models.Film.findById(10).load('actors', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -103,7 +101,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = client.models.Film.findById(10).load('actors', builder =>
+        const builder = client.models.Film.findById(10).load('actors', (builder) =>
           builder
             .limit(2)
             .offset(1)
@@ -118,7 +116,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with alias', async () => {
-        const builder = client.models.Film.findById(10).load('actors', 'performers', builder => builder)
+        const builder = client.models.Film.findById(10).load('actors', 'performers', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -136,8 +134,8 @@ describe('FindByIdBuilder', () => {
       })
 
       test('nested', async () => {
-        const builder = client.models.Film.findById(10).load('actors', builder =>
-          builder.limit(3).load('films', builder => builder.limit(4).load('language', builder => builder))
+        const builder = client.models.Film.findById(10).load('actors', (builder) =>
+          builder.limit(3).load('films', (builder) => builder.limit(4).load('language', (builder) => builder))
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
@@ -153,7 +151,7 @@ describe('FindByIdBuilder', () => {
 
     describe('loadAggregate', () => {
       test('with FK on builder table', async () => {
-        const builder = client.models.Film.findById(10).loadAggregate('language', 'languageAggregate', builder =>
+        const builder = client.models.Film.findById(10).loadAggregate('language', 'languageAggregate', (builder) =>
           builder.max('name')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -164,7 +162,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = client.models.Language.findById(1).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Language.findById(1).loadAggregate('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -175,7 +173,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -186,7 +184,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', (builder) =>
           builder
             .max('rentalRate')
             .limit(2)
@@ -327,10 +325,8 @@ describe('FindByIdBuilder', () => {
 
     describe('transaction', () => {
       test('with transaction', async () => {
-        await client.transaction(async trx => {
-          const result = await client.models.Actor.findById(10)
-            .transaction(trx)
-            .execute()
+        await client.transaction(async (trx) => {
+          const result = await client.models.Actor.findById(10).transaction(trx).execute()
           expect(result).toBeObject()
         })
       })

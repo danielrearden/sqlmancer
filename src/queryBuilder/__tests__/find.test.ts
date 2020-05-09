@@ -51,9 +51,7 @@ describe('FindBuilder', () => {
       })
 
       test('add', async () => {
-        const builder = client.models.Actor.findMany()
-          .select('firstName', 'lastName')
-          .addSelect('id')
+        const builder = client.models.Actor.findMany().select('firstName', 'lastName').addSelect('id')
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
@@ -333,7 +331,7 @@ describe('FindBuilder', () => {
       })
 
       test('nested (single)', async () => {
-        const builder = client.models.Film.findOne().load('language', builder => builder.orderBy([{ name: 'ASC' }]))
+        const builder = client.models.Film.findOne().load('language', (builder) => builder.orderBy([{ name: 'ASC' }]))
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -342,7 +340,7 @@ describe('FindBuilder', () => {
       })
 
       test('nested (single with aggregate)', async () => {
-        const builder = client.models.Film.findOne().load('language', builder =>
+        const builder = client.models.Film.findOne().load('language', (builder) =>
           builder.orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -353,7 +351,9 @@ describe('FindBuilder', () => {
       })
 
       test('nested (multi)', async () => {
-        const builder = client.models.Film.findOne().load('actors', builder => builder.orderBy([{ firstName: 'ASC' }]))
+        const builder = client.models.Film.findOne().load('actors', (builder) =>
+          builder.orderBy([{ firstName: 'ASC' }])
+        )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeObject()
@@ -362,7 +362,7 @@ describe('FindBuilder', () => {
       })
 
       test('nested (multi with aggregate)', async () => {
-        const builder = client.models.Film.findOne().load('actors', builder =>
+        const builder = client.models.Film.findOne().load('actors', (builder) =>
           builder.orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -418,7 +418,7 @@ describe('FindBuilder', () => {
 
     describe('load', () => {
       test('with FK on builder table', async () => {
-        const builder = client.models.Film.findMany().load('language', builder => builder)
+        const builder = client.models.Film.findMany().load('language', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
@@ -427,7 +427,7 @@ describe('FindBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = client.models.Language.findMany().load('films', builder => builder)
+        const builder = client.models.Language.findMany().load('films', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
@@ -436,7 +436,7 @@ describe('FindBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = client.models.Film.findMany().load('actors', builder => builder)
+        const builder = client.models.Film.findMany().load('actors', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
@@ -445,7 +445,7 @@ describe('FindBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = client.models.Film.findMany().load('actors', builder =>
+        const builder = client.models.Film.findMany().load('actors', (builder) =>
           builder
             .limit(2)
             .offset(1)
@@ -460,7 +460,7 @@ describe('FindBuilder', () => {
       })
 
       test('with alias', async () => {
-        const builder = client.models.Film.findMany().load('actors', 'performers', builder => builder)
+        const builder = client.models.Film.findMany().load('actors', 'performers', (builder) => builder)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
@@ -478,8 +478,8 @@ describe('FindBuilder', () => {
       })
 
       test('nested', async () => {
-        const builder = client.models.Film.findOne().load('actors', builder =>
-          builder.limit(3).load('films', builder => builder.limit(4).load('language', builder => builder))
+        const builder = client.models.Film.findOne().load('actors', (builder) =>
+          builder.limit(3).load('films', (builder) => builder.limit(4).load('language', (builder) => builder))
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
@@ -495,7 +495,7 @@ describe('FindBuilder', () => {
 
     describe('loadAggregate', () => {
       test('with FK on builder table', async () => {
-        const builder = client.models.Film.findMany().loadAggregate('language', 'languageAggregate', builder =>
+        const builder = client.models.Film.findMany().loadAggregate('language', 'languageAggregate', (builder) =>
           builder.max('name')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -506,7 +506,7 @@ describe('FindBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = client.models.Language.findMany().loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Language.findMany().loadAggregate('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -517,7 +517,7 @@ describe('FindBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = client.models.Actor.findMany().loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findMany().loadAggregate('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -528,7 +528,7 @@ describe('FindBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = client.models.Actor.findMany().loadAggregate('films', 'filmsAggregate', builder =>
+        const builder = client.models.Actor.findMany().loadAggregate('films', 'filmsAggregate', (builder) =>
           builder
             .max('rentalRate')
             .limit(2)
@@ -690,10 +690,8 @@ describe('FindBuilder', () => {
 
     describe('transaction', () => {
       test('with transaction', async () => {
-        await client.transaction(async trx => {
-          const result = await client.models.Actor.findMany()
-            .transaction(trx)
-            .execute()
+        await client.transaction(async (trx) => {
+          const result = await client.models.Actor.findMany().transaction(trx).execute()
           expect(result).toBeArray()
         })
       })
