@@ -13,7 +13,7 @@ describe('integration (postgres)', () => {
   })
 
   test('basic queries', async () => {
-    const { data, errors } = await graphql<any>(
+    const { data, errors } = await graphql(
       schema,
       `
         query {
@@ -106,23 +106,23 @@ describe('integration (postgres)', () => {
       `
     )
     expect(errors).toBeUndefined()
-    expect(data.films.length).toBeGreaterThan(0)
-    expect(data.film).toBeObject()
-    expect(data.film.language).toBeObject()
-    expect(data.film.actors.length).toBeGreaterThan(0)
-    expect(data.film.categories.length).toBeGreaterThan(0)
-    expect(data.actors.length).toBeGreaterThan(0)
-    expect(data.actor).toBeObject()
-    expect(data.actor.films.length).toBeGreaterThan(0)
-    expect(data.actor.films[0].language).toBeObject()
-    expect(data.customers.length).toBeGreaterThan(0)
-    expect(data.customer).toBeObject()
-    expect(data.addresses.length).toBeGreaterThan(0)
-    expect(data.address).toBeObject()
+    expect(data?.films.length).toBeGreaterThan(0)
+    expect(data?.film).toBeObject()
+    expect(data?.film.language).toBeObject()
+    expect(data?.film.actors.length).toBeGreaterThan(0)
+    expect(data?.film.categories.length).toBeGreaterThan(0)
+    expect(data?.actors.length).toBeGreaterThan(0)
+    expect(data?.actor).toBeObject()
+    expect(data?.actor.films.length).toBeGreaterThan(0)
+    expect(data?.actor.films[0].language).toBeObject()
+    expect(data?.customers.length).toBeGreaterThan(0)
+    expect(data?.customer).toBeObject()
+    expect(data?.addresses.length).toBeGreaterThan(0)
+    expect(data?.address).toBeObject()
   })
 
   test('sorting and filtering', async () => {
-    const { data, errors } = await graphql<any>(
+    const { data, errors } = await graphql(
       schema,
       `
         query {
@@ -184,12 +184,12 @@ describe('integration (postgres)', () => {
       `
     )
     expect(errors).toBeUndefined()
-    expect(data.a).toHaveLength(1)
-    expect(data.a[0].title).toBe('BOOGIE AMELIE')
+    expect(data?.a).toHaveLength(1)
+    expect(data?.a[0].title).toBe('BOOGIE AMELIE')
   })
 
   test('aggregation', async () => {
-    const { data, errors } = await graphql<any>(
+    const { data, errors } = await graphql(
       schema,
       `
         query {
@@ -248,28 +248,28 @@ describe('integration (postgres)', () => {
       `
     )
     expect(errors).toBeUndefined()
-    expect(data.actorsAggregate.count).toBeGreaterThan(0)
-    expect(data.actorsAggregate.min.firstName).toBeDefined()
-    expect(data.actorsAggregate.min.lastUpdate).toBeDefined()
-    expect(data.actorsAggregate.max.lastName).toBeDefined()
-    expect(data.actorsAggregate.max.lastUpdate).toBeDefined()
-    expect(data.filmsAggregate.count).toBeGreaterThan(0)
-    expect(data.filmsAggregate.min.title).toBeDefined()
-    expect(data.filmsAggregate.min.length).toBeDefined()
-    expect(data.filmsAggregate.min.lastUpdate).toBeDefined()
-    expect(data.filmsAggregate.max.title).toBeDefined()
-    expect(data.filmsAggregate.max.length).toBeDefined()
-    expect(data.filmsAggregate.max.lastUpdate).toBeDefined()
-    expect(data.filmsAggregate.avg.length).toBeDefined()
-    expect(data.filmsAggregate.sum.length).toBeDefined()
-    expect(data.actor.filmsAggregate.count).toBeGreaterThan(0)
-    expect(data.actor.filmsAggregate.min.title).toBeDefined()
-    expect(data.actor.filmsAggregate.min.length).toBeDefined()
-    expect(data.actor.filmsAggregate.min.lastUpdate).toBeDefined()
-    expect(data.actor.filmsAggregate.max.title).toBeDefined()
-    expect(data.actor.filmsAggregate.max.length).toBeDefined()
-    expect(data.actor.filmsAggregate.max.lastUpdate).toBeDefined()
-    expect(data.actor.filmsAggregate.avg.length).toBeDefined()
-    expect(data.actor.filmsAggregate.sum.length).toBeDefined()
+    expect(data?.actorsAggregate.count).toBeGreaterThan(0)
+    expect(data?.actorsAggregate.min.firstName).toBeDefined()
+    expect(data?.actorsAggregate.min.lastUpdate).toBeDefined()
+    expect(data?.actorsAggregate.max.lastName).toBeDefined()
+    expect(data?.actorsAggregate.max.lastUpdate).toBeDefined()
+    expect(data?.filmsAggregate.count).toBeGreaterThan(0)
+    expect(data?.filmsAggregate.min.title).toBeDefined()
+    expect(data?.filmsAggregate.min.length).toBeDefined()
+    expect(data?.filmsAggregate.min.lastUpdate).toBeDefined()
+    expect(data?.filmsAggregate.max.title).toBeDefined()
+    expect(data?.filmsAggregate.max.length).toBeDefined()
+    expect(data?.filmsAggregate.max.lastUpdate).toBeDefined()
+    expect(data?.filmsAggregate.avg.length).toBeDefined()
+    expect(data?.filmsAggregate.sum.length).toBeDefined()
+    expect(data?.actor.filmsAggregate.count).toBeGreaterThan(0)
+    expect(data?.actor.filmsAggregate.min.title).toBeDefined()
+    expect(data?.actor.filmsAggregate.min.length).toBeDefined()
+    expect(data?.actor.filmsAggregate.min.lastUpdate).toBeDefined()
+    expect(data?.actor.filmsAggregate.max.title).toBeDefined()
+    expect(data?.actor.filmsAggregate.max.length).toBeDefined()
+    expect(data?.actor.filmsAggregate.max.lastUpdate).toBeDefined()
+    expect(data?.actor.filmsAggregate.avg.length).toBeDefined()
+    expect(data?.actor.filmsAggregate.sum.length).toBeDefined()
   })
 })
