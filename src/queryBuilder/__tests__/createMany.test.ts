@@ -1,4 +1,4 @@
-import { withDialects } from './__utilties__'
+import { withDialects } from '../../__tests__/utilities'
 
 describe('CreateManyBuilder', () => {
   withDialects((client, rollback) => {

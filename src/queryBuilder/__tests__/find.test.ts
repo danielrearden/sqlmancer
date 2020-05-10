@@ -1,4 +1,4 @@
-import { withDialects, mockResolveInfo } from './__utilties__'
+import { withDialects, mockResolveInfo } from '../../__tests__/utilities'
 
 describe('FindBuilder', () => {
   withDialects((client, _rollback, schema) => {

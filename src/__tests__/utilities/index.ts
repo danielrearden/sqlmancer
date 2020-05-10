@@ -1,8 +1,8 @@
 import { execute, parse, GraphQLSchema, GraphQLResolveInfo } from 'graphql'
 import { applyMiddleware } from 'graphql-middleware'
 
-import { BaseBuilder } from '../../base'
-import { SqlmancerClient } from '../../../__tests__/postgres/sqlmancer'
+import { BaseBuilder } from '../..'
+import { SqlmancerClient } from '../postgres/sqlmancer'
 
 const dialectsToTest = process.env.DB ? process.env.DB.split(' ') : ['postgres', 'mysql', 'sqlite']
 
@@ -27,8 +27,8 @@ export function withDialects(
   ) => void
 ) {
   dialectsToTest.forEach((name) => {
-    const client = require(`../../../__tests__/${name}/client`).client as SqlmancerClient
-    const schema = require(`../../../__tests__/${name}/schema`).schema as GraphQLSchema
+    const client = require(`../${name}/client`).client as SqlmancerClient
+    const schema = require(`../${name}/schema`).schema as GraphQLSchema
     // eslint-disable-next-line jest/valid-title
     describe(name, () => {
       fn(client, getRollback(client), schema)

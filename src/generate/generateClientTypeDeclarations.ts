@@ -48,7 +48,7 @@ export type ${name}Ids = ${idFields.length ? idFields.map((fieldName) => `'${fie
 
     const enums = Object.keys(fields).reduce((acc, fieldName) => {
       const field = fields[fieldName]
-      const unwrappedType = unwrap(field.type)
+      const unwrappedType = schema.getType(unwrap(field.type).name)
       if (isEnumType(unwrappedType)) {
         acc[unwrappedType.name] = unwrappedType
       }
@@ -157,7 +157,8 @@ export enum ${enumName} {\n${enumType
       .getValues()
       .map((enumValue) => `  ${enumValue.name} = ${JSON.stringify(enumValue.value)},`)
       .join('\n')}
-}`)
+}
+`)
   })
 
   stream.write(`
