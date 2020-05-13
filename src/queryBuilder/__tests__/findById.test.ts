@@ -149,9 +149,9 @@ describe('FindByIdBuilder', () => {
       })
     })
 
-    describe('loadAggregate', () => {
+    describe('loadPaginated', () => {
       test('with FK on builder table', async () => {
-        const builder = client.models.Film.findById(10).loadAggregate('language', 'languageAggregate', (builder) =>
+        const builder = client.models.Film.findById(10).loadPaginated('language', 'languageAggregate', (builder) =>
           builder.max('name')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -162,7 +162,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with FK on joined table', async () => {
-        const builder = client.models.Language.findById(1).loadAggregate('films', 'filmsAggregate', (builder) =>
+        const builder = client.models.Language.findById(1).loadPaginated('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -173,7 +173,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with junction table', async () => {
-        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', (builder) =>
+        const builder = client.models.Actor.findById(10).loadPaginated('films', 'filmsAggregate', (builder) =>
           builder.max('rentalRate')
         )
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
@@ -184,7 +184,7 @@ describe('FindByIdBuilder', () => {
       })
 
       test('with additional options', async () => {
-        const builder = client.models.Actor.findById(10).loadAggregate('films', 'filmsAggregate', (builder) =>
+        const builder = client.models.Actor.findById(10).loadPaginated('films', 'filmsAggregate', (builder) =>
           builder
             .max('rentalRate')
             .limit(2)

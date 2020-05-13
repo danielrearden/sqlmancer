@@ -9,7 +9,6 @@ export function generateClientTypeDeclarations(schema: GraphQLSchema, stream: Wr
 
   stream.write(`import Knex from 'knex';
 import {
-  AggregateBuilder,
   CreateManyBuilder,
   CreateOneBuilder,
   DeleteByIdBuilder,
@@ -17,6 +16,7 @@ import {
   FindByIdBuilder,
   FindManyBuilder,
   FindOneBuilder,
+  PaginateBuilder,
   UpdateByIdBuilder,
   UpdateManyBuilder
 } from 'sqlmancer';
@@ -65,7 +65,7 @@ export type ${name}Associations = {\n${Object.keys(associations)
         (name) =>
           `  ${name}: [${associations[name].modelName}Find${associations[name].isMany ? 'Many' : 'One'}Builder, ${
             associations[name].modelName
-          }AggregateBuilder];`
+          }PaginateBuilder];`
       )
       .join('\n')}
 }
@@ -118,7 +118,7 @@ export type ${name}FindByIdBuilder<TSelected extends Pick<${name}Fields, any> = 
   TSelected
 >
 
-export type ${name}AggregateBuilder = AggregateBuilder<'${dialect}', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations>
+export type ${name}PaginateBuilder = PaginateBuilder<'${dialect}', ${name}Fields, ${name}Ids, ${name}Enums, ${name}Associations>
       `
     )
 
@@ -171,7 +171,7 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => ${name}FindByIdBuilder;
       findMany: () => ${name}FindManyBuilder;
       findOne: () => ${name}FindOneBuilder;
-      aggregate: () => ${name}AggregateBuilder;${
+      paginate: () => ${name}PaginateBuilder;${
         readOnly
           ? ''
           : `

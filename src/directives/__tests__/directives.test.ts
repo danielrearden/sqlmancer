@@ -144,4 +144,32 @@ describe('directives', () => {
       expect(UpdateWidgetInput.getFields().id).toBeUndefined()
     })
   })
+
+  describe('@paginate', () => {
+    test('correct usage', async () => {
+      const { createWidget, createWidgets, updateWidget, updateWidgets } = (schema.getType(
+        'Mutation'
+      ) as GraphQLObjectType).getFields()
+      const CreateWidgetInput = schema.getType('CreateWidgetInput') as GraphQLInputObjectType
+      const UpdateWidgetInput = schema.getType('UpdateWidgetInput') as GraphQLInputObjectType
+      const createWidgetInputArgType = createWidget.args.find((arg) => arg.name === 'input')!.type
+      const createWidgetsInputArgType = createWidgets.args.find((arg) => arg.name === 'input')!.type
+      const updateWidgetInputArgType = updateWidget.args.find((arg) => arg.name === 'input')!.type
+      const updateWidgetsInputArgType = updateWidgets.args.find((arg) => arg.name === 'input')!.type
+      expect(createWidgetInputArgType.toString()).toBe('CreateWidgetInput!')
+      expect(createWidgetsInputArgType.toString()).toBe('[CreateWidgetInput!]!')
+      expect(updateWidgetInputArgType.toString()).toBe('UpdateWidgetInput!')
+      expect(updateWidgetsInputArgType.toString()).toBe('UpdateWidgetInput!')
+      expect(CreateWidgetInput.getFields().id.type.toString()).toBe('ID')
+      expect(CreateWidgetInput.getFields().idNullable.type.toString()).toBe('ID')
+      expect(CreateWidgetInput.getFields().idList.type.toString()).toBe('[ID!]!')
+      expect(CreateWidgetInput.getFields().string.type.toString()).toBe('String!')
+      expect(CreateWidgetInput.getFields().json.type.toString()).toBe('JSON!')
+      expect(UpdateWidgetInput.getFields().idNullable.type.toString()).toBe('ID')
+      expect(UpdateWidgetInput.getFields().idList.type.toString()).toBe('[ID!]')
+      expect(UpdateWidgetInput.getFields().string.type.toString()).toBe('String')
+      expect(UpdateWidgetInput.getFields().json.type.toString()).toBe('JSON')
+      expect(UpdateWidgetInput.getFields().id).toBeUndefined()
+    })
+  })
 })

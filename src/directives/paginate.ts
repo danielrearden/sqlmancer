@@ -1,19 +1,21 @@
 import _ from 'lodash'
 import { SchemaDirectiveVisitor } from 'graphql-tools'
 import {
+  GraphQLBoolean,
   GraphQLField,
   GraphQLFieldConfigMap,
   GraphQLFloat,
   GraphQLInt,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLOutputType,
 } from 'graphql'
-import { unwrap, makeNullable } from '../utilities'
+import { makeNullable, unwrap } from '../utilities'
 import { getSqlmancerConfig } from '../client'
-import { SqlmancerConfig } from '../types'
+import { Model, SqlmancerConfig } from '../types'
 
-export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
+export class PaginateDirective extends SchemaDirectiveVisitor<any, any> {
   private config: SqlmancerConfig
 
   constructor(config: any) {
@@ -22,24 +24,47 @@ export class AggregateDirective extends SchemaDirectiveVisitor<any, any> {
   }
 
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
-    return { ...field, type: this.getAggregateType(field) }
+    return { ...field, type: this.getPaginateType(field) }
   }
 
-  private getAggregateType(field: GraphQLField<any, any>): GraphQLOutputType {
+  private getPaginateType(field: GraphQLField<any, any>): GraphQLOutputType {
     const unwrappedType = unwrap(field.type)
-    const name = `${unwrappedType.name}Aggregate`
+    const name = `${unwrappedType.name}Page`
     const existingType = this.schema.getType(name)
+    const { models } = this.config
+    const model = models[unwrappedType.name]
 
     if (existingType) {
       return existingType as GraphQLOutputType
     }
-    const { models } = this.config
-    const model = models[unwrappedType.name]
 
     if (!model) {
       throw new Error(
-        `Attempted to generate aggregate type for field "${field.name}" but type ${unwrappedType.name} is not a model.`
+        `Attempted to generate page type for field "${field.name}" but type ${unwrappedType.name} is not a model.`
       )
+    }
+
+    return new GraphQLObjectType({
+      name,
+      fields: () => ({
+        results: {
+          type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(unwrappedType))),
+        },
+        aggregate: {
+          type: new GraphQLNonNull(this.getAggregateType(`${unwrappedType.name}Aggregate`, model)),
+        },
+        hasMore: {
+          type: new GraphQLNonNull(GraphQLBoolean),
+        },
+      }),
+    })
+  }
+
+  private getAggregateType(name: string, model: Model): GraphQLOutputType {
+    const existingType = this.schema.getType(name)
+
+    if (existingType) {
+      return existingType as GraphQLOutputType
     }
 
     return new GraphQLObjectType({

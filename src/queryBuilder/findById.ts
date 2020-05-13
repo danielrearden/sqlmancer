@@ -5,13 +5,13 @@ import {
   BuilderOptions,
   Expressions,
   ID,
-  FromAggregateBuilder,
   FromFindBuilder,
+  FromPaginateBuilder,
   Models,
   QueryBuilderContext,
 } from '../types'
 import { BaseBuilder } from './base'
-import { AggregateBuilder } from './aggregate'
+import { PaginateBuilder } from './paginate'
 import { FindBuilder } from './find'
 import { getAlias } from './utilities'
 import { GraphQLResolveInfo } from 'graphql'
@@ -23,7 +23,10 @@ export abstract class FindByIdBuilder<
   TEnums,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >,
   TSelected extends Pick<TFields, any> = TFields,
   TRawSelected extends Record<string, any> = {},
@@ -149,12 +152,12 @@ export abstract class FindByIdBuilder<
       throw new Error(`Invalid association name: ${name}`)
     }
 
-    const fieldName = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : name
+    const alias = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : name
     const getBuilderFn = typeof aliasOrGetBuilder === 'string' ? getBuilder : aliasOrGetBuilder
     const builders = this._models[association.modelName].builders
     const Builder = association.isMany ? builders.findMany : builders.findOne
     const initialBuilder = new Builder(this._options)
-    this._loadedAssociations[fieldName] = [
+    this._loadedAssociations[alias] = [
       name,
       getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName][0]) : initialBuilder,
     ]
@@ -162,10 +165,34 @@ export abstract class FindByIdBuilder<
     return this
   }
 
-  public loadAggregate<
+  public loadPaginated<
+    TName extends Extract<keyof TAssociations, string>,
+    TGetBuilder extends (
+      builder: TAssociations[TName][1]
+    ) => PaginateBuilder<any, any, any, any, any, any, any, any, any> = (
+      builder: TAssociations[TName][1]
+    ) => TAssociations[TName][1]
+  >(
+    associationName: TName,
+    getBuilder?: TGetBuilder
+  ): FindByIdBuilder<
+    TFields,
+    TIds,
+    TEnums,
+    TAssociations,
+    TSelected,
+    TRawSelected,
+    TLoaded &
+      {
+        [key in TName]: FromFindBuilder<ReturnType<TGetBuilder>>
+      }
+  >
+  public loadPaginated<
     TName extends Extract<keyof TAssociations, string>,
     TAlias extends string,
-    TGetBuilder extends (builder: TAssociations[TName][1]) => AggregateBuilder<any, any, any, any, any, any> = (
+    TGetBuilder extends (
+      builder: TAssociations[TName][1]
+    ) => PaginateBuilder<any, any, any, any, any, any, any, any, any> = (
       builder: TAssociations[TName][1]
     ) => TAssociations[TName][1]
   >(
@@ -181,20 +208,31 @@ export abstract class FindByIdBuilder<
     TRawSelected,
     TLoaded &
       {
-        [key in TAlias]: FromAggregateBuilder<ReturnType<TGetBuilder>>
+        [key in TAlias]: FromPaginateBuilder<ReturnType<TGetBuilder>>
       }
-  > {
+  >
+  public loadPaginated<
+    TName extends Extract<keyof TAssociations, string>,
+    TAlias extends string,
+    TGetBuilder extends (
+      builder: TAssociations[TName][1]
+    ) => PaginateBuilder<any, any, any, any, any, any, any, any, any> = (
+      builder: TAssociations[TName][1]
+    ) => TAssociations[TName][1]
+  >(associationName: TName, aliasOrGetBuilder?: TAlias | TGetBuilder, getBuilder?: TGetBuilder) {
     const association = this._model.associations[associationName]
 
     if (!association) {
       throw new Error(`Invalid association name: ${associationName}`)
     }
 
-    const Builder = this._models[association.modelName].builders.aggregate
+    const alias = typeof aliasOrGetBuilder === 'string' ? aliasOrGetBuilder : associationName
+    const getBuilderFn = typeof aliasOrGetBuilder === 'string' ? getBuilder : aliasOrGetBuilder
+    const Builder = this._models[association.modelName].builders.paginate
     const initialBuilder = new Builder(this._options)
-    this._loadedAggregates[alias] = [
+    this._loadedPaginated[alias] = [
       associationName,
-      getBuilder ? getBuilder(initialBuilder as TAssociations[TName][1]) : initialBuilder,
+      getBuilderFn ? getBuilderFn(initialBuilder as TAssociations[TName][1]) : initialBuilder,
     ]
 
     return this
@@ -235,13 +273,16 @@ export abstract class FindByIdBuilder<
       } else if (field.name in this._model.dependencies) {
         this._model.dependencies[field.name].forEach((columnName) => this.addSelectRaw(columnName))
       } else if (field.name in this._model.associations) {
-        this.load(field.name as Extract<keyof TAssociations, string>, field.alias, (builder) =>
-          builder.resolveInfo(field)
-        )
-      } else if (field.name in this._model.aggregates) {
-        this.loadAggregate(this._model.aggregates[field.name] as any, field.alias, (builder) =>
-          builder.resolveInfo(field)
-        )
+        const association = this._model.associations[field.name]
+        if (association.pagination) {
+          this.loadPaginated(field.name as Extract<keyof TAssociations, string>, field.alias, (builder) =>
+            builder.resolveInfo(field)
+          )
+        } else {
+          this.load(field.name as Extract<keyof TAssociations, string>, field.alias, (builder) =>
+            builder.resolveInfo(field)
+          )
+        }
       }
     })
 
@@ -256,7 +297,7 @@ export abstract class FindByIdBuilder<
 
     // We use JSON aggregation for loading related models and SQLite returns those fields as strings
     if (this._dialect === 'sqlite') {
-      const jsonFields = [...Object.keys(this._loadedAssociations), ...Object.keys(this._loadedAggregates)]
+      const jsonFields = [...Object.keys(this._loadedAssociations), ...Object.keys(this._loadedPaginated)]
       rows.forEach((row: any) => {
         Object.keys(row).forEach((fieldName) => {
           if (jsonFields.includes(fieldName)) {

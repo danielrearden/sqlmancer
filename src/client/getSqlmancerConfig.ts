@@ -3,7 +3,6 @@ import { isListType, isObjectType, GraphQLCompositeType, GraphQLSchema, isEnumTy
 import { getDirectives } from '@graphql-toolkit/common'
 
 import {
-  AggregateBuilder,
   CreateOneBuilder,
   CreateManyBuilder,
   DeleteByIdBuilder,
@@ -11,6 +10,7 @@ import {
   FindByIdBuilder,
   FindOneBuilder,
   FindManyBuilder,
+  PaginateBuilder,
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from '../queryBuilder'
@@ -120,7 +120,7 @@ export function getModels(
             super(options, type.name, models)
           }
         },
-        aggregate: class extends AggregateBuilder<any, any, any, any, any, any> {
+        paginate: class extends PaginateBuilder<any, any, any, any, any, any, any, any, any> {
           constructor(options: BuilderOptions) {
             super(options, type.name, models)
           }
@@ -172,7 +172,7 @@ export function getModels(
       Object.defineProperty(builders.findById, 'name', { value: `${type.name}FindByIdBuilder` })
       Object.defineProperty(builders.findOne, 'name', { value: `${type.name}FindOneBuilder` })
       Object.defineProperty(builders.findMany, 'name', { value: `${type.name}FindManyBuilder` })
-      Object.defineProperty(builders.aggregate, 'name', { value: `${type.name}AggregateBuilder` })
+      Object.defineProperty(builders.paginate, 'name', { value: `${type.name}PaginateBuilder` })
       if (!isReadOnly) {
         Object.defineProperty(builders.createOne, 'name', { value: `${type.name}CreateOneBuilder` })
         Object.defineProperty(builders.createMany, 'name', { value: `${type.name}CreateManyBuilder` })
@@ -213,17 +213,13 @@ export function getModels(
                 }
               }
             } else if (relate) {
-              if (relate.aggregate) {
-                // TODO: Assert valid association field name
-                acc.aggregates[fieldName] = relate.aggregate
-              } else {
-                // TODO: Assert type is model
-                acc.associations[fieldName] = {
-                  modelName: unwrappedType.name,
-                  isMany: isList,
-                  on: relate.on,
-                  through: relate.through,
-                }
+              // TODO: Assert type is model
+              acc.associations[fieldName] = {
+                modelName: unwrappedType.name,
+                isMany: isList,
+                on: relate.on,
+                through: relate.through,
+                pagination: relate.pagination,
               }
             } else if (depend) {
               acc.dependencies[fieldName] = depend.on
@@ -241,7 +237,6 @@ export function getModels(
           fields: {},
           dependencies: {},
           associations: {},
-          aggregates: {},
         } as Model
       )
     }

@@ -73,9 +73,7 @@ function generate(typeDefs: string, output: string): void {
       resolverValidationOptions: { requireResolversForResolveType: false },
     })
   } catch (e) {
-    spinner.fail(
-      `An error was encountered while building a schema from the provided type definitions:\n\n${e.message}\n`
-    )
+    spinner.fail(`An error was encountered while building a schema from the provided type definitions:\n\n${e}\n`)
     process.exit(1)
   }
 
@@ -93,7 +91,7 @@ function generate(typeDefs: string, output: string): void {
   try {
     generateClientTypeDeclarations(schema, stream)
   } catch (e) {
-    spinner.fail(`An error was encountered while generating the client:\n\n${e.message}\n`)
+    spinner.fail(`An error was encountered while generating the client:\n\n${e}\n`)
     process.exit(1)
   }
 

@@ -1,6 +1,5 @@
 import Knex = require('knex')
 import {
-  AggregateBuilder,
   FindBuilder,
   FindByIdBuilder,
   FindOneBuilder,
@@ -9,6 +8,7 @@ import {
   CreateManyBuilder,
   DeleteByIdBuilder,
   DeleteManyBuilder,
+  PaginateBuilder,
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from './queryBuilder'
@@ -40,12 +40,11 @@ export type Model = {
   include: string[]
   dependencies: Record<string, string[]>
   associations: Record<string, Association>
-  aggregates: Record<string, string>
   builders: {
     findById: new (...args: any[]) => FindByIdBuilder<any, any, any, any, any, any, any>
     findOne: new (...args: any[]) => FindOneBuilder<any, any, any, any, any, any, any, any>
     findMany: new (...args: any[]) => FindManyBuilder<any, any, any, any, any, any, any, any>
-    aggregate: new (...args: any[]) => AggregateBuilder<any, any, any, any, any, any>
+    paginate: new (...args: any[]) => PaginateBuilder<any, any, any, any, any, any>
     createOne?: new (...args: any[]) => CreateOneBuilder<any>
     createMany?: new (...args: any[]) => CreateManyBuilder<any>
     deleteById?: new (...args: any[]) => DeleteByIdBuilder
@@ -67,6 +66,7 @@ export type Association = {
   isMany: boolean
   on: { from: string; to: string }[]
   through?: string
+  pagination?: 'offset'
 }
 
 export type BuilderOptions = {
@@ -147,7 +147,10 @@ export type OrderBy<
   TFields extends Record<string, any>,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > = OrderByField<TFields> & OrderByAssociation<TAssociations>
 
@@ -158,7 +161,10 @@ export type OrderByField<TFields extends Record<string, any>> = {
 export type OrderByAssociation<
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > = {
   [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
@@ -189,7 +195,10 @@ export type Where<
   TEnums,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > = WhereFields<TDialect, TFields, TIds, TEnums> &
   WhereAssociations<TAssociations> &
@@ -358,7 +367,10 @@ export type JsonOperators = {
 export type WhereAssociations<
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > = {
   [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
@@ -399,7 +411,10 @@ export type WhereLogicOperators<
   TEnums,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > = {
   or?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
@@ -423,6 +438,16 @@ export type FromFindBuilder<T> = T extends FindBuilder<
     : (TSelected & TRawSelected & TLoaded) | null
   : never
 
-export type FromAggregateBuilder<T> = T extends AggregateBuilder<any, any, any, any, any, infer TAggregates>
-  ? TAggregates
+export type FromPaginateBuilder<T> = T extends PaginateBuilder<
+  any,
+  any,
+  any,
+  any,
+  any,
+  infer TSelected,
+  infer TRawSelected,
+  infer TLoaded,
+  infer TResult
+>
+  ? { [Key in keyof TResult]: Key extends 'results' ? (TSelected & TRawSelected & TLoaded)[] : TResult[Key] }
   : never

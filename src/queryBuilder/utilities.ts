@@ -125,19 +125,25 @@ export function getJsonObjectFunctionByDialect(dialect: Dialect) {
   }
 }
 
-export function getJsonAggregateExpressionByDialect(dialect: Dialect, isArray: boolean): [string, number] {
+export function getJsonAggregateExpressionByDialect(
+  dialect: Dialect,
+  isArray: boolean,
+  expression: Knex.Ref<any, any>
+): string {
   switch (dialect) {
     case 'postgres':
-      return [isArray ? `coalesce(nullif(json_agg(??)::text, '[null]'), '[]')::json` : `json_agg(??) -> 0`, 1]
+      return isArray
+        ? `coalesce(nullif(json_agg(${expression})::text, '[null]'), '[]')::json`
+        : `json_agg(${expression}) -> 0`
     case 'mysql':
       return isArray
-        ? [`if(json_arrayagg(??) is null, json_array(), json_arrayagg(??))`, 2]
-        : [`json_extract(json_arrayagg(??), '$[0]')`, 1]
+        ? `if(json_arrayagg(${expression}) is null, json_array(), json_arrayagg(${expression}))`
+        : `json_extract(json_arrayagg(${expression}), '$[0]')`
     case 'mariadb':
       return isArray
-        ? [`if(json_arrayagg(??) is null, json_array(), json_arrayagg(??))`, 2]
-        : [`json_extract(json_arrayagg(??), '$[0]')`, 1]
+        ? `if(json_arrayagg(${expression}) is null, json_array(), json_arrayagg(${expression}))`
+        : `json_extract(json_arrayagg(${expression}), '$[0]')`
     case 'sqlite':
-      return [isArray ? `json_group_array(??)` : `json_extract(json_group_array(??), '$[0]')`, 1]
+      return isArray ? `json_group_array(${expression})` : `json_extract(json_group_array(${expression}), '$[0]')`
   }
 }

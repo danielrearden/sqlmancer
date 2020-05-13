@@ -1,5 +1,5 @@
 import { BuilderOptions, Dialect, Models } from '../types'
-import { AggregateBuilder } from './aggregate'
+import { PaginateBuilder } from './paginate'
 import { FindBuilder } from './find'
 
 export class FindManyBuilder<
@@ -9,7 +9,10 @@ export class FindManyBuilder<
   TEnums,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >,
   TSelected extends Pick<TFields, any> = TFields,
   TRawSelected extends Record<string, any> = {},

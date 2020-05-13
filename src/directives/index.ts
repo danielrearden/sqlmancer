@@ -1,24 +1,24 @@
 import { makeExecutableSchema, SchemaDirectiveVisitor, IExecutableSchemaDefinition } from 'graphql-tools'
 import { parse, DocumentNode } from 'graphql'
 
-import { AggregateDirective } from './aggregate'
 import { InputDirective } from './input'
 import { LimitDirective } from './limit'
 import { ManyDirective } from './many'
 import { ModelDirective } from './model'
 import { OffsetDirective } from './offset'
 import { OrderByDirective } from './orderBy'
+import { PaginateDirective } from './paginate'
 import { PrivateDirective } from './private'
 import { RelateDirective } from './relate'
 import { ValueDirective } from './value'
 import { WhereDirective } from './where'
 
 export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor } = {
-  aggregate: AggregateDirective,
   input: InputDirective,
   limit: LimitDirective,
   offset: OffsetDirective,
   orderBy: OrderByDirective,
+  paginate: PaginateDirective,
   private: PrivateDirective,
   relate: RelateDirective,
   many: ManyDirective,
@@ -28,8 +28,6 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
 }
 
 export const typeDefs: DocumentNode = parse(`
-  directive @aggregate on FIELD_DEFINITION
-
   directive @col(
     name: String!
   ) on FIELD_DEFINITION
@@ -68,12 +66,14 @@ export const typeDefs: DocumentNode = parse(`
     model: String
   ) on FIELD_DEFINITION
 
+  directive @paginate on FIELD_DEFINITION
+
   directive @private on FIELD_DEFINITION | OBJECT | UNION | INTERFACE
 
   directive @relate(
-    on: [SqlmancerJoinOn!]
+    on: [SqlmancerJoinOn!]!
     through: String
-    aggregate: String
+    pagination: SqlmancerPaginationKind
   ) on FIELD_DEFINITION
 
   directive @sqlmancer(
@@ -122,6 +122,10 @@ export const typeDefs: DocumentNode = parse(`
     sum
   }
 
+  enum SqlmancerPaginationKind {
+    OFFSET
+  }
+
   enum SqlmancerInputAction {
     CREATE
     UPDATE
@@ -135,13 +139,13 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
     schemaDirectives: config.schemaDirectives ? { ...config.schemaDirectives, ...schemaDirectives } : schemaDirectives,
   })
 
-export { AggregateDirective } from './aggregate'
 export { InputDirective } from './input'
 export { LimitDirective } from './limit'
 export { ManyDirective } from './many'
 export { ModelDirective } from './model'
 export { OffsetDirective } from './offset'
 export { OrderByDirective } from './orderBy'
+export { PaginateDirective } from './paginate'
 export { PrivateDirective } from './private'
 export { RelateDirective } from './relate'
 export { ValueDirective } from './value'

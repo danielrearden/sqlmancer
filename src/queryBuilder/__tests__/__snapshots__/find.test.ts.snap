@@ -56,26 +56,26 @@ exports[`FindBuilder mysql load with junction table 1`] = `"select \`f1\`.\`film
 
 exports[`FindBuilder mysql load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`length\` as \`length\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`extra_data\` as \`extraData\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder mysql loadPaginated with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`length\` as \`length\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`extra_data\` as \`extraData\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`)) as \`page\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
 
-exports[`FindBuilder mysql loadAggregate with FK on builder table 2`] = `Array []`;
+exports[`FindBuilder mysql loadPaginated with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder mysql loadPaginated with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
 
-exports[`FindBuilder mysql loadAggregate with FK on joined table 2`] = `Array []`;
+exports[`FindBuilder mysql loadPaginated with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder mysql loadAggregate with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql loadPaginated with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder mysql loadAggregate with additional options 2`] = `
+exports[`FindBuilder mysql loadPaginated with additional options 2`] = `
 Array [
   2,
   1,
 ]
 `;
 
-exports[`FindBuilder mysql loadAggregate with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql loadPaginated with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder mysql loadAggregate with junction table 2`] = `Array []`;
+exports[`FindBuilder mysql loadPaginated with junction table 2`] = `Array []`;
 
 exports[`FindBuilder mysql offset with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit 18446744073709551615 offset ?"`;
 
@@ -169,15 +169,9 @@ Array [
 ]
 `;
 
-exports[`FindBuilder mysql resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder mysql resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder mysql resolveInfo query with nested aggregate 2`] = `
-Array [
-  "Title",
-  10,
-  3,
-]
-`;
+exports[`FindBuilder mysql resolveInfo query with nested aggregate 2`] = `Array []`;
 
 exports[`FindBuilder mysql resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select if(json_arrayagg(\`f1\`.\`o\`) is null, json_array(), json_arrayagg(\`f1\`.\`o\`)) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'length', \`f2\`.\`length\`, 'rating', \`f2\`.\`rating\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'extraData', \`f2\`.\`extra_data\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
 
@@ -411,26 +405,26 @@ exports[`FindBuilder postgres load with junction table 1`] = `"select \\"f1\\".\
 
 exports[`FindBuilder postgres load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with FK on builder table 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"length\\" as \\"length\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"extra_data\\" as \\"extraData\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('name', max(\\"l2\\".\\"name\\"))) as \\"agg\\" from (select \\"l3\\".\\"name\\" from \\"language\\" as \\"l3\\" where \\"f1\\".\\"language_id\\" = \\"l3\\".\\"language_id\\") as \\"l2\\") as \\"l1\\") as \\"languageAggregate\\" from \\"film\\" as \\"f1\\""`;
+exports[`FindBuilder postgres loadPaginated with FK on builder table 1`] = `"select \\"f1\\".\\"film_id\\" as \\"id\\", \\"f1\\".\\"title\\" as \\"title\\", \\"f1\\".\\"description\\" as \\"description\\", \\"f1\\".\\"release_year\\" as \\"releaseYear\\", \\"f1\\".\\"length\\" as \\"length\\", \\"f1\\".\\"rating\\" as \\"rating\\", \\"f1\\".\\"rental_rate\\" as \\"rentalRate\\", \\"f1\\".\\"rental_duration\\" as \\"rentalDuration\\", \\"f1\\".\\"replacement_cost\\" as \\"replacementCost\\", \\"f1\\".\\"special_features\\" as \\"specialFeatures\\", \\"f1\\".\\"extra_data\\" as \\"extraData\\", \\"f1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('aggregate', (select json_build_object('max', json_build_object('name', max(\\"l2\\".\\"name\\"))) from (select \\"l3\\".\\"name\\" from \\"language\\" as \\"l3\\" where \\"f1\\".\\"language_id\\" = \\"l3\\".\\"language_id\\") as \\"l2\\")) as \\"page\\") as \\"l1\\") as \\"languageAggregate\\" from \\"film\\" as \\"f1\\""`;
 
-exports[`FindBuilder postgres loadAggregate with FK on builder table 2`] = `Array []`;
+exports[`FindBuilder postgres loadPaginated with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with FK on joined table 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" where \\"l1\\".\\"language_id\\" = \\"f3\\".\\"language_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"language\\" as \\"l1\\""`;
+exports[`FindBuilder postgres loadPaginated with FK on joined table 1`] = `"select \\"l1\\".\\"language_id\\" as \\"id\\", \\"l1\\".\\"name\\" as \\"name\\", \\"l1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('aggregate', (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" where \\"l1\\".\\"language_id\\" = \\"f3\\".\\"language_id\\") as \\"f2\\")) as \\"page\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"language\\" as \\"l1\\""`;
 
-exports[`FindBuilder postgres loadAggregate with FK on joined table 2`] = `Array []`;
+exports[`FindBuilder postgres loadPaginated with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder postgres loadAggregate with additional options 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" order by \\"f3\\".\\"title\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres loadPaginated with additional options 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('aggregate', (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" order by \\"f3\\".\\"title\\" desc limit ? offset ?) as \\"f2\\")) as \\"page\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
 
-exports[`FindBuilder postgres loadAggregate with additional options 2`] = `
+exports[`FindBuilder postgres loadPaginated with additional options 2`] = `
 Array [
   2,
   1,
 ]
 `;
 
-exports[`FindBuilder postgres loadAggregate with junction table 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\") as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres loadPaginated with junction table 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('aggregate', (select json_build_object('max', json_build_object('rentalRate', coalesce(max(\\"f2\\".\\"rental_rate\\"), 0))) from (select \\"f3\\".\\"rental_rate\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\") as \\"f2\\")) as \\"page\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
 
-exports[`FindBuilder postgres loadAggregate with junction table 2`] = `Array []`;
+exports[`FindBuilder postgres loadPaginated with junction table 2`] = `Array []`;
 
 exports[`FindBuilder postgres offset with number 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\" offset ?"`;
 
@@ -524,15 +518,9 @@ Array [
 ]
 `;
 
-exports[`FindBuilder postgres resolveInfo query with nested aggregate 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select (select json_build_object('count', coalesce(count(\\"f2\\".\\"film_id\\"), 0), 'avg', json_build_object('rentalRate', coalesce(avg(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(avg(\\"f2\\".\\"replacement_cost\\"), 0)), 'sum', json_build_object('rentalRate', coalesce(sum(\\"f2\\".\\"rental_rate\\"), 0), 'replacementCost', coalesce(sum(\\"f2\\".\\"replacement_cost\\"), 0)), 'min', json_build_object('title', min(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(min(\\"f2\\".\\"release_year\\"), 0)), 'max', json_build_object('title', max(\\"f2\\".\\"title\\"), 'releaseYear', coalesce(max(\\"f2\\".\\"release_year\\"), 0))) as \\"agg\\" from (select \\"f3\\".\\"film_id\\", \\"f3\\".\\"rental_rate\\", \\"f3\\".\\"replacement_cost\\", \\"f3\\".\\"title\\", \\"f3\\".\\"release_year\\" from \\"film\\" as \\"f3\\" inner join \\"film_actor\\" as \\"f4\\" on \\"f4\\".\\"film_id\\" = \\"f3\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f4\\".\\"actor_id\\" and \\"f3\\".\\"title\\" = ? order by \\"f3\\".\\"release_year\\" desc limit ? offset ?) as \\"f2\\") as \\"f1\\") as \\"filmsAggregate\\" from \\"actor\\" as \\"a1\\""`;
+exports[`FindBuilder postgres resolveInfo query with nested aggregate 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\" from \\"actor\\" as \\"a1\\""`;
 
-exports[`FindBuilder postgres resolveInfo query with nested aggregate 2`] = `
-Array [
-  "Title",
-  10,
-  3,
-]
-`;
+exports[`FindBuilder postgres resolveInfo query with nested aggregate 2`] = `Array []`;
 
 exports[`FindBuilder postgres resolveInfo query with nested arguments 1`] = `"select \\"a1\\".\\"actor_id\\" as \\"id\\", \\"a1\\".\\"first_name\\" as \\"firstName\\", \\"a1\\".\\"last_name\\" as \\"lastName\\", \\"a1\\".\\"last_update\\" as \\"lastUpdate\\", (select coalesce(nullif(json_agg(\\"f1\\".\\"o\\")::text, '[null]'), '[]')::json from (select json_build_object('id', \\"f2\\".\\"film_id\\", 'title', \\"f2\\".\\"title\\", 'description', \\"f2\\".\\"description\\", 'releaseYear', \\"f2\\".\\"release_year\\", 'length', \\"f2\\".\\"length\\", 'rating', \\"f2\\".\\"rating\\", 'rentalRate', \\"f2\\".\\"rental_rate\\", 'rentalDuration', \\"f2\\".\\"rental_duration\\", 'replacementCost', \\"f2\\".\\"replacement_cost\\", 'specialFeatures', \\"f2\\".\\"special_features\\", 'extraData', \\"f2\\".\\"extra_data\\", 'lastUpdate', \\"f2\\".\\"last_update\\") as \\"o\\" from \\"film\\" as \\"f2\\" inner join \\"film_actor\\" as \\"f3\\" on \\"f3\\".\\"film_id\\" = \\"f2\\".\\"film_id\\" where \\"a1\\".\\"actor_id\\" = \\"f3\\".\\"actor_id\\" and \\"f2\\".\\"title\\" = ? order by \\"f2\\".\\"release_year\\" desc limit ? offset ?) as \\"f1\\") as \\"films\\" from \\"actor\\" as \\"a1\\""`;
 
@@ -766,26 +754,26 @@ exports[`FindBuilder sqlite load with junction table 1`] = `"select \`f1\`.\`fil
 
 exports[`FindBuilder sqlite load with junction table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`length\` as \`length\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) as \`agg\` from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
+exports[`FindBuilder sqlite loadPaginated with FK on builder table 1`] = `"select \`f1\`.\`film_id\` as \`id\`, \`f1\`.\`title\` as \`title\`, \`f1\`.\`description\` as \`description\`, \`f1\`.\`release_year\` as \`releaseYear\`, \`f1\`.\`length\` as \`length\`, \`f1\`.\`rating\` as \`rating\`, \`f1\`.\`rental_rate\` as \`rentalRate\`, \`f1\`.\`rental_duration\` as \`rentalDuration\`, \`f1\`.\`replacement_cost\` as \`replacementCost\`, \`f1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('name', max(\`l2\`.\`name\`))) from (select \`l3\`.\`name\` from \`language\` as \`l3\` where \`f1\`.\`language_id\` = \`l3\`.\`language_id\`) as \`l2\`)) as \`page\`) as \`l1\`) as \`languageAggregate\` from \`film\` as \`f1\`"`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on builder table 2`] = `Array []`;
+exports[`FindBuilder sqlite loadPaginated with FK on builder table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
+exports[`FindBuilder sqlite loadPaginated with FK on joined table 1`] = `"select \`l1\`.\`language_id\` as \`id\`, \`l1\`.\`name\` as \`name\`, \`l1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` where \`l1\`.\`language_id\` = \`f3\`.\`language_id\`) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`language\` as \`l1\`"`;
 
-exports[`FindBuilder sqlite loadAggregate with FK on joined table 2`] = `Array []`;
+exports[`FindBuilder sqlite loadPaginated with FK on joined table 2`] = `Array []`;
 
-exports[`FindBuilder sqlite loadAggregate with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite loadPaginated with additional options 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` order by \`f3\`.\`title\` desc limit ? offset ?) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder sqlite loadAggregate with additional options 2`] = `
+exports[`FindBuilder sqlite loadPaginated with additional options 2`] = `
 Array [
   2,
   1,
 ]
 `;
 
-exports[`FindBuilder sqlite loadAggregate with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) as \`agg\` from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite loadPaginated with junction table 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('aggregate', (select json_object('max', json_object('rentalRate', coalesce(max(\`f2\`.\`rental_rate\`), 0))) from (select \`f3\`.\`rental_rate\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\`) as \`f2\`)) as \`page\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder sqlite loadAggregate with junction table 2`] = `Array []`;
+exports[`FindBuilder sqlite loadPaginated with junction table 2`] = `Array []`;
 
 exports[`FindBuilder sqlite offset with number 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\` limit ? offset ?"`;
 
@@ -880,15 +868,9 @@ Array [
 ]
 `;
 
-exports[`FindBuilder sqlite resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select (select json_object('count', coalesce(count(\`f2\`.\`film_id\`), 0), 'avg', json_object('rentalRate', coalesce(avg(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(avg(\`f2\`.\`replacement_cost\`), 0)), 'sum', json_object('rentalRate', coalesce(sum(\`f2\`.\`rental_rate\`), 0), 'replacementCost', coalesce(sum(\`f2\`.\`replacement_cost\`), 0)), 'min', json_object('title', min(\`f2\`.\`title\`), 'releaseYear', coalesce(min(\`f2\`.\`release_year\`), 0)), 'max', json_object('title', max(\`f2\`.\`title\`), 'releaseYear', coalesce(max(\`f2\`.\`release_year\`), 0))) as \`agg\` from (select \`f3\`.\`film_id\`, \`f3\`.\`rental_rate\`, \`f3\`.\`replacement_cost\`, \`f3\`.\`title\`, \`f3\`.\`release_year\` from \`film\` as \`f3\` inner join \`film_actor\` as \`f4\` on \`f4\`.\`film_id\` = \`f3\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f4\`.\`actor_id\` and \`f3\`.\`title\` = ? order by \`f3\`.\`release_year\` desc limit ? offset ?) as \`f2\`) as \`f1\`) as \`filmsAggregate\` from \`actor\` as \`a1\`"`;
+exports[`FindBuilder sqlite resolveInfo query with nested aggregate 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\` from \`actor\` as \`a1\`"`;
 
-exports[`FindBuilder sqlite resolveInfo query with nested aggregate 2`] = `
-Array [
-  "Title",
-  10,
-  3,
-]
-`;
+exports[`FindBuilder sqlite resolveInfo query with nested aggregate 2`] = `Array []`;
 
 exports[`FindBuilder sqlite resolveInfo query with nested arguments 1`] = `"select \`a1\`.\`actor_id\` as \`id\`, \`a1\`.\`first_name\` as \`firstName\`, \`a1\`.\`last_name\` as \`lastName\`, \`a1\`.\`last_update\` as \`lastUpdate\`, (select json_group_array(\`f1\`.\`o\`) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'length', \`f2\`.\`length\`, 'rating', \`f2\`.\`rating\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`film_id\` = \`f2\`.\`film_id\` where \`a1\`.\`actor_id\` = \`f3\`.\`actor_id\` and \`f2\`.\`title\` = ? order by \`f2\`.\`release_year\` desc limit ? offset ?) as \`f1\`) as \`films\` from \`actor\` as \`a1\`"`;
 

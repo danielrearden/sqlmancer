@@ -155,43 +155,30 @@ describe('integration (sqlite)', () => {
     expect(data?.a[0].title).toBe('BOOGIE AMELIE')
   })
 
-  test('aggregation', async () => {
+  test('pagination', async () => {
     const { data, errors } = await graphql(
       schema,
       `
         query {
-          actorsAggregate {
-            count
-            min {
-              firstName
-              lastUpdate
+          actorsPaginated {
+            aggregate {
+              count
+              min {
+                firstName
+                lastUpdate
+              }
+              max {
+                lastName
+                lastUpdate
+              }
             }
-            max {
-              lastName
-              lastUpdate
+            results {
+              id
             }
+            hasMore
           }
-          filmsAggregate {
-            count
-            min {
-              title
-              length
-              lastUpdate
-            }
-            max {
-              title
-              length
-              lastUpdate
-            }
-            avg {
-              length
-            }
-            sum {
-              length
-            }
-          }
-          actor(id: 1) {
-            filmsAggregate {
+          filmsPaginated {
+            aggregate {
               count
               min {
                 title
@@ -210,34 +197,71 @@ describe('integration (sqlite)', () => {
                 length
               }
             }
+            results {
+              id
+            }
+            hasMore
+          }
+          actor(id: 1) {
+            filmsPaginated {
+              aggregate {
+                count
+                min {
+                  title
+                  length
+                  lastUpdate
+                }
+                max {
+                  title
+                  length
+                  lastUpdate
+                }
+                avg {
+                  length
+                }
+                sum {
+                  length
+                }
+              }
+              results {
+                id
+              }
+              hasMore
+            }
           }
         }
       `
     )
     expect(errors).toBeUndefined()
-    expect(data?.actorsAggregate.count).toBeGreaterThan(0)
-    expect(data?.actorsAggregate.min.firstName).toBeDefined()
-    expect(data?.actorsAggregate.min.lastUpdate).toBeDefined()
-    expect(data?.actorsAggregate.max.lastName).toBeDefined()
-    expect(data?.actorsAggregate.max.lastUpdate).toBeDefined()
-    expect(data?.filmsAggregate.count).toBeGreaterThan(0)
-    expect(data?.filmsAggregate.min.title).toBeDefined()
-    expect(data?.filmsAggregate.min.length).toBeDefined()
-    expect(data?.filmsAggregate.min.lastUpdate).toBeDefined()
-    expect(data?.filmsAggregate.max.title).toBeDefined()
-    expect(data?.filmsAggregate.max.length).toBeDefined()
-    expect(data?.filmsAggregate.max.lastUpdate).toBeDefined()
-    expect(data?.filmsAggregate.avg.length).toBeDefined()
-    expect(data?.filmsAggregate.sum.length).toBeDefined()
-    expect(data?.actor.filmsAggregate.count).toBeGreaterThan(0)
-    expect(data?.actor.filmsAggregate.min.title).toBeDefined()
-    expect(data?.actor.filmsAggregate.min.length).toBeDefined()
-    expect(data?.actor.filmsAggregate.min.lastUpdate).toBeDefined()
-    expect(data?.actor.filmsAggregate.max.title).toBeDefined()
-    expect(data?.actor.filmsAggregate.max.length).toBeDefined()
-    expect(data?.actor.filmsAggregate.max.lastUpdate).toBeDefined()
-    expect(data?.actor.filmsAggregate.avg.length).toBeDefined()
-    expect(data?.actor.filmsAggregate.sum.length).toBeDefined()
+    expect(data?.actorsPaginated.aggregate.count).toBeGreaterThan(0)
+    expect(data?.actorsPaginated.aggregate.min.firstName).toBeDefined()
+    expect(data?.actorsPaginated.aggregate.min.lastUpdate).toBeDefined()
+    expect(data?.actorsPaginated.aggregate.max.lastName).toBeDefined()
+    expect(data?.actorsPaginated.aggregate.max.lastUpdate).toBeDefined()
+    expect(data?.actorsPaginated.results.length).toBeGreaterThan(0)
+    expect(data?.actorsPaginated.hasMore).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.count).toBeGreaterThan(0)
+    expect(data?.filmsPaginated.aggregate.min.title).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.min.length).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.min.lastUpdate).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.max.title).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.max.length).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.max.lastUpdate).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.avg.length).toBeDefined()
+    expect(data?.filmsPaginated.aggregate.sum.length).toBeDefined()
+    expect(data?.filmsPaginated.results.length).toBeGreaterThan(0)
+    expect(data?.filmsPaginated.hasMore).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.count).toBeGreaterThan(0)
+    expect(data?.actor.filmsPaginated.aggregate.min.title).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.min.length).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.min.lastUpdate).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.max.title).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.max.length).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.max.lastUpdate).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.avg.length).toBeDefined()
+    expect(data?.actor.filmsPaginated.aggregate.sum.length).toBeDefined()
+    expect(data?.actor.filmsPaginated.results.length).toBeGreaterThan(0)
+    expect(data?.actor.filmsPaginated.hasMore).toBeDefined()
   })
 
   test('abstract types', async () => {

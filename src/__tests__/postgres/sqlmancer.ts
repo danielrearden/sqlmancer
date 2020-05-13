@@ -1,6 +1,5 @@
 import Knex from 'knex'
 import {
-  AggregateBuilder,
   CreateManyBuilder,
   CreateOneBuilder,
   DeleteByIdBuilder,
@@ -8,6 +7,7 @@ import {
   FindByIdBuilder,
   FindManyBuilder,
   FindOneBuilder,
+  PaginateBuilder,
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from '../..'
@@ -31,7 +31,8 @@ export type ActorIds = 'id'
 export type ActorEnums = unknown
 
 export type ActorAssociations = {
-  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+  films: [FilmFindManyBuilder, FilmPaginateBuilder]
+  filmsPaginated: [FilmFindOneBuilder, FilmPaginateBuilder]
 }
 
 export type ActorCreateFields = {
@@ -73,7 +74,7 @@ export type ActorFindByIdBuilder<TSelected extends Pick<ActorFields, any> = Acto
   TSelected
 >
 
-export type ActorAggregateBuilder = AggregateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
+export type ActorPaginateBuilder = PaginateBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
 
 export type ActorDeleteManyBuilder = DeleteManyBuilder<'postgres', ActorFields, ActorIds, ActorEnums, ActorAssociations>
 
@@ -114,10 +115,11 @@ export type FilmIds = 'id'
 export type FilmEnums = FilmRating
 
 export type FilmAssociations = {
-  actors: [ActorFindManyBuilder, ActorAggregateBuilder]
-  categories: [CategoryFindManyBuilder, CategoryAggregateBuilder]
-  language: [LanguageFindOneBuilder, LanguageAggregateBuilder]
-  originalLanguage: [LanguageFindOneBuilder, LanguageAggregateBuilder]
+  actors: [ActorFindManyBuilder, ActorPaginateBuilder]
+  categories: [CategoryFindManyBuilder, CategoryPaginateBuilder]
+  actorsPaginated: [ActorFindOneBuilder, ActorPaginateBuilder]
+  language: [LanguageFindOneBuilder, LanguagePaginateBuilder]
+  originalLanguage: [LanguageFindOneBuilder, LanguagePaginateBuilder]
 }
 
 export type FilmCreateFields = {
@@ -175,7 +177,7 @@ export type FilmFindByIdBuilder<TSelected extends Pick<FilmFields, any> = FilmFi
   TSelected
 >
 
-export type FilmAggregateBuilder = AggregateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
+export type FilmPaginateBuilder = PaginateBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
 
 export type FilmDeleteManyBuilder = DeleteManyBuilder<'postgres', FilmFields, FilmIds, FilmEnums, FilmAssociations>
 
@@ -207,7 +209,8 @@ export type LanguageIds = 'id'
 export type LanguageEnums = unknown
 
 export type LanguageAssociations = {
-  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+  films: [FilmFindManyBuilder, FilmPaginateBuilder]
+  filmsPaginated: [FilmFindOneBuilder, FilmPaginateBuilder]
 }
 
 export type LanguageCreateFields = {
@@ -247,7 +250,7 @@ export type LanguageFindByIdBuilder<TSelected extends Pick<LanguageFields, any> 
   TSelected
 >
 
-export type LanguageAggregateBuilder = AggregateBuilder<
+export type LanguagePaginateBuilder = PaginateBuilder<
   'postgres',
   LanguageFields,
   LanguageIds,
@@ -335,7 +338,7 @@ export type CustomerFindByIdBuilder<TSelected extends Pick<CustomerFields, any> 
   TSelected
 >
 
-export type CustomerAggregateBuilder = AggregateBuilder<
+export type CustomerPaginateBuilder = PaginateBuilder<
   'postgres',
   CustomerFields,
   CustomerIds,
@@ -379,7 +382,7 @@ export type CategoryIds = 'id'
 export type CategoryEnums = unknown
 
 export type CategoryAssociations = {
-  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+  films: [FilmFindManyBuilder, FilmPaginateBuilder]
 }
 
 export type CategoryCreateFields = {
@@ -419,7 +422,7 @@ export type CategoryFindByIdBuilder<TSelected extends Pick<CategoryFields, any> 
   TSelected
 >
 
-export type CategoryAggregateBuilder = AggregateBuilder<
+export type CategoryPaginateBuilder = PaginateBuilder<
   'postgres',
   CategoryFields,
   CategoryIds,
@@ -513,7 +516,7 @@ export type AddressFindByIdBuilder<TSelected extends Pick<AddressFields, any> = 
   TSelected
 >
 
-export type AddressAggregateBuilder = AggregateBuilder<
+export type AddressPaginateBuilder = PaginateBuilder<
   'postgres',
   AddressFields,
   AddressIds,
@@ -619,7 +622,7 @@ export type MovieFindByIdBuilder<TSelected extends Pick<MovieFields, any> = Movi
   TSelected
 >
 
-export type MovieAggregateBuilder = AggregateBuilder<'postgres', MovieFields, MovieIds, MovieEnums, MovieAssociations>
+export type MoviePaginateBuilder = PaginateBuilder<'postgres', MovieFields, MovieIds, MovieEnums, MovieAssociations>
 
 export type MovieDeleteManyBuilder = DeleteManyBuilder<'postgres', MovieFields, MovieIds, MovieEnums, MovieAssociations>
 
@@ -653,7 +656,8 @@ export type PersonIds = 'id'
 export type PersonEnums = unknown
 
 export type PersonAssociations = {
-  films: [FilmFindManyBuilder, FilmAggregateBuilder]
+  films: [FilmFindManyBuilder, FilmPaginateBuilder]
+  filmsPaginated: [FilmFindOneBuilder, FilmPaginateBuilder]
 }
 
 export type PersonCreateFields = {
@@ -697,7 +701,7 @@ export type PersonFindByIdBuilder<TSelected extends Pick<PersonFields, any> = Pe
   TSelected
 >
 
-export type PersonAggregateBuilder = AggregateBuilder<
+export type PersonPaginateBuilder = PaginateBuilder<
   'postgres',
   PersonFields,
   PersonIds,
@@ -737,13 +741,14 @@ export enum FilmRating {
   R = 'R',
   NC17 = 'NC-17',
 }
+
 export type SqlmancerClient = Knex & {
   models: {
     Actor: {
       findById: (id: ID) => ActorFindByIdBuilder
       findMany: () => ActorFindManyBuilder
       findOne: () => ActorFindOneBuilder
-      aggregate: () => ActorAggregateBuilder
+      paginate: () => ActorPaginateBuilder
       createMany: (input: ActorCreateFields[]) => ActorCreateManyBuilder
       createOne: (input: ActorCreateFields) => ActorCreateOneBuilder
       deleteById: (id: ID) => ActorDeleteByIdBuilder
@@ -755,7 +760,7 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => FilmFindByIdBuilder
       findMany: () => FilmFindManyBuilder
       findOne: () => FilmFindOneBuilder
-      aggregate: () => FilmAggregateBuilder
+      paginate: () => FilmPaginateBuilder
       createMany: (input: FilmCreateFields[]) => FilmCreateManyBuilder
       createOne: (input: FilmCreateFields) => FilmCreateOneBuilder
       deleteById: (id: ID) => FilmDeleteByIdBuilder
@@ -767,7 +772,7 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => LanguageFindByIdBuilder
       findMany: () => LanguageFindManyBuilder
       findOne: () => LanguageFindOneBuilder
-      aggregate: () => LanguageAggregateBuilder
+      paginate: () => LanguagePaginateBuilder
       createMany: (input: LanguageCreateFields[]) => LanguageCreateManyBuilder
       createOne: (input: LanguageCreateFields) => LanguageCreateOneBuilder
       deleteById: (id: ID) => LanguageDeleteByIdBuilder
@@ -779,7 +784,7 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => CustomerFindByIdBuilder
       findMany: () => CustomerFindManyBuilder
       findOne: () => CustomerFindOneBuilder
-      aggregate: () => CustomerAggregateBuilder
+      paginate: () => CustomerPaginateBuilder
       createMany: (input: CustomerCreateFields[]) => CustomerCreateManyBuilder
       createOne: (input: CustomerCreateFields) => CustomerCreateOneBuilder
       deleteById: (id: ID) => CustomerDeleteByIdBuilder
@@ -791,19 +796,19 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => CategoryFindByIdBuilder
       findMany: () => CategoryFindManyBuilder
       findOne: () => CategoryFindOneBuilder
-      aggregate: () => CategoryAggregateBuilder
+      paginate: () => CategoryPaginateBuilder
     }
     Address: {
       findById: (id: ID) => AddressFindByIdBuilder
       findMany: () => AddressFindManyBuilder
       findOne: () => AddressFindOneBuilder
-      aggregate: () => AddressAggregateBuilder
+      paginate: () => AddressPaginateBuilder
     }
     Movie: {
       findById: (id: ID) => MovieFindByIdBuilder
       findMany: () => MovieFindManyBuilder
       findOne: () => MovieFindOneBuilder
-      aggregate: () => MovieAggregateBuilder
+      paginate: () => MoviePaginateBuilder
       createMany: (input: MovieCreateFields[]) => MovieCreateManyBuilder
       createOne: (input: MovieCreateFields) => MovieCreateOneBuilder
       deleteById: (id: ID) => MovieDeleteByIdBuilder
@@ -815,7 +820,7 @@ export type SqlmancerClient = Knex & {
       findById: (id: ID) => PersonFindByIdBuilder
       findMany: () => PersonFindManyBuilder
       findOne: () => PersonFindOneBuilder
-      aggregate: () => PersonAggregateBuilder
+      paginate: () => PersonPaginateBuilder
     }
   }
 }

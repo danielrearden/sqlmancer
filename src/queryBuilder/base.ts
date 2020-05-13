@@ -41,7 +41,7 @@ export abstract class BaseBuilder {
   protected _select: any[] = []
   protected _rawSelect: Record<string, string> = {}
   protected _loadedAssociations: Record<string, [any, any]> = {}
-  protected _loadedAggregates: Record<string, [any, any]> = {}
+  protected _loadedPaginated: Record<string, [any, any]> = {}
   protected _where: Where<any, any, any, any, any> = {}
   protected _orderBy: OrderBy<any, any>[] = []
   protected _limit = 0
@@ -98,17 +98,18 @@ export abstract class BaseBuilder {
           association,
         },
       }
-      const [jsonAggExpression, numberPlaceholders] = getJsonAggregateExpressionByDialect(
+      const jsonAggExpression = getJsonAggregateExpressionByDialect(
         this._dialect,
-        association.isMany
+        association.isMany,
+        this._knex.ref(`${subqueryAlias}.o`)
       )
       expressions.select[alias] = this._knex
         .queryBuilder()
-        .select(this._knex.raw(jsonAggExpression, new Array(numberPlaceholders).fill(`${subqueryAlias}.o`)))
+        .select(this._knex.raw(jsonAggExpression))
         .from(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
     })
 
-    _.forIn(this._loadedAggregates, ([associationName, builder], alias) => {
+    _.forIn(this._loadedPaginated, ([associationName, builder], alias) => {
       const subqueryAlias = getAlias(alias, context)
       const association = this._model.associations[associationName]
       const nestedContext: QueryBuilderContext = {
@@ -122,8 +123,6 @@ export abstract class BaseBuilder {
       expressions.select[alias] = this._knex
         .queryBuilder()
         .select(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
-      // .select({ [alias]: `${subqueryAlias}.agg` })
-      // .from(builder.toQueryBuilder(nestedContext).as(subqueryAlias))
     })
   }
 

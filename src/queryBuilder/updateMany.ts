@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Knex from 'knex'
 
 import { BaseBuilder } from './base'
-import { AggregateBuilder } from './aggregate'
+import { PaginateBuilder } from './paginate'
 import { FindBuilder } from './find'
 import { BuilderOptions, Dialect, Expressions, OrderBy, Models, Where } from '../types'
 import { getAlias } from './utilities'
@@ -15,7 +15,10 @@ export class UpdateManyBuilder<
   TEnums,
   TAssociations extends Record<
     string,
-    [FindBuilder<any, any, any, any, any, any, any, any, any>, AggregateBuilder<any, any, any, any, any, any>]
+    [
+      FindBuilder<any, any, any, any, any, any, any, any, any>,
+      PaginateBuilder<any, any, any, any, any, any, any, any, any>
+    ]
   >
 > extends BaseBuilder {
   protected _data: TUpdateFields

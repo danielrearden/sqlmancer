@@ -2,7 +2,6 @@ import _ from 'lodash'
 import Knex from 'knex'
 
 import {
-  AggregateBuilder,
   CreateOneBuilder,
   CreateManyBuilder,
   DeleteByIdBuilder,
@@ -10,6 +9,7 @@ import {
   FindByIdBuilder,
   FindOneBuilder,
   FindManyBuilder,
+  PaginateBuilder,
   UpdateByIdBuilder,
   UpdateManyBuilder,
 } from '../queryBuilder'
@@ -25,7 +25,7 @@ type GenericSqlmancerClient = Knex & {
       findById: (id: ID) => FindByIdBuilder<any, any, any, any, any, any, any>
       findMany: () => FindManyBuilder<any, any, any, any, any, any, any, any>
       findOne: () => FindOneBuilder<any, any, any, any, any, any, any, any>
-      aggregate: () => AggregateBuilder<any, any, any, any, any, any>
+      paginate: () => PaginateBuilder<any, any, any, any, any, any, any, any, any>
       createMany?: (input: Array<any>) => CreateManyBuilder<any>
       createOne?: (input: any) => CreateOneBuilder<any>
       deleteById?: (id: ID) => DeleteByIdBuilder
@@ -57,7 +57,7 @@ export function createSqlmancerClient<T extends GenericSqlmancerClient = Generic
         findById: (id: ID) => new builders.findById(options, id),
         findMany: () => new builders.findMany(options),
         findOne: () => new builders.findOne(options),
-        aggregate: () => new builders.aggregate(options),
+        paginate: () => new builders.paginate(options),
         createOne: readOnly ? undefined : (input: any) => new builders.createOne!(options, input),
         createMany: readOnly ? undefined : (input: Array<any>) => new builders.createMany!(options, input),
         deleteById: readOnly ? undefined : (id: ID) => new builders.deleteById!(options, id),

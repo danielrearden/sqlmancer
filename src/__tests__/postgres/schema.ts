@@ -19,10 +19,10 @@ const typeDefs = gql`
     ) {
     actors: [Actor!]! @many
     actor(id: ID!): Actor
-    actorsAggregate: Actor @aggregate @many(model: "Actor")
+    actorsPaginated: Actor @paginate @many(model: "Actor")
     films: [Film!]! @limit @offset @where @orderBy
     film(id: ID!): Film
-    filmsAggregate: Film @aggregate @many(model: "Actor")
+    filmsPaginated: Film @paginate @many(model: "Film")
     customers: [Customer!]! @many
     customer(id: ID!): Customer
     addresses: [Address!]! @many
@@ -51,7 +51,14 @@ const typeDefs = gql`
     films: [Film!]!
       @relate(on: [{ from: "actor_id", to: "actor_id" }, { from: "film_id", to: "film_id" }], through: "film_actor")
       @many
-    filmsAggregate: Film @relate(aggregate: "films") @aggregate @many(model: "Film")
+    filmsPaginated: Film
+      @relate(
+        on: [{ from: "actor_id", to: "actor_id" }, { from: "film_id", to: "film_id" }]
+        through: "film_actor"
+        pagination: OFFSET
+      )
+      @paginate
+      @many(model: "Film")
   }
 
   type Film @model(table: "film", pk: "film_id") {
@@ -76,7 +83,14 @@ const typeDefs = gql`
         through: "film_category"
       )
       @many
-    actorsAggregate: Actor @relate(aggregate: "actors") @aggregate @many(model: "Actor")
+    actorsPaginated: Actor
+      @relate(
+        on: [{ from: "film_id", to: "film_id" }, { from: "actor_id", to: "actor_id" }]
+        through: "film_actor"
+        pagination: OFFSET
+      )
+      @paginate
+      @many(model: "Actor")
     language: Language! @relate(on: { from: "language_id", to: "language_id" })
     originalLanguage: Language @relate(on: { from: "original_language_id", to: "language_id" })
   }
@@ -86,7 +100,10 @@ const typeDefs = gql`
     name: String!
     lastUpdate: DateTime! @hasDefault
     films: [Film!]! @relate(on: { from: "language_id", to: "language_id" }) @many
-    filmsAggregate: Film @relate(aggregate: "films") @aggregate @many(model: "Film")
+    filmsPaginated: Film
+      @relate(on: { from: "language_id", to: "language_id" }, pagination: OFFSET)
+      @paginate
+      @many(model: "Film")
   }
 
   type Customer @model(table: "customer", pk: "customer_id") {
@@ -240,8 +257,8 @@ const resolvers: IResolvers = {
     actor: (_root, args, _ctx, info) => {
       return Actor.findById(args.id).resolveInfo(info).execute()
     },
-    actorsAggregate: (_root, _args, _ctx, info) => {
-      return Actor.aggregate().resolveInfo(info).execute()
+    actorsPaginated: (_root, _args, _ctx, info) => {
+      return Actor.paginate().resolveInfo(info).execute()
     },
     films: (_root, _args, _ctx, info) => {
       return Film.findMany().resolveInfo(info).execute()
@@ -249,8 +266,8 @@ const resolvers: IResolvers = {
     film: (_root, args, _ctx, info) => {
       return Film.findById(args.id).resolveInfo(info).execute()
     },
-    filmsAggregate: (_root, _args, _ctx, info) => {
-      return Film.aggregate().resolveInfo(info).execute()
+    filmsPaginated: (_root, _args, _ctx, info) => {
+      return Film.paginate().resolveInfo(info).execute()
     },
     customers: (_root, _args, _ctx, info) => {
       return Customer.findMany().resolveInfo(info).execute()

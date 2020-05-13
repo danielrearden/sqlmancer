@@ -57,6 +57,9 @@ function assertValidModels({ models }: SqlmancerConfig): void {
     }
     Object.keys(associations).forEach((associationName) => {
       const { on, through } = associations[associationName]
+      if (!on) {
+        throw new SqlmancerConfigError(`Association ${associationName} on model ${modelName} is missing "on" property.`)
+      }
       if (through) {
         if (on.length !== 2) {
           throw new SqlmancerConfigError(
