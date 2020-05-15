@@ -314,7 +314,7 @@ Array [
 ]
 `;
 
-exports[`PaginateBuilder sqlite hasMore limit 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ?) as \`f1\`), 'hasMore', (select coalesce(count(\`f3\`.\`film_id\`), 0) > 5 from \`film\` as \`f3\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite hasMore limit 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ?) as \`f1\`), 'hasMore', (select coalesce(count(\`f3\`.\`film_id\`), 0) > 5 from \`film\` as \`f3\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite hasMore limit 2`] = `
 Array [
@@ -322,11 +322,11 @@ Array [
 ]
 `;
 
-exports[`PaginateBuilder sqlite hasMore no limit 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`), 'hasMore', false) as \`page\`"`;
+exports[`PaginateBuilder sqlite hasMore no limit 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`), 'hasMore', false) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite hasMore no limit 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results limit 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ?) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results limit 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ?) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results limit 2`] = `
 Array [
@@ -334,15 +334,15 @@ Array [
 ]
 `;
 
-exports[`PaginateBuilder sqlite results load 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('credits', (select json_group_array(\`c1\`.\`o\`) from (select json_object('id', \`a1\`.\`actor_id\`, 'firstName', \`a1\`.\`first_name\`, 'lastName', \`a1\`.\`last_name\`, 'lastUpdate', \`a1\`.\`last_update\`) as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f2\`.\`film_id\` = \`f3\`.\`film_id\`) as \`c1\`)) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results load 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('credits', (select json_group_array(json(\`c1\`.\`o\`)) from (select json_object('id', \`a1\`.\`actor_id\`, 'firstName', \`a1\`.\`first_name\`, 'lastName', \`a1\`.\`last_name\`, 'lastUpdate', \`a1\`.\`last_update\`) as \`o\` from \`actor\` as \`a1\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`actor_id\` = \`a1\`.\`actor_id\` where \`f2\`.\`film_id\` = \`f3\`.\`film_id\`) as \`c1\`)) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results load 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results loadPaginated 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('actors', (select (select json_object('aggregate', (select json_object('count', coalesce(count(\`a2\`.\`actor_id\`), 0)) from (select \`a3\`.\`actor_id\` from \`actor\` as \`a3\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`actor_id\` = \`a3\`.\`actor_id\` where \`f2\`.\`film_id\` = \`f3\`.\`film_id\`) as \`a2\`)) as \`page\`) as \`a1\`)) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results loadPaginated 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('actors', (select (select json_object('aggregate', (select json_object('count', coalesce(count(\`a2\`.\`actor_id\`), 0)) from (select \`a3\`.\`actor_id\` from \`actor\` as \`a3\` inner join \`film_actor\` as \`f3\` on \`f3\`.\`actor_id\` = \`a3\`.\`actor_id\` where \`f2\`.\`film_id\` = \`f3\`.\`film_id\`) as \`a2\`)) as \`page\`) as \`a1\`)) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results loadPaginated 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results mergeWhere 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` where \`f2\`.\`title\` = ? and \`f2\`.\`description\` = ?) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results mergeWhere 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` where \`f2\`.\`title\` = ? and \`f2\`.\`description\` = ?) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results mergeWhere 2`] = `
 Array [
@@ -351,7 +351,7 @@ Array [
 ]
 `;
 
-exports[`PaginateBuilder sqlite results offset 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ? offset ?) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results offset 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` limit ? offset ?) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results offset 2`] = `
 Array [
@@ -360,19 +360,19 @@ Array [
 ]
 `;
 
-exports[`PaginateBuilder sqlite results orderBy 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` order by \`f2\`.\`title\` asc) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results orderBy 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` order by \`f2\`.\`title\` asc) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results orderBy 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results select 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results select 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results select 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results selectAll 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'length', \`f2\`.\`length\`, 'rating', \`f2\`.\`rating\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results selectAll 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('id', \`f2\`.\`film_id\`, 'title', \`f2\`.\`title\`, 'description', \`f2\`.\`description\`, 'releaseYear', \`f2\`.\`release_year\`, 'length', \`f2\`.\`length\`, 'rating', \`f2\`.\`rating\`, 'rentalRate', \`f2\`.\`rental_rate\`, 'rentalDuration', \`f2\`.\`rental_duration\`, 'replacementCost', \`f2\`.\`replacement_cost\`, 'lastUpdate', \`f2\`.\`last_update\`) as \`o\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results selectAll 2`] = `Array []`;
 
-exports[`PaginateBuilder sqlite results where 1`] = `"select json_object('results', (select json_group_array(\`f1\`.\`o\`) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` where \`f2\`.\`title\` = ?) as \`f1\`)) as \`page\`"`;
+exports[`PaginateBuilder sqlite results where 1`] = `"select json_object('results', (select json_group_array(json(\`f1\`.\`o\`)) from (select json_object('title', \`f2\`.\`title\`) as \`o\` from \`film\` as \`f2\` where \`f2\`.\`title\` = ?) as \`f1\`)) as \`page\`"`;
 
 exports[`PaginateBuilder sqlite results where 2`] = `
 Array [
