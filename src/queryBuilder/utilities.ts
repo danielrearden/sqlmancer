@@ -144,6 +144,8 @@ export function getJsonAggregateExpressionByDialect(
         ? `if(json_arrayagg(${expression}) is null, json_array(), json_arrayagg(${expression}))`
         : `json_extract(json_arrayagg(${expression}), '$[0]')`
     case 'sqlite':
-      return isArray ? `json_group_array(${expression})` : `json_extract(json_group_array(${expression}), '$[0]')`
+      return isArray
+        ? `json_group_array(json(${expression}))`
+        : `json_extract(json_group_array(json(${expression})), '$[0]')`
   }
 }

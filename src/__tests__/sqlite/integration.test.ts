@@ -155,6 +155,23 @@ describe('integration (sqlite)', () => {
     expect(data?.a[0].title).toBe('BOOGIE AMELIE')
   })
 
+  test('nested sorting and filtering', async () => {
+    const { data, errors } = await graphql(
+      schema,
+      `
+        query {
+          actors(limit: 5) {
+            films(limit: 3, offset: 1, orderBy: { id: DESC }, where: { title: { like: "%" } }) {
+              title
+            }
+          }
+        }
+      `
+    )
+    expect(errors).toBeUndefined()
+    expect(data?.actors[0].films[0]).toBeDefined()
+  })
+
   test('pagination', async () => {
     const { data, errors } = await graphql(
       schema,
