@@ -52,12 +52,14 @@ const typeDefs = `
     enumNullable: Flavor
     enumList: [Flavor!]!
     renamedField: String! @col(name: "something_else")
-    privateField: String @private
+    privateString: String! @private
+    privateInt: Int! @private
     derivedField: String @depend(on: ["foo", "bar"])
     unsupportedType: Gizmo
     unsupportedListType: [Gizmo!]!
     gizmos: [Gizmo!]! @relate(on: {from: "id", to: "widget_id"})
     jiggers: [Jigger!]! @relate(through: "widget_jiggers" on:[{from: "id", to: "gizmo_id"}, {from: "jigger_id", to: "id"}])
+    privateRelationship: [Jigger!]! @relate(through: "widget_jiggers" on:[{from: "id", to: "gizmo_id"}, {from: "jigger_id", to: "id"}]) @private
     bauble: Bauble @relate(on: {from: "bauble_id", to: "id"})
     ignoredField: String! @ignore
   }

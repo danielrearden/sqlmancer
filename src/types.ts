@@ -59,11 +59,13 @@ export type Field = {
   mappedType: string
   type: GraphQLOutputType
   hasDefault: boolean
+  isPrivate: boolean
 }
 
 export type Association = {
   modelName: string
   isMany: boolean
+  isPrivate: boolean
   on: { from: string; to: string }[]
   through?: string
   pagination?: 'offset'

@@ -75,15 +75,17 @@ export class PaginateDirective extends SchemaDirectiveVisitor<any, any> {
       fields: () => {
         const fieldsByAggregateFunction = Object.keys(model.fields).reduce(
           (acc, fieldName) => {
-            const { mappedType, type } = model.fields[fieldName]
-            if (mappedType === 'number') {
-              acc.avg.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
-              acc.sum.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
-            }
-            if (mappedType === 'number' || mappedType === 'string' || mappedType === 'ID' || mappedType === 'Date') {
-              const nullableType = makeNullable(type)
-              acc.min.push({ fieldName, type: nullableType })
-              acc.max.push({ fieldName, type: nullableType })
+            const { mappedType, type, isPrivate } = model.fields[fieldName]
+            if (!isPrivate) {
+              if (mappedType === 'number') {
+                acc.avg.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
+                acc.sum.push({ fieldName, type: new GraphQLNonNull(GraphQLFloat) })
+              }
+              if (mappedType === 'number' || mappedType === 'string' || mappedType === 'ID' || mappedType === 'Date') {
+                const nullableType = makeNullable(type)
+                acc.min.push({ fieldName, type: nullableType })
+                acc.max.push({ fieldName, type: nullableType })
+              }
             }
 
             return acc

@@ -4,7 +4,6 @@ import { parse, DocumentNode } from 'graphql'
 import { InputDirective } from './input'
 import { LimitDirective } from './limit'
 import { ManyDirective } from './many'
-import { ModelDirective } from './model'
 import { OffsetDirective } from './offset'
 import { OrderByDirective } from './orderBy'
 import { PaginateDirective } from './paginate'
@@ -22,7 +21,6 @@ export const schemaDirectives: { [name: string]: typeof SchemaDirectiveVisitor }
   private: PrivateDirective,
   relate: RelateDirective,
   many: ManyDirective,
-  model: ModelDirective,
   value: ValueDirective,
   where: WhereDirective,
 }
@@ -142,7 +140,6 @@ export const makeSqlmancerSchema = (config: IExecutableSchemaDefinition) =>
 export { InputDirective } from './input'
 export { LimitDirective } from './limit'
 export { ManyDirective } from './many'
-export { ModelDirective } from './model'
 export { OffsetDirective } from './offset'
 export { OrderByDirective } from './orderBy'
 export { PaginateDirective } from './paginate'

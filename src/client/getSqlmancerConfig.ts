@@ -189,7 +189,7 @@ export function getModels(
           const fieldNames = Object.keys(fieldMap)
           fieldNames.forEach((fieldName) => {
             const field = fieldMap[fieldName]
-            const { col, relate, depend, ignore, hasDefault } = getDirectives(schema, field)
+            const { col, relate, depend, ignore, hasDefault, private: isPrivate } = getDirectives(schema, field)
 
             const unwrappedType = unwrap(field.type)
             const nullableType = makeNullable(field.type)
@@ -210,6 +210,7 @@ export function getModels(
                   mappedType,
                   type: field.type,
                   hasDefault: !!hasDefault,
+                  isPrivate: !!isPrivate,
                 }
               }
             } else if (relate) {
@@ -217,6 +218,7 @@ export function getModels(
               acc.associations[fieldName] = {
                 modelName: unwrappedType.name,
                 isMany: isList,
+                isPrivate: !!isPrivate,
                 on: relate.on,
                 through: relate.through,
                 pagination: relate.pagination,

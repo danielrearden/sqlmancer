@@ -14,6 +14,7 @@ describe('assertValidSqlmancerConfig', () => {
           friends: {
             modelName: 'User',
             isMany: true,
+            isPrivate: false,
             on: [{ from: 'a', to: 'b' }],
             through: undefined,
           },

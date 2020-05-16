@@ -87,7 +87,7 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
     return Object.keys(fields).reduce((acc, fieldName) => {
       const field = fields[fieldName]
       const operatorType = this.getOperatorType(field)
-      if (operatorType) {
+      if (!field.isPrivate && operatorType) {
         acc[fieldName] = { type: operatorType }
         this.schema.getTypeMap()[operatorType.name] = operatorType
       }
@@ -166,12 +166,14 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
 
   private getAssociationFields(associations: Record<string, Association>): GraphQLInputFieldMap {
     return Object.keys(associations).reduce((acc, associationName) => {
-      const { modelName, isMany } = associations[associationName]
+      const { modelName, isMany, isPrivate } = associations[associationName]
 
-      acc[associationName] = {
-        name: associationName,
-        type: this.getInputType(modelName, isMany)!,
-        extensions: undefined,
+      if (!isPrivate) {
+        acc[associationName] = {
+          name: associationName,
+          type: this.getInputType(modelName, isMany)!,
+          extensions: undefined,
+        }
       }
 
       return acc
@@ -210,14 +212,16 @@ export class WhereDirective extends SchemaDirectiveVisitor<any, any> {
   private getAggregateFields(modelName: string, fields: Record<string, Field>): GraphQLInputFieldMap {
     const fieldsByAggregateFunction = Object.keys(fields).reduce(
       (acc, fieldName) => {
-        const { mappedType } = fields[fieldName]
-        if (mappedType === 'number') {
-          acc.avg.push(fieldName)
-          acc.sum.push(fieldName)
-        }
-        if (mappedType === 'number' || mappedType === 'string' || mappedType === 'Date') {
-          acc.min.push(fieldName)
-          acc.max.push(fieldName)
+        const { mappedType, isPrivate } = fields[fieldName]
+        if (!isPrivate) {
+          if (mappedType === 'number') {
+            acc.avg.push(fieldName)
+            acc.sum.push(fieldName)
+          }
+          if (mappedType === 'number' || mappedType === 'string' || mappedType === 'Date') {
+            acc.min.push(fieldName)
+            acc.max.push(fieldName)
+          }
         }
         return acc
       },

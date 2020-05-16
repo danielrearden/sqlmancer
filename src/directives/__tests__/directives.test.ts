@@ -20,7 +20,7 @@ describe('directives', () => {
     test('correct usage', async () => {
       await new Promise((resolve) => process.nextTick(resolve))
       expect(schema.getType('Secret')).toBeUndefined()
-      expect((schema.getType('Widget') as GraphQLObjectType).getFields().privateField).toBeUndefined()
+      expect((schema.getType('Widget') as GraphQLObjectType).getFields().privateString).toBeUndefined()
     })
   })
 
@@ -70,6 +70,9 @@ describe('directives', () => {
       expect(fields.enum.type.toString()).toStrictEqual('FlavorOperators')
       expect(fields.enumNullable.type.toString()).toStrictEqual('FlavorOperators')
       expect(fields.enumList.type.toString()).toStrictEqual('FlavorListOperators')
+      expect(fields.privateString).toBeUndefined()
+      expect(fields.privateInt).toBeUndefined()
+      expect(fields.privateRelationship).toBeUndefined()
     })
   })
 
@@ -104,6 +107,9 @@ describe('directives', () => {
       expect(fields.jsonObjectNullable).toBeUndefined()
       expect(fields.jsonObjectList).toBeUndefined()
       expect(fields.enumList).toBeUndefined()
+      expect(fields.privateString).toBeUndefined()
+      expect(fields.privateInt).toBeUndefined()
+      expect(fields.privateRelationship).toBeUndefined()
     })
   })
 
@@ -142,6 +148,8 @@ describe('directives', () => {
       expect(UpdateWidgetInput.getFields().string.type.toString()).toBe('String')
       expect(UpdateWidgetInput.getFields().json.type.toString()).toBe('JSON')
       expect(UpdateWidgetInput.getFields().id).toBeUndefined()
+      expect(UpdateWidgetInput.getFields().privateString).toBeUndefined()
+      expect(UpdateWidgetInput.getFields().privateInt).toBeUndefined()
     })
   })
 
@@ -177,10 +185,18 @@ describe('directives', () => {
       expect(avgFields.int).toBeDefined()
       expect(avgFields.float).toBeDefined()
 
+      expect(minFields.privateString).toBeUndefined()
+      expect(minFields.privateInt).toBeUndefined()
+      expect(maxFields.privateString).toBeUndefined()
+      expect(maxFields.privateInt).toBeUndefined()
       expect(sumFields.id).toBeUndefined()
       expect(sumFields.string).toBeUndefined()
+      expect(sumFields.privateString).toBeUndefined()
+      expect(sumFields.privateInt).toBeUndefined()
       expect(avgFields.id).toBeUndefined()
       expect(avgFields.string).toBeUndefined()
+      expect(avgFields.privateString).toBeUndefined()
+      expect(avgFields.privateInt).toBeUndefined()
     })
   })
 })

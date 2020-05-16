@@ -71,10 +71,10 @@ export class InputDirective extends SchemaDirectiveVisitor<any, any> {
     const inputType: GraphQLInputObjectType = new GraphQLInputObjectType({
       name: typeName,
       fields: Object.keys(model.fields).reduce((acc, fieldName) => {
-        const field = model.fields[fieldName]
-        const nullable = action === 'UPDATE' || field.hasDefault
-        if (isInputType(field.type) && (action === 'CREATE' || field.column !== model.primaryKey)) {
-          acc[fieldName] = { type: nullable ? makeNullable(field.type) : field.type }
+        const { type, column, hasDefault, isPrivate } = model.fields[fieldName]
+        const nullable = action === 'UPDATE' || hasDefault
+        if (!isPrivate && isInputType(type) && (action === 'CREATE' || column !== model.primaryKey)) {
+          acc[fieldName] = { type: nullable ? makeNullable(type) : type }
         }
         return acc
       }, {} as GraphQLInputFieldConfigMap),
