@@ -2,7 +2,7 @@
 
 ### Conjure SQL from your GraphQL queries 🧙🔮✨
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/danielrearden/sqlmancer) ![GitHub](https://img.shields.io/github/license/danielrearden/sqlmancer) [![Build Status](https://img.shields.io/travis/com/danielrearden/sqlmancer?logo=travis)](https://travis-ci.com/danielrearden/sqlmancer) [![Coverage Status](https://img.shields.io/coveralls/github/danielrearden/sqlmancer?logo=coveralls)](https://coveralls.io/github/danielrearden/sqlmancer?branch=master) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/danielrearden/sqlmancer)](https://lgtm.com/projects/g/danielrearden/sqlmancer/context:javascript) ![Dependencies](https://img.shields.io/librariesio/release/npm/sqlmancer)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/danielrearden/sqlmancer) ![GitHub](https://img.shields.io/github/license/danielrearden/sqlmancer) [![Build Status](https://img.shields.io/travis/com/danielrearden/sqlmancer?logo=travis)](https://travis-ci.com/danielrearden/sqlmancer) [![Coverage Status](https://img.shields.io/coveralls/github/danielrearden/sqlmancer?logo=coveralls)](https://coveralls.io/github/danielrearden/sqlmancer?branch=master) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/danielrearden/sqlmancer)](https://lgtm.com/projects/g/danielrearden/sqlmancer/context:javascript) ![Discord](https://img.shields.io/discord/625400653321076807)
 
 > ⚠️ This project is still in development. The API is still subject to change and suggestions are welcome. If you find a bug that doesn't already have an open issue, please open one.
 
@@ -82,6 +82,10 @@ query FilmQuery {
 * **Flexible and unopinionated.** Sqlmancer enabled you to easily add features like authorization, tracing, cost analysis and depth limits using existing libraries without paying for a "pro" version.
 
 See [the official documentation](https://sqlmancer.netlify.app/) for API reference, guides and more.
+
+## Community
+
+If you found a bug, have a feature request or want to contribute to the project, please open an issue. If you need help or have a question, you can ask on [Stack Overflow](https://stackoverflow.com/questions/tagged/sqlmancer) or come chat with us on [Discord](https://discord.com/channels/625400653321076807/710279654140805230)!
 
 ## Contributors
 
