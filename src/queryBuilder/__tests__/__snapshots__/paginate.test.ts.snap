@@ -126,6 +126,10 @@ Array [
 ]
 `;
 
+exports[`PaginateBuilder mysql totalCount correct usage 1`] = `"select json_object('totalCount', (select coalesce(\`f1\`.\`count\`, 0) from (select count(\`f2\`.\`film_id\`) as count from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+
+exports[`PaginateBuilder mysql totalCount correct usage 2`] = `Array []`;
+
 exports[`PaginateBuilder postgres aggregate avg 1`] = `"select json_build_object('aggregate', (select json_build_object('avg', json_build_object('rentalRate', coalesce(avg(\\"f1\\".\\"rental_rate\\"), 0))) from (select \\"f2\\".\\"rental_rate\\" from \\"film\\" as \\"f2\\") as \\"f1\\")) as \\"page\\""`;
 
 exports[`PaginateBuilder postgres aggregate avg 2`] = `Array []`;
@@ -251,6 +255,10 @@ Array [
   "FILM",
 ]
 `;
+
+exports[`PaginateBuilder postgres totalCount correct usage 1`] = `"select json_build_object('totalCount', (select coalesce(\\"f1\\".\\"count\\", 0) from (select count(\\"f2\\".\\"film_id\\") as count from \\"film\\" as \\"f2\\") as \\"f1\\")) as \\"page\\""`;
+
+exports[`PaginateBuilder postgres totalCount correct usage 2`] = `Array []`;
 
 exports[`PaginateBuilder sqlite aggregate avg 1`] = `"select json_object('aggregate', (select json_object('avg', json_object('rentalRate', coalesce(avg(\`f1\`.\`rental_rate\`), 0))) from (select \`f2\`.\`rental_rate\` from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
 
@@ -379,3 +387,7 @@ Array [
   "FILM",
 ]
 `;
+
+exports[`PaginateBuilder sqlite totalCount correct usage 1`] = `"select json_object('totalCount', (select coalesce(\`f1\`.\`count\`, 0) from (select count(\`f2\`.\`film_id\`) as count from \`film\` as \`f2\`) as \`f1\`)) as \`page\`"`;
+
+exports[`PaginateBuilder sqlite totalCount correct usage 2`] = `Array []`;

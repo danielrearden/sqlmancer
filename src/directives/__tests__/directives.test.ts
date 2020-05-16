@@ -147,29 +147,40 @@ describe('directives', () => {
 
   describe('@paginate', () => {
     test('correct usage', async () => {
-      const { createWidget, createWidgets, updateWidget, updateWidgets } = (schema.getType(
-        'Mutation'
+      const { paginatedWidgets } = (schema.getType('Query') as GraphQLObjectType).getFields()
+      const { results, aggregate, hasMore, totalCount } = (schema.getType(
+        'WidgetPage'
       ) as GraphQLObjectType).getFields()
-      const CreateWidgetInput = schema.getType('CreateWidgetInput') as GraphQLInputObjectType
-      const UpdateWidgetInput = schema.getType('UpdateWidgetInput') as GraphQLInputObjectType
-      const createWidgetInputArgType = createWidget.args.find((arg) => arg.name === 'input')!.type
-      const createWidgetsInputArgType = createWidgets.args.find((arg) => arg.name === 'input')!.type
-      const updateWidgetInputArgType = updateWidget.args.find((arg) => arg.name === 'input')!.type
-      const updateWidgetsInputArgType = updateWidgets.args.find((arg) => arg.name === 'input')!.type
-      expect(createWidgetInputArgType.toString()).toBe('CreateWidgetInput!')
-      expect(createWidgetsInputArgType.toString()).toBe('[CreateWidgetInput!]!')
-      expect(updateWidgetInputArgType.toString()).toBe('UpdateWidgetInput!')
-      expect(updateWidgetsInputArgType.toString()).toBe('UpdateWidgetInput!')
-      expect(CreateWidgetInput.getFields().id.type.toString()).toBe('ID')
-      expect(CreateWidgetInput.getFields().idNullable.type.toString()).toBe('ID')
-      expect(CreateWidgetInput.getFields().idList.type.toString()).toBe('[ID!]!')
-      expect(CreateWidgetInput.getFields().string.type.toString()).toBe('String!')
-      expect(CreateWidgetInput.getFields().json.type.toString()).toBe('JSON!')
-      expect(UpdateWidgetInput.getFields().idNullable.type.toString()).toBe('ID')
-      expect(UpdateWidgetInput.getFields().idList.type.toString()).toBe('[ID!]')
-      expect(UpdateWidgetInput.getFields().string.type.toString()).toBe('String')
-      expect(UpdateWidgetInput.getFields().json.type.toString()).toBe('JSON')
-      expect(UpdateWidgetInput.getFields().id).toBeUndefined()
+      const { count } = (schema.getType('WidgetAggregate') as GraphQLObjectType).getFields()
+      const minFields = (schema.getType('WidgetAggregateMin') as GraphQLObjectType).getFields()
+      const maxFields = (schema.getType('WidgetAggregateMax') as GraphQLObjectType).getFields()
+      const sumFields = (schema.getType('WidgetAggregateSum') as GraphQLObjectType).getFields()
+      const avgFields = (schema.getType('WidgetAggregateAvg') as GraphQLObjectType).getFields()
+
+      expect(paginatedWidgets.type.toString()).toBe('WidgetPage!')
+      expect(results.type.toString()).toBe('[Widget!]!')
+      expect(aggregate.type.toString()).toBe('WidgetAggregate!')
+      expect(hasMore.type.toString()).toBe('Boolean!')
+      expect(totalCount.type.toString()).toBe('Int!')
+      expect(count.type.toString()).toBe('Int!')
+
+      expect(minFields.id).toBeDefined()
+      expect(minFields.string).toBeDefined()
+      expect(minFields.int).toBeDefined()
+      expect(minFields.float).toBeDefined()
+      expect(maxFields.id).toBeDefined()
+      expect(maxFields.string).toBeDefined()
+      expect(maxFields.int).toBeDefined()
+      expect(maxFields.float).toBeDefined()
+      expect(sumFields.int).toBeDefined()
+      expect(sumFields.float).toBeDefined()
+      expect(avgFields.int).toBeDefined()
+      expect(avgFields.float).toBeDefined()
+
+      expect(sumFields.id).toBeUndefined()
+      expect(sumFields.string).toBeUndefined()
+      expect(avgFields.id).toBeUndefined()
+      expect(avgFields.string).toBeUndefined()
     })
   })
 })

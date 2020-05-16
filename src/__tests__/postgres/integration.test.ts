@@ -209,6 +209,7 @@ describe('integration (postgres)', () => {
               id
             }
             hasMore
+            totalCount
           }
           filmsPaginated {
             aggregate {
@@ -234,6 +235,7 @@ describe('integration (postgres)', () => {
               id
             }
             hasMore
+            totalCount
           }
           actor(id: 1) {
             filmsPaginated {
@@ -260,6 +262,7 @@ describe('integration (postgres)', () => {
                 id
               }
               hasMore
+              totalCount
             }
           }
         }
@@ -273,6 +276,7 @@ describe('integration (postgres)', () => {
     expect(data?.actorsPaginated.aggregate.max.lastUpdate).toBeDefined()
     expect(data?.actorsPaginated.results.length).toBeGreaterThan(0)
     expect(data?.actorsPaginated.hasMore).toBeDefined()
+    expect(data?.actorsPaginated.totalCount).toBeDefined()
     expect(data?.filmsPaginated.aggregate.count).toBeGreaterThan(0)
     expect(data?.filmsPaginated.aggregate.min.title).toBeDefined()
     expect(data?.filmsPaginated.aggregate.min.length).toBeDefined()
@@ -284,6 +288,7 @@ describe('integration (postgres)', () => {
     expect(data?.filmsPaginated.aggregate.sum.length).toBeDefined()
     expect(data?.filmsPaginated.results.length).toBeGreaterThan(0)
     expect(data?.filmsPaginated.hasMore).toBeDefined()
+    expect(data?.filmsPaginated.totalCount).toBeDefined()
     expect(data?.actor.filmsPaginated.aggregate.count).toBeGreaterThan(0)
     expect(data?.actor.filmsPaginated.aggregate.min.title).toBeDefined()
     expect(data?.actor.filmsPaginated.aggregate.min.length).toBeDefined()
@@ -295,6 +300,7 @@ describe('integration (postgres)', () => {
     expect(data?.actor.filmsPaginated.aggregate.sum.length).toBeDefined()
     expect(data?.actor.filmsPaginated.results.length).toBeGreaterThan(0)
     expect(data?.actor.filmsPaginated.hasMore).toBeDefined()
+    expect(data?.actor.filmsPaginated.totalCount).toBeDefined()
   })
 
   test('abstract types', async () => {

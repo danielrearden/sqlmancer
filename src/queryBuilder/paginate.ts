@@ -40,6 +40,7 @@ export class PaginateBuilder<
 > extends BaseBuilder {
   protected _aggregates: Aggregates<TFields> = []
   protected _includeHasMore = false
+  protected _includeTotalCount = false
 
   constructor(options: BuilderOptions, modelName: string, models: Models) {
     super(options, modelName, models)
@@ -284,7 +285,8 @@ export class PaginateBuilder<
   }
 
   /**
-   * Gets a count of all the records in the associated table
+   * Gets a count of all the records in the associated table matching the provided criteria.
+   * The value is available under the "aggregate" property in the object returned when calling `execute`.
    */
   public count(): PaginateBuilder<
     TDialect,
@@ -302,7 +304,8 @@ export class PaginateBuilder<
   }
 
   /**
-   * Gets the average of the provided field
+   * Gets the average of the provided field.
+   * The value is available under the "aggregate" property in the object returned when calling `execute`.
    */
   public avg<TField extends AggregateNumberFields<TFields>>(
     field: TField
@@ -322,7 +325,8 @@ export class PaginateBuilder<
   }
 
   /**
-   * Gets the sum of the provided field
+   * Gets the sum of the provided field.
+   * The value is available under the "aggregate" property in the object returned when calling `execute`.
    */
   public sum<TField extends AggregateNumberFields<TFields>>(
     field: TField
@@ -342,7 +346,8 @@ export class PaginateBuilder<
   }
 
   /**
-   * Gets the minimum value of the provided field, or null if no matching records are found
+   * Gets the minimum value of the provided field, or null if no matching records are found.
+   * The value is available under the "aggregate" property in the object returned when calling `execute`.
    */
   public min<TField extends AggregateStringOrNumberFields<TFields>>(
     field: TField
@@ -362,7 +367,8 @@ export class PaginateBuilder<
   }
 
   /**
-   * Gets the maximum value of the provided field, or null if no matching records are found
+   * Gets the maximum value of the provided field, or null if no matching records are found.
+   * The value is available under the "aggregate" property in the object returned when calling `execute`.
    */
   public max<TField extends AggregateStringOrNumberFields<TFields>>(
     field: TField
@@ -397,6 +403,25 @@ export class PaginateBuilder<
     TResult & { hasMore: TDialect extends 'postgres' ? boolean : 0 | 1 }
   > {
     this._includeHasMore = true
+    return this as any
+  }
+
+  /**
+   * Attaches the "totalCount" property to the object returned when calling `execute`. The property indicates the
+   * total number of records matchinging the provided criteria, regardless of limit.
+   */
+  public totalCount(): PaginateBuilder<
+    TDialect,
+    TFields,
+    TIds,
+    TEnums,
+    TAssociations,
+    TFields,
+    TRawSelected,
+    TLoaded,
+    TResult & { totalCount: number }
+  > {
+    this._includeTotalCount = true
     return this as any
   }
 
@@ -449,7 +474,7 @@ export class PaginateBuilder<
     }
 
     const {
-      fields: { results, aggregate, hasMore },
+      fields: { results, aggregate, hasMore, totalCount },
       args: { where, orderBy, limit, offset },
     } = tree
 
@@ -518,6 +543,10 @@ export class PaginateBuilder<
       this.hasMore()
     }
 
+    if (totalCount) {
+      this.totalCount()
+    }
+
     if (!_.isNil(where)) {
       this.where(where)
     }
@@ -582,6 +611,11 @@ export class PaginateBuilder<
     if (this._includeHasMore) {
       keyValuePairs.push(`'hasMore', ?`)
       bindings.push(this._getHasMoreValue(context))
+    }
+
+    if (this._includeTotalCount) {
+      keyValuePairs.push(`'totalCount', ?`)
+      bindings.push(this._getTotalCountValue(context))
     }
 
     query.select({
@@ -750,6 +784,47 @@ export class PaginateBuilder<
     } else {
       query.with(tableAlias, this._knex.raw(this._cte!)).from(tableAlias)
     }
+
+    return query
+  }
+
+  protected _getTotalCountValue(context: QueryBuilderContext): Knex.RawBinding {
+    const subqueryAlias = getAlias(this._tableName || this._modelName, context)
+    const query = this._knex.queryBuilder()
+
+    query.select(this._knex.raw(`coalesce(${this._knex.ref(`${subqueryAlias}.count`)}, 0)`))
+
+    query.from(this._getTotalCountSubqueryBuilder(context).as(subqueryAlias))
+
+    return query
+  }
+
+  protected _getTotalCountSubqueryBuilder(context: QueryBuilderContext): Knex.QueryBuilder {
+    const tableAlias = getAlias(this._tableName || this._modelName, context)
+    const throughAlias =
+      context.nested && context.nested.association.through ? getAlias(context.nested.association.through, context) : ''
+    const expressions: Expressions = {
+      select: {},
+      join: [],
+      where: [],
+      groupBy: [],
+      orderBy: [],
+    }
+
+    this._addJoinExpressions(tableAlias, throughAlias, expressions, context)
+    this._addWhereExpressions(tableAlias, throughAlias, expressions, context)
+
+    const query = this._knex.queryBuilder()
+
+    query.select(this._knex.raw(`count(${this._knex.ref(`${tableAlias}.${this._primaryKey}`)}) as count`))
+
+    if (this._tableName) {
+      query.from({ [tableAlias]: this._tableName })
+    } else {
+      query.with(tableAlias, this._knex.raw(this._cte!)).from(tableAlias)
+    }
+
+    this._applyExpressions(query, expressions, false)
 
     return query
   }

@@ -226,5 +226,22 @@ describe('PaginateBuilder', () => {
         expect(bindings).toMatchSnapshot()
       })
     })
+
+    describe('totalCount', () => {
+      test('correct usage', async () => {
+        const builder = client.models.Film.paginate().totalCount()
+        const builder2 = client.models.Film.paginate().offset(10).totalCount()
+        const builder3 = client.models.Film.paginate().limit(10).totalCount()
+        const { sql, bindings } = builder.toQueryBuilder().toSQL()
+        const result = await builder.execute()
+        const result2 = await builder2.execute()
+        const result3 = await builder3.execute()
+        expect(result.totalCount).toBeNumber()
+        expect(result.totalCount).toBe(result2.totalCount)
+        expect(result.totalCount).toBe(result3.totalCount)
+        expect(sql).toMatchSnapshot()
+        expect(bindings).toMatchSnapshot()
+      })
+    })
   })
 })

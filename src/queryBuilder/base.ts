@@ -482,7 +482,7 @@ export abstract class BaseBuilder {
     return { orderByColumnName, direction, selectExpression }
   }
 
-  protected _applyExpressions(query: Knex.QueryBuilder, expressions: Expressions) {
+  protected _applyExpressions(query: Knex.QueryBuilder, expressions: Expressions, includeLimitOffset = true) {
     expressions.join.forEach((join) => (query as any)[join.type](join.table, join.on))
 
     expressions.where.forEach((whereArgs) => (query.where as any)(...whereArgs))
@@ -495,11 +495,11 @@ export abstract class BaseBuilder {
       query.orderBy(expressions.orderBy as any)
     }
 
-    if (this._limit) {
+    if (this._limit && includeLimitOffset) {
       query.limit(this._limit)
     }
 
-    if (this._offset) {
+    if (this._offset && includeLimitOffset) {
       query.offset(this._offset)
     }
   }

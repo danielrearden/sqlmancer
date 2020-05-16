@@ -16,6 +16,7 @@ const typeDefs = `
     widgets: [Widget!]! @limit @offset @orderBy(model: "Widget") @where(model: "Widget")
     alsoWidgets: [Widget!]! @orderBy @where
     someMoreWidgets: [Widget!]! @many
+    paginatedWidgets: Widget @paginate
   }
 
   type Mutation {

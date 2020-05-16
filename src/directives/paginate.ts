@@ -56,6 +56,9 @@ export class PaginateDirective extends SchemaDirectiveVisitor<any, any> {
         hasMore: {
           type: new GraphQLNonNull(GraphQLBoolean),
         },
+        totalCount: {
+          type: new GraphQLNonNull(GraphQLInt),
+        },
       }),
     })
   }
