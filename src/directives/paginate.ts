@@ -24,7 +24,7 @@ export class PaginateDirective extends SchemaDirectiveVisitor<any, any> {
   }
 
   visitFieldDefinition(field: GraphQLField<any, any>): GraphQLField<any, any> {
-    return { ...field, type: this.getPaginateType(field) }
+    return { ...field, type: new GraphQLNonNull(this.getPaginateType(field)) }
   }
 
   private getPaginateType(field: GraphQLField<any, any>): GraphQLOutputType {
