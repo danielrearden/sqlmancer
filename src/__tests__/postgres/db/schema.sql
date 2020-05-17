@@ -87,7 +87,8 @@ CREATE TABLE film (
     last_update timestamp without time zone DEFAULT now() NOT NULL,
     special_features text[],
     fulltext tsvector NOT NULL,
-    extra_data jsonb DEFAULT '{"imdbRating": 0}' NOT NULL
+    extra_data jsonb DEFAULT '{"imdbRating": 0}' NOT NULL,
+    sequel_id integer NULL
 );
 
 ALTER TABLE public.film OWNER TO postgres;

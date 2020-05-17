@@ -87,6 +87,7 @@ const typeDefs = gql`
       @many(model: "Actor")
     language: Language! @relate(on: { from: "language_id", to: "language_id" })
     originalLanguage: Language @relate(on: { from: "original_language_id", to: "language_id" })
+    sequel: Film @relate(on: { from: "sequel_id", to: "film_id" })
   }
 
   type Language @model(table: "language", pk: "language_id") {

@@ -62,6 +62,7 @@ const typeDefs = `
     privateRelationship: [Jigger!]! @relate(through: "widget_jiggers" on:[{from: "id", to: "gizmo_id"}, {from: "jigger_id", to: "id"}]) @private
     bauble: Bauble @relate(on: {from: "bauble_id", to: "id"})
     ignoredField: String! @ignore
+    parentWidget: Widget! @relate(on: { from: "parent_id", to: "id" })
   }
 
   enum Flavor {

@@ -153,6 +153,7 @@ CREATE TABLE film (
   rating VARCHAR(10) DEFAULT 'G',
   special_features VARCHAR(100) DEFAULT NULL,
   last_update TIMESTAMP,
+  sequel_id INTEGER DEFAULT NULL,
   CONSTRAINT CHECK_special_features CHECK(special_features is null or
                                                            special_features like '%Trailers%' or
                                                            special_features like '%Commentaries%' or

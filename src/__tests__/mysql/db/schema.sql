@@ -82,6 +82,7 @@ CREATE TABLE film (
   special_features SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes') DEFAULT NULL,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   extra_data JSON NULL,
+  sequel_id SMALLINT UNSIGNED NULL,
   PRIMARY KEY  (film_id),
   KEY idx_title (title),
   KEY idx_fk_language_id (language_id),

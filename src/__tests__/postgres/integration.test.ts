@@ -121,6 +121,44 @@ describe('integration (postgres)', () => {
     expect(data?.address).toBeObject()
   })
 
+  test('aliases', async () => {
+    const { data, errors } = await graphql(
+      schema,
+      `
+        query {
+          actor(id: 1) {
+            id
+            films1: films(limit: 2) {
+              id
+              actors1: actors(limit: 2) {
+                id
+              }
+              actors2: actors(limit: 3) {
+                id
+              }
+            }
+            films2: films(limit: 3) {
+              id
+              actors1: actors(limit: 2) {
+                id
+              }
+              actors2: actors(limit: 3) {
+                id
+              }
+            }
+          }
+        }
+      `
+    )
+    expect(errors).toBeUndefined()
+    expect(data?.actor.films1.length).toBe(2)
+    expect(data?.actor.films2.length).toBe(3)
+    expect(data?.actor.films1[0].actors1.length).toBe(2)
+    expect(data?.actor.films1[0].actors2.length).toBe(3)
+    expect(data?.actor.films2[0].actors1.length).toBe(2)
+    expect(data?.actor.films2[0].actors2.length).toBe(3)
+  })
+
   test('sorting and filtering', async () => {
     const { data, errors } = await graphql(
       schema,
@@ -334,5 +372,23 @@ describe('integration (postgres)', () => {
     expect(data?.movies.filter((m: any) => m.__typename === 'LongMovie').length).toBeGreaterThan(0)
     expect(data?.people.filter((p: any) => p.__typename === 'Actor').length).toBeGreaterThan(0)
     expect(data?.people.filter((p: any) => p.__typename === 'Customer').length).toBeGreaterThan(0)
+  })
+
+  test('self join', async () => {
+    const { data, errors } = await graphql(
+      schema,
+      `
+        query {
+          films {
+            id
+            sequel {
+              id
+            }
+          }
+        }
+      `
+    )
+    expect(errors).toBeUndefined()
+    expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
 })
