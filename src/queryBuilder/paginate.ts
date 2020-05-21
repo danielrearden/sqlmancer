@@ -478,6 +478,9 @@ export class PaginateBuilder<
       args: { where, orderBy, limit, offset },
     } = tree
 
+    // The builder defaults to selecting all fields, so we need to clear the selected fields first
+    this.select()
+
     if (results) {
       Object.keys(results.fields).forEach((fieldName) => {
         const field = results.fields[fieldName]

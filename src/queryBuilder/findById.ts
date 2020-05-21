@@ -266,6 +266,9 @@ export abstract class FindByIdBuilder<
 
     const { fields } = tree
 
+    // The builder defaults to selecting all fields, so we need to clear the selected fields first
+    this.select()
+
     Object.keys(fields).forEach((fieldName) => {
       const field = fields[fieldName]
       if (field.name in this._model.fields) {

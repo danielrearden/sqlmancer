@@ -613,28 +613,30 @@ describe('FindBuilder', () => {
             id
             firstName
             lastName
-            filmsAggregate(
+            filmsPaginated(
               where: { title: { equal: "Title" } }
               orderBy: { releaseYear: DESC }
               limit: 10
               offset: 3
             ) {
-              count
-              max {
-                title
-                releaseYear
-              }
-              min {
-                title
-                releaseYear
-              }
-              avg {
-                rentalRate
-                replacementCost
-              }
-              sum {
-                rentalRate
-                replacementCost
+              aggregate {
+                count
+                max {
+                  title
+                  releaseYear
+                }
+                min {
+                  title
+                  releaseYear
+                }
+                avg {
+                  rentalRate
+                  replacementCost
+                }
+                sum {
+                  rentalRate
+                  replacementCost
+                }
               }
             }
           }
@@ -644,6 +646,7 @@ describe('FindBuilder', () => {
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
         expect(result).toBeArray()
+        expect((result[0] as any).filmsPaginated.aggregate.count).toBeDefined()
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
