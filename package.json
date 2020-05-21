@@ -1,6 +1,6 @@
 {
   "name": "sqlmancer",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Conjure SQL from GraphQL queries",
   "author": "Daniel Rearden",
   "license": "MIT",
