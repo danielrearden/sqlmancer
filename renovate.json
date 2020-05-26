@@ -3,8 +3,23 @@
     "config:base"
   ],
   "baseBranches": ["develop"],
-  "automerge": true,
-  "major": {
-    "automerge": false
-  }
+  "packageRules": [
+    {
+      "enabled": true,
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "enabled": true,
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "enabled": true,
+      "depTypeList": ["dependencies"],
+      "automerge": false
+    }
+  ]
 }
