@@ -26,13 +26,16 @@ export function withDialects(
     schema: GraphQLSchema
   ) => void
 ) {
-  dialectsToTest.forEach((name) => {
+  const dialects = ['postgres', 'mysql', 'sqlite']
+  dialects.forEach((name) => {
+    const describeMaybeSkip = dialectsToTest.includes(name) ? describe : describe.skip
     const client = require(`../${name}/client`).client as SqlmancerClient
     const schema = require(`../${name}/schema`).schema as GraphQLSchema
     // eslint-disable-next-line jest/valid-title
-    describe(name, () => {
+    describeMaybeSkip(name, () => {
       fn(client, getRollback(client), schema)
 
+      // eslint-disable-next-line jest/require-top-level-describe
       afterAll(async () => {
         await client.destroy()
       })

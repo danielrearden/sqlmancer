@@ -11,10 +11,8 @@ import {
   OrderByAssociation,
   QueryBuilderContext,
   Where,
-  WhereAggregate,
   WhereArgs,
   WhereAssociations,
-  WhereFields,
 } from '../types'
 import { Dialect } from '../types'
 import {
@@ -226,14 +224,14 @@ export abstract class BaseBuilder {
 
   protected _getFieldWhereExpression(
     field: string,
-    operatorAndValue: WhereFields<any, any, any, any>[string],
+    operatorAndValue: any,
     modelName: string,
     tableAlias: string,
     aggregateKey?: keyof AggregateFields
   ): Knex.Raw {
     const { fields } = this._models[modelName]
     const key = Object.keys(operatorAndValue!)[0]
-    const value = (operatorAndValue as any)[key]
+    const value = operatorAndValue[key]
     return getComparisonExpression(
       this._knex,
       this._dialect,
@@ -247,7 +245,7 @@ export abstract class BaseBuilder {
 
   protected _getAssociationWhereExpression(
     associationName: string,
-    operatorAndValue: NonNullable<WhereAssociations<any>[string]>,
+    operatorAndValue: any,
     modelName: string,
     tableAlias: string,
     context: QueryBuilderContext
@@ -278,7 +276,7 @@ export abstract class BaseBuilder {
         'and',
         'or',
         'not',
-      ]) as any,
+      ]),
       association.modelName,
       associationAlias,
       context
@@ -293,7 +291,7 @@ export abstract class BaseBuilder {
 
     if (association.isMany) {
       Object.keys(_.pick(operatorAndValue, AGGREGATE_KEYS)).forEach((aggregateKey: keyof AggregateFields | 'count') => {
-        const where = (operatorAndValue as WhereAggregate<any, any, any, any, true>)[aggregateKey]
+        const where = operatorAndValue[aggregateKey]
         if (aggregateKey === 'count') {
           const key = Object.keys(where!)[0]
           const value = (where as any)[key]

@@ -1,7 +1,10 @@
+/* eslint-disable jest/require-top-level-describe */
 import { graphql, validateSchema } from 'graphql'
 import { schema, client } from './schema'
 
-describe('integration (sqlite)', () => {
+const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('sqlite') ? describe.skip : describe
+
+describeMaybeSkip('integration (sqlite)', () => {
   afterAll(async () => {
     await client.destroy()
   })

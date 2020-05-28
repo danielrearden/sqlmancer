@@ -1,8 +1,11 @@
+/* eslint-disable jest/require-top-level-describe */
 /* eslint-disable no-useless-escape */
 import { graphql, validateSchema } from 'graphql'
 import { schema, client } from './schema'
 
-describe('integration (postgres)', () => {
+const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
+
+describeMaybeSkip('integration (postgres)', () => {
   afterAll(async () => {
     await client.destroy()
   })
