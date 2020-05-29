@@ -21,7 +21,7 @@ import { GraphQLResolveInfo } from 'graphql'
 export abstract class FindBuilder<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

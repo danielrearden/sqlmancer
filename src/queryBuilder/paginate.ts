@@ -24,7 +24,7 @@ import { parseResolveInfo, FlattenedResolveTree } from '../utilities'
 export class PaginateBuilder<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

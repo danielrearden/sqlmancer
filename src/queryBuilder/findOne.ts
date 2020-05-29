@@ -5,7 +5,7 @@ import { FindBuilder } from './find'
 export class FindOneBuilder<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

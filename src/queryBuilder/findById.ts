@@ -19,7 +19,7 @@ import { parseResolveInfo } from '../utilities'
 
 export abstract class FindByIdBuilder<
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

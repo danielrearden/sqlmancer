@@ -11,7 +11,7 @@ export class UpdateManyBuilder<
   TDialect extends Dialect,
   TUpdateFields extends Record<string, any>,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

@@ -26,7 +26,7 @@ export type ActorFields = {
   lastUpdate: string
 }
 
-export type ActorIds = 'id'
+export type ActorIds = unknown
 
 export type ActorEnums = unknown
 

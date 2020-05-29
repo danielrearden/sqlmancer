@@ -10,7 +10,7 @@ import { getAlias } from './utilities'
 export class DeleteManyBuilder<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,

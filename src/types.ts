@@ -193,7 +193,7 @@ export type OrderByAssociation<
 export type Where<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,
@@ -206,7 +206,7 @@ export type Where<
   WhereAssociations<TAssociations> &
   WhereLogicOperators<TDialect, TFields, TIds, TEnums, TAssociations>
 
-export type WhereFields<TDialect extends Dialect, TFields extends Record<string, any>, TIds extends string, TEnums> = {
+export type WhereFields<TDialect extends Dialect, TFields extends Record<string, any>, TIds, TEnums> = {
   [Key in keyof TFields]?: TDialect extends 'postgres'
     ? Key extends TIds
       ? TFields[Key] extends Array<any>
@@ -393,7 +393,7 @@ export type WhereAssociations<
 export type WhereAggregate<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TMany extends boolean
 > = TMany extends false
@@ -409,7 +409,7 @@ export type WhereAggregate<
 export type WhereLogicOperators<
   TDialect extends Dialect,
   TFields extends Record<string, any>,
-  TIds extends string,
+  TIds,
   TEnums,
   TAssociations extends Record<
     string,
