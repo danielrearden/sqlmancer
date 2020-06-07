@@ -15,10 +15,10 @@ import {
 } from '../queryBuilder'
 import { getSqlmancerConfig } from '.'
 import { makeSqlmancerSchema } from '../directives'
-import { ID } from '../types'
+import { ID, Model } from '../types'
 import { getTypeDefsFromGlob } from '../generate/getTypeDefsFromGlob'
 
-type GenericSqlmancerClient = Knex & {
+export type GenericSqlmancerClient = Knex & {
   models: Record<
     string,
     {
@@ -50,7 +50,7 @@ export function createSqlmancerClient<T extends GenericSqlmancerClient = Generic
   const { dialect, models } = getSqlmancerConfig(schema)
 
   return Object.assign(knex, {
-    models: _.mapValues(models, (model) => {
+    models: _.mapValues(models, (model: Model) => {
       const options = { knex, dialect }
       const { builders, readOnly } = model
       return {
