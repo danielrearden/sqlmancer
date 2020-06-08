@@ -98,6 +98,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/danielrearden"><img src="https://avatars2.githubusercontent.com/u/18018864?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Rearden</b></sub></a><br /><a href="https://github.com/danielrearden/sqlmancer/commits?author=danielrearden" title="Code">💻</a> <a href="https://github.com/danielrearden/sqlmancer/commits?author=danielrearden" title="Documentation">📖</a> <a href="#ideas-danielrearden" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://lishine.github.io"><img src="https://avatars3.githubusercontent.com/u/6741645?v=4" width="100px;" alt=""/><br /><sub><b>Pavel Ravits</b></sub></a><br /><a href="https://github.com/danielrearden/sqlmancer/commits?author=lishine" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/tadejstanic"><img src="https://avatars0.githubusercontent.com/u/7260332?v=4" width="100px;" alt=""/><br /><sub><b>Tadej Stanic</b></sub></a><br /><a href="https://github.com/danielrearden/sqlmancer/issues?q=author%3Atadejstanic" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/TSiege"><img src="https://avatars0.githubusercontent.com/u/6217518?v=4" width="100px;" alt=""/><br /><sub><b>Tristan Siegel</b></sub></a><br /><a href="https://github.com/danielrearden/sqlmancer/commits?author=TSiege" title="Code">💻</a></td>
   </tr>
 </table>
 
