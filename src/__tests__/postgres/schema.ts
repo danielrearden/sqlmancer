@@ -5,11 +5,16 @@ import { IResolvers } from 'graphql-tools'
 import knex from './knex'
 import { createSqlmancerClient, makeSqlmancerSchema } from '../..'
 import { SqlmancerClient } from './sqlmancer'
+import { PubSub } from 'graphql-subscriptions'
 
 const typeDefs = gql`
   scalar DateTime
   scalar JSON
   scalar JSONObject
+  
+  type Subscription {
+      create: String!
+  }
 
   type Query
     @sqlmancer(
@@ -243,14 +248,25 @@ const typeDefs = gql`
   }
 `
 
-export const client = createSqlmancerClient<SqlmancerClient>(__filename, knex)
+export const client = createSqlmancerClient<SqlmancerClient>(__filename, knex, new PubSub())
 
 const { Film, Actor, Customer, Address, Movie, Person } = client.models
+const pubsub = new PubSub()
 
 const resolvers: IResolvers = {
   DateTime: GraphQLDateTime,
   JSON: GraphQLJSON,
   JSONObject: GraphQLJSONObject,
+
+  Subscription: {
+    create: {
+      subscribe: () => {
+        debugger;
+        return pubsub.asyncIterator('CREATE_ONE');
+      }
+    }
+  },
+
   Query: {
     actors: (_root, _args, _ctx, info) => {
       return Actor.findMany().resolveInfo(info).execute()
@@ -291,7 +307,7 @@ const resolvers: IResolvers = {
   },
   Mutation: {
     createCustomer: async (_root, args, _ctx, info) => {
-      const id = await Customer.createOne(args.input).execute()
+      const id = await Customer.createOne(args.input).publish().execute()
       return Customer.findById(id).resolveInfo(info).execute()
     },
     createCustomers: async (_root, args, _ctx, info) => {

@@ -11,6 +11,14 @@ export class CreateOneBuilder<TCreateFields extends Record<string, any>> extends
   }
 
   /**
+   * Publishes and event notifying subscriber of Change
+   */
+  public publish(): this {
+    this._options.pubsub.publish('CREATE_ONE');
+    return this;
+  }
+
+  /**
    * Executes the query and returns a Promise that will resolve to the ID of the created row.
    */
   public async execute(): Promise<string | number> {

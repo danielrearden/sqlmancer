@@ -394,4 +394,16 @@ describeMaybeSkip('integration (postgres)', () => {
     expect(errors).toBeUndefined()
     expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
+
+  test('subscriptions', async () => {
+    const { data, errors } = await graphql(
+      schema,
+      `subscription {
+        create 
+      }`
+    )
+    console.dir(errors)
+    expect(errors).toBeUndefined()
+    expect(data).toBeDefined()
+  })
 })
