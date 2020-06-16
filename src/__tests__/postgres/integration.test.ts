@@ -1,7 +1,9 @@
 /* eslint-disable jest/require-top-level-describe */
 /* eslint-disable no-useless-escape */
-import { graphql, validateSchema } from 'graphql'
-import { schema, client } from './schema'
+import { graphql, validateSchema, subscribe, parse, ExecutionResult } from 'graphql'
+import { schema, client, pubsub } from './schema'
+import { EventEmitter } from 'events'
+
 
 const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
 
@@ -395,15 +397,25 @@ describeMaybeSkip('integration (postgres)', () => {
     expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
 
-  test('subscriptions', async () => {
-    const { data, errors } = await graphql(
-      schema,
-      `subscription {
+  test.only('subscriptions', async () => {
+    // const pubsub = new PubSub();
+    // const pubsub2 = new EventEmitter();
+    const document = parse(`
+      subscription {
         create 
-      }`
-    )
-    console.dir(errors)
+      }
+    `)
+
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
+
+    expect(sub.next).toBeDefined()
+
+
+    setTimeout(() => pubsub.publish('CREATE_ONE', { create: "FLUM" }), 3000)
+    const { value: { errors, data } } = await sub.next()
+    // const { errors, data } = executionResult;
+
     expect(errors).toBeUndefined()
     expect(data).toBeDefined()
-  })
+  }, 10000)
 })
