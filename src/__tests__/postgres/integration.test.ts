@@ -397,6 +397,8 @@ describeMaybeSkip('integration (postgres)', () => {
     expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
 
+  jest.useFakeTimers()
+
   test.only('subscriptions', async () => {
     // const pubsub = new PubSub();
     // const pubsub2 = new EventEmitter();
