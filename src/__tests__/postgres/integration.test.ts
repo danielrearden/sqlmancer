@@ -3,6 +3,7 @@
 import { graphql, validateSchema, subscribe, parse, ExecutionResult } from 'graphql'
 import { schema, client, pubsub } from './schema'
 import { EventEmitter } from 'events'
+import { mockResolveInfo } from '../utilities'
 
 
 const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
@@ -397,11 +398,7 @@ describeMaybeSkip('integration (postgres)', () => {
     expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
 
-  jest.useFakeTimers()
-
-  test.only('subscriptions', async () => {
-    // const pubsub = new PubSub();
-    // const pubsub2 = new EventEmitter();
+  test('subscriptions', async () => {
     const document = parse(`
       subscription {
         create 
@@ -409,15 +406,46 @@ describeMaybeSkip('integration (postgres)', () => {
     `)
 
     const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
-
     expect(sub.next).toBeDefined()
+    setImmediate(() => pubsub.publish('CREATE_ONE', { create: "FLUM!" }))
 
-
-    setTimeout(() => pubsub.publish('CREATE_ONE', { create: "FLUM" }), 3000)
     const { value: { errors, data } } = await sub.next()
-    // const { errors, data } = executionResult;
 
     expect(errors).toBeUndefined()
     expect(data).toBeDefined()
+    expect(data.create).toBe('FLUM!')
+  })
+
+  // this test times out (sub.next() does not return)
+  test.skip('subscription triggered by mutation', async () => {
+    const document = parse(`
+      subscription {
+        create 
+      }
+    `)
+
+
+    const query = `mutation {
+      createCustomerWithPayload {
+        customer {
+          id
+          email
+        }
+      }
+    }`
+
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
+    expect(sub.next).toBeDefined()
+
+    const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
+    expect(info).toBeDefined()
+    expect(info.operation).toBeDefined()
+    expect(info.operation.operation).toBeDefined()
+    expect(info.operation.operation).toBe('mutation')
+
+    const { value: { errors, data } } = await sub.next()
+
+    expect(errors).toBeUndefined()
+    expect(data.event).toBeDefined()
   }, 10000)
 })
