@@ -69,7 +69,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@types/jest": "26.0.1",
+    "@types/jest": "26.0.3",
     "@types/lodash": "4.14.157",
     "@types/mkdirp": "1.0.1",
     "@typescript-eslint/eslint-plugin": "3.4.0",
