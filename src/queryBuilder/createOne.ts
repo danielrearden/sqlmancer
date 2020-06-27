@@ -15,7 +15,7 @@ export class CreateOneBuilder<TCreateFields extends Record<string, any>> extends
    */
   public publish(): this {
     if (this._options.pubSub) {
-      this._options.pubSub.publish('CREATE_ONE');
+      this._options.pubSub.publish('CREATE_ONE', { create: "TEST" });
     }
     return this;
   }

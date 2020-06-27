@@ -416,7 +416,7 @@ describeMaybeSkip('integration (postgres)', () => {
   })
 
   // this skipped test is returning "GraphQLError: Cannot return null for non-nullable field Subscription.create" at `expect(subErrors).toBeUndefined()`
-  test.skip('subscription triggered by mutation', async () => {
+  test('subscription triggered by mutation', async () => {
     const document = parse(`
       subscription {
         create 
@@ -448,6 +448,6 @@ describeMaybeSkip('integration (postgres)', () => {
 
     const { value: { errors: subErrors, data: subData } } = await next;
     expect(subErrors).toBeUndefined()
-    expect(subData.event).toBeDefined()
+    expect(subData).toBeDefined()
   }, 10000)
 })

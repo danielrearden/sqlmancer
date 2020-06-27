@@ -261,7 +261,7 @@ const resolvers: IResolvers = {
   Subscription: {
     create: {
       subscribe: () => {
-        return pubSub.asyncIterator('CREATE_ONE');
+        return pubSub.asyncIterator('CREATE_ONE')
       }
     }
   },
@@ -306,7 +306,8 @@ const resolvers: IResolvers = {
   },
   Mutation: {
     createCustomer: async (_root, args, _ctx, info) => {
-      const id = await Customer.createOne(args.input).publish().execute()
+      const id = await Customer.createOne(args.input)
+        .publish().execute()
       return Customer.findById(id).resolveInfo(info).execute()
     },
     createCustomers: async (_root, args, _ctx, info) => {
