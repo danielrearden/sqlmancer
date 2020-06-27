@@ -155,7 +155,7 @@ export type OrderBy<
       PaginateBuilder<any, any, any, any, any, any, any, any, any>
     ]
   >
-  > = OrderByField<TFields> & OrderByAssociation<TAssociations>
+> = OrderByField<TFields> & OrderByAssociation<TAssociations>
 
 export type OrderByField<TFields extends Record<string, any>> = {
   [Key in keyof TFields]?: OrderByDirection
@@ -169,27 +169,27 @@ export type OrderByAssociation<
       PaginateBuilder<any, any, any, any, any, any, any, any, any>
     ]
   >
-  > = {
-    [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
-      any,
-      infer TFields,
-      any,
-      any,
-      any,
-      infer TMany,
-      any,
-      any,
-      any
-    >
+> = {
+  [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
+    any,
+    infer TFields,
+    any,
+    any,
+    any,
+    infer TMany,
+    any,
+    any,
+    any
+  >
     ? TMany extends true
-    ? {
-      [AggKey in keyof AggregateFields]?: {
-        [Key in keyof TFields]?: TFields[Key] extends AggregateFields[AggKey] ? OrderByDirection : never
-      }
-    } & { count?: OrderByDirection }
-    : { [Key in keyof TFields]?: OrderByDirection }
+      ? {
+          [AggKey in keyof AggregateFields]?: {
+            [Key in keyof TFields]?: TFields[Key] extends AggregateFields[AggKey] ? OrderByDirection : never
+          }
+        } & { count?: OrderByDirection }
+      : { [Key in keyof TFields]?: OrderByDirection }
     : never
-  }
+}
 
 export type Where<
   TDialect extends Dialect,
@@ -203,66 +203,66 @@ export type Where<
       PaginateBuilder<any, any, any, any, any, any, any, any, any>
     ]
   >
-  > = WhereFields<TDialect, TFields, TIds, TEnums> &
+> = WhereFields<TDialect, TFields, TIds, TEnums> &
   WhereAssociations<TAssociations> &
   WhereLogicOperators<TDialect, TFields, TIds, TEnums, TAssociations>
 
 export type WhereFields<TDialect extends Dialect, TFields extends Record<string, any>, TIds, TEnums> = {
   [Key in keyof TFields]?: TDialect extends 'postgres'
-  ? Key extends TIds
-  ? TFields[Key] extends Array<any>
-  ? IdArrayOperators
-  : IdOperators
-  : TFields[Key] extends Array<infer TElement>
-  ? TElement extends TEnums
-  ? EnumArrayOperators<TFields[Key]>
-  : TElement extends boolean
-  ? BooleanArrayOperators
-  : TElement extends number
-  ? NumberArrayOperators
-  : TElement extends string
-  ? StringArrayOperators
-  : never
-  : TFields[Key] extends TEnums
-  ? EnumOperators<TFields[Key]>
-  : TFields[Key] extends boolean
-  ? BooleanOperators
-  : TFields[Key] extends number
-  ? NumberOperators
-  : TFields[Key] extends string
-  ? PgStringOperators
-  : TFields[Key] extends JSON
-  ? JsonOperators
-  : never
-  : TDialect extends 'sqlite'
-  ? Key extends TIds
-  ? TFields[Key] extends Array<any>
-  ? never
-  : IdOperators
-  : TFields[Key] extends TEnums
-  ? EnumOperators<TFields[Key]>
-  : TFields[Key] extends boolean
-  ? BooleanOperators
-  : TFields[Key] extends number
-  ? NumberOperators
-  : TFields[Key] extends string
-  ? StringOperators
-  : never
-  : Key extends TIds
-  ? TFields[Key] extends Array<any>
-  ? never
-  : IdOperators
-  : TFields[Key] extends TEnums
-  ? EnumOperators<TFields[Key]>
-  : TFields[Key] extends boolean
-  ? BooleanOperators
-  : TFields[Key] extends number
-  ? NumberOperators
-  : TFields[Key] extends string
-  ? StringOperators
-  : TFields[Key] extends JSON
-  ? JsonOperators
-  : never
+    ? Key extends TIds
+      ? TFields[Key] extends Array<any>
+        ? IdArrayOperators
+        : IdOperators
+      : TFields[Key] extends Array<infer TElement>
+      ? TElement extends TEnums
+        ? EnumArrayOperators<TFields[Key]>
+        : TElement extends boolean
+        ? BooleanArrayOperators
+        : TElement extends number
+        ? NumberArrayOperators
+        : TElement extends string
+        ? StringArrayOperators
+        : never
+      : TFields[Key] extends TEnums
+      ? EnumOperators<TFields[Key]>
+      : TFields[Key] extends boolean
+      ? BooleanOperators
+      : TFields[Key] extends number
+      ? NumberOperators
+      : TFields[Key] extends string
+      ? PgStringOperators
+      : TFields[Key] extends JSON
+      ? JsonOperators
+      : never
+    : TDialect extends 'sqlite'
+    ? Key extends TIds
+      ? TFields[Key] extends Array<any>
+        ? never
+        : IdOperators
+      : TFields[Key] extends TEnums
+      ? EnumOperators<TFields[Key]>
+      : TFields[Key] extends boolean
+      ? BooleanOperators
+      : TFields[Key] extends number
+      ? NumberOperators
+      : TFields[Key] extends string
+      ? StringOperators
+      : never
+    : Key extends TIds
+    ? TFields[Key] extends Array<any>
+      ? never
+      : IdOperators
+    : TFields[Key] extends TEnums
+    ? EnumOperators<TFields[Key]>
+    : TFields[Key] extends boolean
+    ? BooleanOperators
+    : TFields[Key] extends number
+    ? NumberOperators
+    : TFields[Key] extends string
+    ? StringOperators
+    : TFields[Key] extends JSON
+    ? JsonOperators
+    : never
 }
 
 export type IdOperators = {
@@ -375,21 +375,21 @@ export type WhereAssociations<
       PaginateBuilder<any, any, any, any, any, any, any, any, any>
     ]
   >
-  > = {
-    [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
-      infer TDialect,
-      infer TFields,
-      infer TIds,
-      infer TEnums,
-      infer TAssociations,
-      infer TMany,
-      any,
-      any,
-      any
-    >
+> = {
+  [Key in keyof TAssociations]?: TAssociations[Key][0] extends FindBuilder<
+    infer TDialect,
+    infer TFields,
+    infer TIds,
+    infer TEnums,
+    infer TAssociations,
+    infer TMany,
+    any,
+    any,
+    any
+  >
     ? Where<TDialect, TFields, TIds, TEnums, TAssociations> & WhereAggregate<TDialect, TFields, TIds, TEnums, TMany>
     : {}
-  }
+}
 
 export type WhereAggregate<
   TDialect extends Dialect,
@@ -397,15 +397,15 @@ export type WhereAggregate<
   TIds,
   TEnums,
   TMany extends boolean
-  > = TMany extends false
+> = TMany extends false
   ? {}
   : {
-    [AggKey in keyof AggregateFields]?: {
-      [Key in keyof TFields]?: TFields[Key] extends AggregateFields[AggKey]
-      ? WhereFields<TDialect, TFields, TIds, TEnums>[Key]
-      : never
-    }
-  } & { count?: NumberOperators }
+      [AggKey in keyof AggregateFields]?: {
+        [Key in keyof TFields]?: TFields[Key] extends AggregateFields[AggKey]
+          ? WhereFields<TDialect, TFields, TIds, TEnums>[Key]
+          : never
+      }
+    } & { count?: NumberOperators }
 
 export type WhereLogicOperators<
   TDialect extends Dialect,
@@ -419,11 +419,11 @@ export type WhereLogicOperators<
       PaginateBuilder<any, any, any, any, any, any, any, any, any>
     ]
   >
-  > = {
-    or?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
-    and?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
-    not?: Where<TDialect, TFields, TIds, TEnums, TAssociations>
-  }
+> = {
+  or?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
+  and?: Where<TDialect, TFields, TIds, TEnums, TAssociations>[]
+  not?: Where<TDialect, TFields, TIds, TEnums, TAssociations>
+}
 
 export type FromFindBuilder<T> = T extends FindBuilder<
   any,
@@ -437,8 +437,8 @@ export type FromFindBuilder<T> = T extends FindBuilder<
   infer TLoaded
 >
   ? TMany extends true
-  ? (TSelected & TRawSelected & TLoaded)[]
-  : (TSelected & TRawSelected & TLoaded) | null
+    ? (TSelected & TRawSelected & TLoaded)[]
+    : (TSelected & TRawSelected & TLoaded) | null
   : never
 
 export type FromPaginateBuilder<T> = T extends PaginateBuilder<

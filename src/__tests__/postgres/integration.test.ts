@@ -3,7 +3,6 @@
 import { graphql, validateSchema, subscribe, parse, ExecutionResult } from 'graphql'
 import { schema, client, pubSub } from './schema'
 
-
 const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
 
 describeMaybeSkip('integration (postgres)', () => {
@@ -403,12 +402,14 @@ describeMaybeSkip('integration (postgres)', () => {
       }
     `)
 
-    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document)
     expect(sub.next).toBeDefined()
 
-    const next = sub.next();  // grab the promise
-    pubSub.publish('CREATE_ONE', { create: "FLUM!" })  //publish
-    const { value: { errors, data } } = await next    // await the promise
+    const next = sub.next() // grab the promise
+    pubSub.publish('CREATE_ONE', { create: 'FLUM!' }) //publish
+    const {
+      value: { errors, data },
+    } = await next // await the promise
 
     expect(errors).toBeUndefined()
     expect(data).toBeDefined()
@@ -423,7 +424,6 @@ describeMaybeSkip('integration (postgres)', () => {
       }
     `)
 
-
     const query = `mutation {
       deleteCustomer(id: 1009)
 
@@ -437,16 +437,18 @@ describeMaybeSkip('integration (postgres)', () => {
       }
     }`
 
-    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document)
     expect(sub.next).toBeDefined()
 
-    const next = sub.next();
+    const next = sub.next()
 
     const { data, errors } = await graphql(schema, query)
     expect(errors).toBeUndefined()
     expect(data).toBeDefined()
 
-    const { value: { errors: subErrors, data: subData } } = await next;
+    const {
+      value: { errors: subErrors, data: subData },
+    } = await next
     expect(subErrors).toBeUndefined()
     expect(subData).toBeDefined()
   }, 10000)

@@ -11,9 +11,9 @@ const typeDefs = gql`
   scalar DateTime
   scalar JSON
   scalar JSONObject
-  
+
   type Subscription {
-      create: String!
+    create: String!
   }
 
   type Query
@@ -262,8 +262,8 @@ const resolvers: IResolvers = {
     create: {
       subscribe: () => {
         return pubSub.asyncIterator('CREATE_ONE')
-      }
-    }
+      },
+    },
   },
 
   Query: {
@@ -306,8 +306,7 @@ const resolvers: IResolvers = {
   },
   Mutation: {
     createCustomer: async (_root, args, _ctx, info) => {
-      const id = await Customer.createOne(args.input)
-        .publish().execute()
+      const id = await Customer.createOne(args.input).publish().execute()
       return Customer.findById(id).resolveInfo(info).execute()
     },
     createCustomers: async (_root, args, _ctx, info) => {
@@ -355,4 +354,4 @@ export const schema = makeSqlmancerSchema({
   typeDefs,
   resolvers,
 })
-export { pubSub };
+export { pubSub }
