@@ -14,8 +14,8 @@ export class CreateOneBuilder<TCreateFields extends Record<string, any>> extends
    * Publishes and event notifying subscriber of Change
    */
   public publish(): this {
-    if (this._options.pubsub) {
-      this._options.pubsub.publish('CREATE_ONE');
+    if (this._options.pubSub) {
+      this._options.pubSub.publish('CREATE_ONE');
     }
     return this;
   }

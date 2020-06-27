@@ -39,7 +39,7 @@ export type GenericSqlmancerClient = Knex & {
 export function createSqlmancerClient<T extends GenericSqlmancerClient = GenericSqlmancerClient>(
   glob: string,
   knex: Knex,
-  pubsub?: any
+  pubSub?: any
 ): T {
   const typeDefs = getTypeDefsFromGlob(glob)
 
@@ -52,7 +52,7 @@ export function createSqlmancerClient<T extends GenericSqlmancerClient = Generic
 
   return Object.assign(knex, {
     models: _.mapValues(models, (model: Model) => {
-      const options = { knex, dialect, pubsub }
+      const options = { knex, dialect, pubSub }
       const { builders, readOnly } = model
       return {
         findById: (id: ID) => new builders.findById(options, id),

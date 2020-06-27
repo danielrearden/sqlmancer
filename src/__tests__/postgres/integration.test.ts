@@ -1,9 +1,7 @@
 /* eslint-disable jest/require-top-level-describe */
 /* eslint-disable no-useless-escape */
 import { graphql, validateSchema, subscribe, parse, ExecutionResult } from 'graphql'
-import { schema, client, pubsub } from './schema'
-import { EventEmitter } from 'events'
-import { mockResolveInfo } from '../utilities'
+import { schema, client, pubSub } from './schema'
 
 
 const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
@@ -407,16 +405,17 @@ describeMaybeSkip('integration (postgres)', () => {
 
     const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
     expect(sub.next).toBeDefined()
-    setImmediate(() => pubsub.publish('CREATE_ONE', { create: "FLUM!" }))
 
-    const { value: { errors, data } } = await sub.next()
+    const next = sub.next();  // grab the promise
+    pubSub.publish('CREATE_ONE', { create: "FLUM!" })  //publish
+    const { value: { errors, data } } = await next    // await the promise
 
     expect(errors).toBeUndefined()
     expect(data).toBeDefined()
     expect(data.create).toBe('FLUM!')
   })
 
-  // this test times out (sub.next() does not return)
+  // this skipped test is returning "GraphQLError: Cannot return null for non-nullable field Subscription.create" at `expect(subErrors).toBeUndefined()`
   test.skip('subscription triggered by mutation', async () => {
     const document = parse(`
       subscription {
@@ -426,26 +425,29 @@ describeMaybeSkip('integration (postgres)', () => {
 
 
     const query = `mutation {
-      createCustomerWithPayload {
-        customer {
-          id
-          email
-        }
+      deleteCustomer(id: 1009)
+
+      createCustomer (input: {
+          id: 1009
+          firstName: "Morty"
+          lastName: "Blinkers"
+          email: "morty@flizzit.com"
+      }) {
+        id
       }
     }`
 
     const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document);
     expect(sub.next).toBeDefined()
 
-    const info = await mockResolveInfo(schema, 'Mutation', 'createCustomerWithPayload', query)
-    expect(info).toBeDefined()
-    expect(info.operation).toBeDefined()
-    expect(info.operation.operation).toBeDefined()
-    expect(info.operation.operation).toBe('mutation')
+    const next = sub.next();
 
-    const { value: { errors, data } } = await sub.next()
-
+    const { data, errors } = await graphql(schema, query)
     expect(errors).toBeUndefined()
-    expect(data.event).toBeDefined()
+    expect(data).toBeDefined()
+
+    const { value: { errors: subErrors, data: subData } } = await next;
+    expect(subErrors).toBeUndefined()
+    expect(subData.event).toBeDefined()
   }, 10000)
 })

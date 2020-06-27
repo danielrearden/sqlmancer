@@ -6,5 +6,4 @@ node_modules
 *.iml
 *.code-workspace
 .DS_Store
-sakila.db
-src/jeffNotes.md
+

@@ -248,8 +248,8 @@ const typeDefs = gql`
   }
 `
 
-const pubsub = new PubSub()
-export const client = createSqlmancerClient<SqlmancerClient>(__filename, knex, pubsub)
+const pubSub = new PubSub()
+export const client = createSqlmancerClient<SqlmancerClient>(__filename, knex, pubSub)
 
 const { Film, Actor, Customer, Address, Movie, Person } = client.models
 
@@ -261,7 +261,7 @@ const resolvers: IResolvers = {
   Subscription: {
     create: {
       subscribe: () => {
-        return pubsub.asyncIterator('CREATE_ONE');
+        return pubSub.asyncIterator('CREATE_ONE');
       }
     }
   },
@@ -354,4 +354,4 @@ export const schema = makeSqlmancerSchema({
   typeDefs,
   resolvers,
 })
-export { pubsub };
+export { pubSub };

@@ -74,7 +74,7 @@ export type Association = {
 export type BuilderOptions = {
   knex: Knex
   dialect: Dialect
-  pubsub?: any
+  pubSub?: any
 }
 
 export type QueryBuilderContext = {
