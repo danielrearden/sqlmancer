@@ -13,23 +13,11 @@
     "strictNullChecks": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "types/*"
-      ]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ]
+    "rootDir": "lib",
+    "declaration": true
   },
   "include": [
-    "src/**/*"
+    "lib/**/*"
   ]
 }

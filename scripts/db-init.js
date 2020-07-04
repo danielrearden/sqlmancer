@@ -5,9 +5,9 @@ const path = require('path')
 const dialectsToMigrate = process.env.DB ? process.env.DB.split(' ') : ['postgres', 'mysql', 'sqlite']
 const dialects = _.pickBy(
   {
-    postgres: require('../src/__tests__/postgres/knex'),
-    mysql: require('../src/__tests__/mysql/knex'),
-    sqlite: require('../src/__tests__/sqlite/knex'),
+    postgres: require('../test/integration/postgres/knex'),
+    mysql: require('../test/integration/mysql/knex'),
+    sqlite: require('../test/integration/sqlite/knex'),
   },
   (_value, key) => dialectsToMigrate.includes(key)
 )
@@ -16,7 +16,7 @@ Object.keys(dialects)
   .reduce((previousPromise, name) => {
     const knex = dialects[name]
     return previousPromise.then(async () => {
-      await knex.transaction(async trx => {
+      await knex.transaction(async (trx) => {
         process.stdout.write(`Migrating ${name} database... `)
         await runFromFile(trx, name, 'migrate')
         console.log('Done!')
@@ -27,7 +27,7 @@ Object.keys(dialects)
       await knex.destroy()
     })
   }, Promise.resolve())
-  .catch(e => {
+  .catch((e) => {
     console.error(e)
     process.exit(1)
   })
@@ -35,7 +35,7 @@ Object.keys(dialects)
 async function runFromFile(transaction, dialectName, action) {
   const filePath = path.join(
     __dirname,
-    '../src/__tests__/',
+    '../test/integration/',
     dialectName,
     'db',
     action === 'migrate' ? 'schema.sql' : 'seed.sql'

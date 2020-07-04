@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest',
   },
   testEnvironment: 'node',
-  testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
+  testMatch: ['<rootDir>/test/**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  collectCoverageFrom: ['src/**/*.ts', '!**/__tests__/**/*.ts', '!**/index.ts'],
+  collectCoverageFrom: ['lib/**/*.ts', '!**/index.ts'],
 }

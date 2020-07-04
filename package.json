@@ -26,8 +26,7 @@
   ],
   "main": "dist/index.js",
   "files": [
-    "/dist",
-    "!**/__tests__/**/*"
+    "/dist"
   ],
   "types": "dist/index.d.ts",
   "bin": {
@@ -36,10 +35,11 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "jest --runInBand --coverage",
+    "testonly": "jest --runInBand",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint src",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "check:format": "prettier --check \"src/**/*.ts\"",
+    "lint": "eslint \"@(lib|test)/**/*.ts\"",
+    "format": "prettier --write \"@(lib|test)/**/*.ts\"",
+    "check:format": "prettier --check \"@(lib|test)/**/*.ts\"",
     "check:ts": "tsc --noemit",
     "db:init": "node scripts/db-init",
     "prepublishOnly": "npm run lint && npm run check:format && npm run test && npm run build"
@@ -65,8 +65,7 @@
     "knex": "^0.21.1",
     "lodash": "^4.17.15",
     "mkdirp": "^1.0.4",
-    "ora": "^4.0.4",
-    "rimraf": "^3.0.2"
+    "ora": "^4.0.4"
   },
   "devDependencies": {
     "@types/jest": "26.0.3",
@@ -86,6 +85,7 @@
     "mysql2": "2.1.0",
     "pg": "8.2.1",
     "prettier": "2.0.5",
+    "rimraf": "3.0.2",
     "sqlite3": "5.0.0",
     "stream-mock": "2.0.5",
     "ts-jest": "26.1.1",
