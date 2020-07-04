@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { withDialects } from '../utilities'
 
 describe('DeleteBuilder', () => {
@@ -6,7 +7,7 @@ describe('DeleteBuilder', () => {
       test('no additional options', async () => {
         const builder = client.models.Actor.deleteMany()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -16,7 +17,7 @@ describe('DeleteBuilder', () => {
       test('with one field', async () => {
         const builder = client.models.Actor.deleteMany().where({ firstName: { equal: 'BOB' } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -28,7 +29,7 @@ describe('DeleteBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -39,7 +40,7 @@ describe('DeleteBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -50,7 +51,7 @@ describe('DeleteBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -58,7 +59,7 @@ describe('DeleteBuilder', () => {
       test('with extra operators', async () => {
         const builder = client.models.Actor.deleteMany().where({ firstName: { equal: 'BOB', notEqual: 'SUSAN' } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -68,7 +69,7 @@ describe('DeleteBuilder', () => {
           firstNam: { equal: 'BOB' },
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -76,7 +77,7 @@ describe('DeleteBuilder', () => {
       test('with empty object', async () => {
         const builder = client.models.Actor.deleteMany().where({})
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -87,7 +88,7 @@ describe('DeleteBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -98,7 +99,7 @@ describe('DeleteBuilder', () => {
         })
 
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -106,7 +107,7 @@ describe('DeleteBuilder', () => {
       test('not', async () => {
         const builder = client.models.Actor.deleteMany().where({ not: { firstName: { equal: 'BOB' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -114,7 +115,7 @@ describe('DeleteBuilder', () => {
       test('with association (single)', async () => {
         const builder = client.models.Film.deleteMany().where({ language: { name: { equal: 'English' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -122,7 +123,7 @@ describe('DeleteBuilder', () => {
       test('with association (multi)', async () => {
         const builder = client.models.Language.deleteMany().where({ films: { title: { equal: 'BEAR GRACELAND' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -130,7 +131,7 @@ describe('DeleteBuilder', () => {
       test('with association (through)', async () => {
         const builder = client.models.Actor.deleteMany().where({ films: { title: { equal: 'BEAR GRACELAND' } } })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -140,7 +141,7 @@ describe('DeleteBuilder', () => {
           films: { avg: { replacementCost: { greaterThan: 10 } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        // await rollback(builder, result => expect(result).toBeNumber())
+        // await rollback(builder, result => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -150,7 +151,7 @@ describe('DeleteBuilder', () => {
           films: { count: { greaterThan: 1 } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -160,7 +161,7 @@ describe('DeleteBuilder', () => {
           films: { avg: { replacementCost: { greaterThan: 20 } }, title: { equal: 'BEAR GRACELAND' } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -170,7 +171,7 @@ describe('DeleteBuilder', () => {
           films: { language: { name: { equal: 'English' } } },
         })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -183,7 +184,7 @@ describe('DeleteBuilder', () => {
           })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
-        expect(result).toBeNumber()
+        expect(_.isInteger(result)).toBe(true)
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -193,7 +194,7 @@ describe('DeleteBuilder', () => {
       test('with one field', async () => {
         const builder = client.models.Actor.deleteMany().orderBy([{ firstName: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -201,7 +202,7 @@ describe('DeleteBuilder', () => {
       test('with no fields', async () => {
         const builder = client.models.Actor.deleteMany().orderBy([])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -209,7 +210,7 @@ describe('DeleteBuilder', () => {
       test('with multiple fields', async () => {
         const builder = client.models.Actor.deleteMany().orderBy([{ id: 'ASC' }, { lastUpdate: 'ASC' }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -217,7 +218,7 @@ describe('DeleteBuilder', () => {
       test('with association (field)', async () => {
         const builder = client.models.Film.deleteMany().orderBy([{ language: { name: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -225,7 +226,7 @@ describe('DeleteBuilder', () => {
       test('with association (aggregate)', async () => {
         const builder = client.models.Language.deleteMany().orderBy([{ films: { avg: { replacementCost: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -233,7 +234,7 @@ describe('DeleteBuilder', () => {
       test('with association (aggregate and through)', async () => {
         const builder = client.models.Film.deleteMany().orderBy([{ actors: { min: { lastUpdate: 'ASC' } } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -241,7 +242,7 @@ describe('DeleteBuilder', () => {
       test('with association (count)', async () => {
         const builder = client.models.Actor.deleteMany().orderBy([{ films: { count: 'ASC' } }])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -249,7 +250,7 @@ describe('DeleteBuilder', () => {
       test('with empty object', async () => {
         const builder = client.models.Actor.deleteMany().orderBy([{}])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -271,7 +272,7 @@ describe('DeleteBuilder', () => {
       test('with number', async () => {
         const builder = client.models.Actor.deleteMany().limit(10)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -281,7 +282,7 @@ describe('DeleteBuilder', () => {
       test('with number', async () => {
         const builder = client.models.Actor.deleteMany().offset(20)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

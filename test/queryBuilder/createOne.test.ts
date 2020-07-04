@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { withDialects } from '../utilities'
 
 describe('CreateOneBuilder', () => {
@@ -6,7 +7,7 @@ describe('CreateOneBuilder', () => {
       test('no additional options', async () => {
         const builder = client.models.Actor.createOne({ firstName: 'SUSAN', lastName: 'ANTHONY' })
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -18,7 +19,7 @@ describe('CreateOneBuilder', () => {
           foo: 'bar',
         } as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeNumber())
+        await rollback(builder, (result) => expect(_.isInteger(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

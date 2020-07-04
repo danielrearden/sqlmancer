@@ -81,7 +81,6 @@
     "graphql-tag": "2.10.3",
     "husky": "4.2.5",
     "jest": "26.1.0",
-    "jest-extended": "0.11.5",
     "mysql2": "2.1.0",
     "pg": "8.2.1",
     "prettier": "2.0.5",

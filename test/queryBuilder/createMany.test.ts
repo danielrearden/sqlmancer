@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { withDialects } from '../utilities'
 
 describe('CreateManyBuilder', () => {
@@ -9,7 +10,7 @@ describe('CreateManyBuilder', () => {
           { firstName: 'VIRGINIA', lastName: 'WOLF' },
         ])
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeArray())
+        await rollback(builder, (result) => expect(_.isArray(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -20,7 +21,7 @@ describe('CreateManyBuilder', () => {
           { firstName: 'VIRGINIA', lastName: 'WOLF', foo: 'bar' },
         ] as any)
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
-        await rollback(builder, (result) => expect(result).toBeArray())
+        await rollback(builder, (result) => expect(_.isArray(result)).toBe(true))
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })

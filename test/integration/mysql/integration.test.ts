@@ -1,4 +1,5 @@
 /* eslint-disable jest/require-top-level-describe */
+import _ from 'lodash'
 import { graphql, validateSchema } from 'graphql'
 import { schema, client } from './schema'
 
@@ -107,18 +108,18 @@ describeMaybeSkip('integration (mysql)', () => {
     )
     expect(errors).toBeUndefined()
     expect(data?.films.length).toBeGreaterThan(0)
-    expect(data?.film).toBeObject()
-    expect(data?.film.language).toBeObject()
+    expect(_.isObject(data?.film)).toBe(true)
+    expect(_.isObject(data?.film.language)).toBe(true)
     expect(data?.film.actors.length).toBeGreaterThan(0)
     expect(data?.film.categories.length).toBeGreaterThan(0)
     expect(data?.actors.length).toBeGreaterThan(0)
-    expect(data?.actor).toBeObject()
+    expect(_.isObject(data?.actor)).toBe(true)
     expect(data?.actor.films.length).toBeGreaterThan(0)
-    expect(data?.actor.films[0].language).toBeObject()
+    expect(_.isObject(data?.actor.films[0].language)).toBe(true)
     expect(data?.customers.length).toBeGreaterThan(0)
-    expect(data?.customer).toBeObject()
+    expect(_.isObject(data?.customer)).toBe(true)
     expect(data?.addresses.length).toBeGreaterThan(0)
-    expect(data?.address).toBeObject()
+    expect(_.isObject(data?.address)).toBe(true)
   })
 
   test('aliases', async () => {

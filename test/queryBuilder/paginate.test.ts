@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { withDialects } from '../utilities'
 
 describe('PaginateBuilder', () => {
@@ -212,7 +213,7 @@ describe('PaginateBuilder', () => {
         const builder = client.models.Film.paginate().select('title').limit(5).hasMore()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
-        expect(result.hasMore).toBeOneOf([true, 1])
+        expect([true, 1]).toContain(result.hasMore)
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -221,7 +222,7 @@ describe('PaginateBuilder', () => {
         const builder = client.models.Film.paginate().select('title').hasMore()
         const { sql, bindings } = builder.toQueryBuilder().toSQL()
         const result = await builder.execute()
-        expect(result.hasMore).toBeOneOf([false, 0])
+        expect([false, 0]).toContain(result.hasMore)
         expect(sql).toMatchSnapshot()
         expect(bindings).toMatchSnapshot()
       })
@@ -236,7 +237,7 @@ describe('PaginateBuilder', () => {
         const result = await builder.execute()
         const result2 = await builder2.execute()
         const result3 = await builder3.execute()
-        expect(result.totalCount).toBeNumber()
+        expect(_.isInteger(result.totalCount)).toBe(true)
         expect(result.totalCount).toBe(result2.totalCount)
         expect(result.totalCount).toBe(result3.totalCount)
         expect(sql).toMatchSnapshot()
