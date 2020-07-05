@@ -36,6 +36,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "jest --runInBand --coverage",
+    "testOnly": "jest --runInBand",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint src",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -79,6 +80,7 @@
     "graphql": "15.2.0",
     "graphql-middleware": "4.0.2",
     "graphql-scalars": "1.1.5",
+    "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "2.10.3",
     "husky": "4.2.5",
     "jest": "26.1.0",

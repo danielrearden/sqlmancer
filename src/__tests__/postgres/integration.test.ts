@@ -1,7 +1,7 @@
 /* eslint-disable jest/require-top-level-describe */
 /* eslint-disable no-useless-escape */
-import { graphql, validateSchema } from 'graphql'
-import { schema, client } from './schema'
+import { graphql, validateSchema, subscribe, parse, ExecutionResult } from 'graphql'
+import { schema, client, pubSub } from './schema'
 
 const describeMaybeSkip = process.env.DB && !process.env.DB.split(' ').includes('postgres') ? describe.skip : describe
 
@@ -394,4 +394,62 @@ describeMaybeSkip('integration (postgres)', () => {
     expect(errors).toBeUndefined()
     expect(data?.films.some((f: any) => f.sequel && f.sequel.id)).toBe(true)
   })
+
+  test('subscriptions', async () => {
+    const document = parse(`
+      subscription {
+        create 
+      }
+    `)
+
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document)
+    expect(sub.next).toBeDefined()
+
+    const next = sub.next() // grab the promise
+    pubSub.publish('CREATE_ONE', { create: 'FLUM!' }) //publish
+    const {
+      value: { errors, data },
+    } = await next // await the promise
+
+    expect(errors).toBeUndefined()
+    expect(data).toBeDefined()
+    expect(data.create).toBe('FLUM!')
+  })
+
+  // this skipped test is returning "GraphQLError: Cannot return null for non-nullable field Subscription.create" at `expect(subErrors).toBeUndefined()`
+  test('subscription triggered by mutation', async () => {
+    const document = parse(`
+      subscription {
+        create 
+      }
+    `)
+
+    const query = `mutation {
+      deleteCustomer(id: 1009)
+
+      createCustomer (input: {
+          id: 1009
+          firstName: "Morty"
+          lastName: "Blinkers"
+          email: "morty@flizzit.com"
+      }) {
+        id
+      }
+    }`
+
+    const sub = <AsyncIterator<ExecutionResult>>await subscribe(schema, document)
+    expect(sub.next).toBeDefined()
+
+    const next = sub.next()
+
+    const { data, errors } = await graphql(schema, query)
+    expect(errors).toBeUndefined()
+    expect(data).toBeDefined()
+
+    const {
+      value: { errors: subErrors, data: subData },
+    } = await next
+    expect(subErrors).toBeUndefined()
+    expect(subData).toBeDefined()
+  }, 10000)
 })
