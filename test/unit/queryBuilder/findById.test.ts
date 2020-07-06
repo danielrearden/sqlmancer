@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { withDialects, mockResolveInfo } from '../utilities'
+import { withDialects, mockResolveInfo } from '../../utilities'
 
 describe('FindByIdBuilder', () => {
   withDialects((client, _rollback, schema) => {

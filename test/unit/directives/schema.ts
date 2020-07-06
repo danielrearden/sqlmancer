@@ -1,6 +1,6 @@
 import { GraphQLJSON, GraphQLJSONObject } from 'graphql-scalars'
 
-import { makeSqlmancerSchema } from '../../lib/directives'
+import { makeSqlmancerSchema } from '../../../lib/directives'
 
 const typeDefs = `
   scalar JSON

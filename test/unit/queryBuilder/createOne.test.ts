@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { withDialects } from '../utilities'
+import { withDialects } from '../../utilities'
 
 describe('CreateOneBuilder', () => {
   withDialects((client, rollback) => {

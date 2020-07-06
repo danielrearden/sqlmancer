@@ -1,4 +1,4 @@
-import { assertValidSqlmancerConfig } from '../../lib/client/assertValidSqlmancerConfig'
+import { assertValidSqlmancerConfig } from '../../../lib/client/assertValidSqlmancerConfig'
 
 describe('assertValidSqlmancerConfig', () => {
   const config = {

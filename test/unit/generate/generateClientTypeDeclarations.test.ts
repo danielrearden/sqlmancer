@@ -1,6 +1,6 @@
 import { BufferWritableMock } from 'stream-mock'
-import { generateClientTypeDeclarations } from '../../lib/generate/generateClientTypeDeclarations'
-import { withDialects } from '../utilities'
+import { generateClientTypeDeclarations } from '../../../lib/generate/generateClientTypeDeclarations'
+import { withDialects } from '../../utilities'
 
 describe('generateClientTypeDeclarations', () => {
   withDialects((_client, _rollback, schema) => {

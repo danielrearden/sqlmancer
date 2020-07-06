@@ -1,5 +1,10 @@
 import Knex from 'knex'
-import { getAlias, getDirection, getAggregateFunction, getComparisonExpression } from '../../lib/queryBuilder/utilities'
+import {
+  getAlias,
+  getDirection,
+  getAggregateFunction,
+  getComparisonExpression,
+} from '../../../lib/queryBuilder/utilities'
 
 describe('utilities', () => {
   test('getAlias', () => {
