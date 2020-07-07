@@ -12,4 +12,5 @@ module.exports = {
   testMatch: ['<rootDir>/test/**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   collectCoverageFrom: ['lib/**/*.ts', '!**/index.ts'],
+  snapshotResolver: '<rootDir>/scripts/snapshot-resolver.js',
 }
