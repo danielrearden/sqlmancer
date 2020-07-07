@@ -68,7 +68,7 @@
     "ora": "^4.0.4"
   },
   "devDependencies": {
-    "@types/jest": "26.0.3",
+    "@types/jest": "26.0.4",
     "@types/lodash": "4.14.157",
     "@types/mkdirp": "1.0.1",
     "@typescript-eslint/eslint-plugin": "3.6.0",
