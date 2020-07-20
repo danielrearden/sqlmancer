@@ -65,7 +65,7 @@
     "knex": "^0.21.2",
     "lodash": "^4.17.19",
     "mkdirp": "^1.0.4",
-    "ora": "^4.0.4"
+    "ora": "^4.0.5"
   },
   "devDependencies": {
     "@types/jest": "26.0.5",
