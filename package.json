@@ -78,7 +78,7 @@
     "graphql": "15.3.0",
     "graphql-middleware": "4.0.2",
     "graphql-scalars": "1.2.2",
-    "graphql-tag": "2.10.4",
+    "graphql-tag": "2.11.0",
     "husky": "4.2.5",
     "jest": "26.1.0",
     "mysql2": "2.1.0",
