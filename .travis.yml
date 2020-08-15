@@ -1,42 +1,21 @@
 language: node_js
-
-env:
-  global:
-    - MYSQL_USER=testuser
-    - MYSQL_PASSWORD=testpassword
-    - MYSQL_DATABASE=testdb
-    - MYSQL_PORT=23306
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=testpassword
-    - POSTGRES_DB=testdb
-    - POSTGRES_PORT=25432
-
-node_js:
-  - 14
-  - 12
-  - 10
-
-install:
-  - npm install
-
-before_script:
-  - docker-compose -f scripts/docker-compose.yml up --build -d mysql postgres
-  - docker-compose -f scripts/docker-compose.yml up waitmysql waitpostgres
-  - npm run db:init
-
-script:
-  - npm run test
-
-after_success:
-  - npm run coveralls
-
+dist: focal
+jobs:
+  include:
+    - name: "JavaScript driver"
+      node_js: "10"
+      services:
+        - postgresql
+      addons:
+        postgresql: "12"
+      script:
+        - psql --version
+        - pg_isready
+        - psql -c "CREATE DATABASE postgres;" -U postgres
+        - rm -fr ./node_modules
+        - hash -r
+        - npm install
+        - node travis-test.js
 notifications:
   email: false
-
-services:
-  - docker
-
-branches:
-  only:
-    - master
-    - develop
+sudo: false
