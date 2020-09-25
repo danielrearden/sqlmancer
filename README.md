@@ -4,7 +4,7 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/danielrearden/sqlmancer) ![GitHub](https://img.shields.io/github/license/danielrearden/sqlmancer) [![Build Status](https://img.shields.io/travis/com/danielrearden/sqlmancer?logo=travis)](https://travis-ci.com/danielrearden/sqlmancer) [![Coverage Status](https://img.shields.io/coveralls/github/danielrearden/sqlmancer?logo=coveralls)](https://coveralls.io/github/danielrearden/sqlmancer?branch=master) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/danielrearden/sqlmancer)](https://lgtm.com/projects/g/danielrearden/sqlmancer/context:javascript) ![Discord](https://img.shields.io/discord/625400653321076807)
 
-> ⚠️ This project is still in development. The API is still subject to change and suggestions are welcome. If you find a bug that doesn't already have an open issue, please open one.
+> ⚠️ **This project is currently on hiatus.** I am hoping to resume working on Sqlmancer once I have some more free time. Feel free to submit new issues for feature requests or bug reports, although I may not address them immediately.
 
 Sqlmancer is a Node.js library for integrating SQL with GraphQL. It empowers you to effortlessly and efficiently translate GraphQL queries into SQL statements.
 
