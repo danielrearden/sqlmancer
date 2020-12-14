@@ -79,7 +79,7 @@
     "graphql-middleware": "4.0.2",
     "graphql-scalars": "1.2.2",
     "graphql-tag": "2.10.4",
-    "husky": "4.2.5",
+    "husky": "4.3.6",
     "jest": "26.1.0",
     "mysql2": "2.1.0",
     "pg": "8.3.0",
