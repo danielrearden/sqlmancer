@@ -58,7 +58,7 @@
     "@graphql-toolkit/graphql-file-loader": "^0.10.7",
     "@graphql-toolkit/schema-merging": "^0.10.7",
     "chokidar": "^3.4.1",
-    "commander": "^5.1.0",
+    "commander": "^8.0.0",
     "coveralls": "^3.1.0",
     "graphql-parse-resolve-info": "^4.7.0",
     "graphql-tools": "^5.0.1-065f82a.0",
