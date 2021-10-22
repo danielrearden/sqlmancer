@@ -76,7 +76,7 @@
     "eslint": "7.5.0",
     "eslint-plugin-jest": "23.18.2",
     "graphql": "15.3.0",
-    "graphql-middleware": "4.0.2",
+    "graphql-middleware": "6.1.10",
     "graphql-scalars": "1.2.2",
     "graphql-tag": "2.10.4",
     "husky": "4.2.5",
